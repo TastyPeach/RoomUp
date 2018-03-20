@@ -26,7 +26,7 @@ SECRET_KEY = 'klp$854)x^t2d-csux6ly(b#ptcm2utf^!_kzzwot_i0_6h8&z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -39,13 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_basic',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -103,6 +105,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.BasicAuthentication',
+            # 'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
+        ),
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.AllowAny',
+        )
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

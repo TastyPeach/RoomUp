@@ -1,15 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class User(models.Model):
-    uid = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=20)
-    displayname = models.CharField(max_length=20)
-    email = models.CharField(max_length=30)
-    password = models.CharField(max_length=20)
-    #now data field? active?
-    def __str__(self):
-        return self.username + ", with uid: " + self.uid
+# class User(AbstractUser):
+    # uid = models.AutoField(primary_key=True)
+    # username = models.CharField(max_length=20)
+    # displayname = models.CharField(max_length=20)
+    # email = models.CharField(max_length=30)
+    # password = models.CharField(max_length=20)
+
+#    def __str__(self):
+#        return self.username + ", with uid: " + self.id
     
 class Apartment(models.Model):
     aid = models.AutoField(primary_key=True)
