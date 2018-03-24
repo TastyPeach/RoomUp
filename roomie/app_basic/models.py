@@ -8,7 +8,7 @@ User becomes advanced user when he/she wants to do more than just searching for 
 Namely, when the user wants to search for potential roommates, save potential match, create a group, etc
 AdvancedUser will be assigned a gid by default, which is an auto-increment counter
 """
-class AdvancedUser(models.Model): #should actually be user-personality
+class AdvancedUser(models.Model): 
     uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE) 
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
@@ -61,7 +61,9 @@ Namely, we require a group to have a 'apartment' in mind,
 and creating a group requires creating an apartment. 
 """    
 class Group(models.Model):
+    # TODO: gid duplicate with aid?
     gid = models.AutoField(primary_key=True)
+    
     group_name = models.CharField(max_length=10, null=False) # for display in potential match
     aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True)
     peopleleft = models.IntegerField(null=False)

@@ -18,6 +18,7 @@ def index(request):
     my_dick = {'insert_me' : "Hello I am from views.py"}
     return render(request, 'app_basic/index.html', context=my_dick)
 
+## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
 @parser_classes((JSONParser,))
 def app_login(request):
@@ -61,3 +62,73 @@ def app_logout(request):
     # r.delete_cookie('token')
     r.status_code = status.HTTP_200_OK
     return r
+
+
+## ---------------------------------- Apartment Related -------------------------------
+@api_view(['GET'])
+def get_apt_by_addr(request):
+    pass
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_apt_by_id(request):
+    pass
+
+
+## ---------------------------------- User Info Related -------------------------------
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def become_advance(request):
+    pass
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_personal_info(request):
+    pass
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_user_info(request):
+    pass
+
+
+## -------------------------------- User Group Potential Match ------------------------
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_potential_match(request):
+    pass
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_potential_match(request):
+    pass
+
+
+## -------------------------------- Group Related Operation ---------------------------
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def filter_group(request):
+    pass
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def create_group(request):
+    pass
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_to_group(request):
+    pass
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def leave_from_group(request):
+    pass
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_group_info(request):
+    pass
+
+ 
