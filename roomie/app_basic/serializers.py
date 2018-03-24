@@ -18,7 +18,7 @@ class AdvancedUserSerializer(serializers.ModelSerializer):
 class ApartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Apartment
-        fields = ('aid', 'capacity', 'price', 'address', 'floorplan')
+        fields = ('aid', 'name', 'capacity', 'price', 'address', 'floorplan', 'occupied')
 
 class Group(serializers.ModelSerializer):
     pass

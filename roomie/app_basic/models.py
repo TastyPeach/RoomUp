@@ -50,11 +50,11 @@ class Apartment(models.Model):
     capacity = models.IntegerField()
     price = models.IntegerField()
     address = models.CharField(max_length=50)
-    floorplan = models.IntegerField()
+    floorplan = models.CharField(max_length=5)
     occupied = models.BooleanField() # True if this unit is intended for sublease, false if not
     
     def __str__(self):
-        return "Apartment wit id: " + self.aid
+        return "id " + str(self.aid)
     
 """
 Group is a unit of operation, a group 'owns' or 'interested in' an apartment

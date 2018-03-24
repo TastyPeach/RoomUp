@@ -66,15 +66,19 @@ def app_logout(request):
 
 ## ---------------------------------- Apartment Related -------------------------------
 @api_view(['GET'])
-def get_apt_by_addr(request):
+def get_apt_by_name(request):
+    # TODO: support get_apt_by_address
     pass
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+@parser_classes((JSONParser,)) 
+#@permission_classes((IsAuthenticated,))
 def get_apt_by_id(request):
-    pass
-
+    aid = request.query_params.get('aid')
+    apt = Apartment.objects.filter(aid=aid)[0]
+    apt_ser = ApartmentSerializer(apt)
+    return JsonResponse(apt_ser.data, safe=False)
 
 ## ---------------------------------- User Info Related -------------------------------
 @api_view(['POST'])
@@ -95,7 +99,7 @@ def get_user_info(request):
 
 ## -------------------------------- User Group Potential Match ------------------------
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def add_potential_match(request):
     pass
 
