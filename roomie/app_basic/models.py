@@ -46,6 +46,7 @@ We allow two duplicate apartment information (with different aid)
 """
 class Apartment(models.Model):
     aid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
     capacity = models.IntegerField()
     price = models.IntegerField()
     address = models.CharField(max_length=50)
