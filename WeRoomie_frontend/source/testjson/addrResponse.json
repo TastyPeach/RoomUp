@@ -1,0 +1,8 @@
+{
+  "array": [
+    {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
+    {"addr":"Apt#101, 1010 University Avenue","gID":16002,"memberName":["banana","peach"]},
+    {"addr":"Apt#101, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
+  ],
+  "notes": "A group of users after filtering "
+}

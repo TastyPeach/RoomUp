@@ -1,0 +1,38 @@
+{
+  "name": "uiucwp_fa17",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.jsx",
+  "scripts": {
+    "watch": "webpack -d --watch",
+    "build": "webpack",
+    "dev": "webpack-dev-server --content-base public/ --history-api-fallback"
+  },
+  "author": "Simon Lu",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.27.3",
+    "node-sass": "^4.5.2",
+    "postcss-loader": "^1.3.3",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "normalize.css": "^6.0.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.74.2"
+  }
+}
