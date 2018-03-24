@@ -20,8 +20,10 @@ class ApartmentSerializer(serializers.ModelSerializer):
         model = Apartment
         fields = ('aid', 'name', 'capacity', 'price', 'address', 'floorplan', 'occupied')
 
-class Group(serializers.ModelSerializer):
-    pass
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('gid', 'group_name', 'aid', 'peopleleft', 'admin_uid', 'active')
 
 class PotentialMatch(serializers.ModelSerializer):
     pass
