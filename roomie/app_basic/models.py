@@ -24,7 +24,7 @@ class AdvancedUser(models.Model):
     graduationyear = models.IntegerField(null=True)
     note = models.CharField(max_length=256, null=True)
 
-    gid = models.ForeignKey('Group', on_delete=models.CASCADE)
+    gid = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, db_column='gid')
 
     def __str__(self):
         return "Advance User with uid: " + (self.uid)
@@ -79,8 +79,8 @@ User select some group as his/her 'PotentialMatch' after filter_group operation
 """
 class PotentialMatch(models.Model):
     pid = models.AutoField(primary_key=True)
-    uid = models.ForeignKey(AdvancedUser, on_delete=models.CASCADE)
-    gid = models.ForeignKey(Group, on_delete=models.CASCADE)
+    uid = models.ForeignKey(AdvancedUser, on_delete=models.CASCADE, db_column="uid")
+    gid = models.ForeignKey(Group, on_delete=models.CASCADE, db_column="gid")
 
 
 # TODO

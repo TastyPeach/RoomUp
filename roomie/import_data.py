@@ -26,16 +26,26 @@ advance4.save()
 advance5.save()
 # AdvancedUser.objects.all().delete()
 
-apt1 = Apartment(name="Campus Circle", capacity=4, price=635, address="1010 W Univeristy Ave", floorplan="4B4B", occupied=True)
-apt2 = Apartment(name="IT", capacity=4, price=650, address="409 E Chalmers St", floorplan="4B1B", occupied=False)
+apt1 = Apartment(name="Campus Circle", price=635, address="1010 W Univeristy Ave", floorplan="4B4B", occupied=True)
+apt2 = Apartment(name="IT", price=650, address="409 E Chalmers St", floorplan="4B1B", occupied=False)
 
 apt1.save()
 apt2.save()
 # Apartment.objects.all().delete()
 
-group1 = Group(gid=1, group_name="group1", aid=apt1, peopleleft=4, admin_uid=advance1) #134
-group2 = Group(gid=2, group_name="group2", aid=apt2, peopleleft=4, admin_uid=advance2) #25
+group1 = Group(gid=1, group_name="group1", aid=apt1, peopleleft=4, admin_uid=advance1, capacity=4) #134
+group2 = Group(gid=2, group_name="group2", aid=apt2, peopleleft=4, admin_uid=advance2, capacity=4) #25
 
 group1.save()
 group2.save()
 # Group.objects.all().delete()
+
+pm1 = PotentialMatch(user1, group2)
+pm2 = PotentialMatch(user2, group1)
+pm3 = PotentialMatch(user5, group1)
+pm4 = PotentialMatch(user3, group2)
+
+pm1.save()
+pm2.save()
+pm3.save()
+pm4.save()
