@@ -42,9 +42,12 @@ def app_login(request):
 def app_register(request):
     uname = request.data.get('username')
     passwd = request.data.get('password')
-    print("this is register")
+    fname = request.data.get('first_name')
+    lname = request.data.get('last_name')
+    email = request.data.get('email')
+
     try:
-        u = User(username=uname, password=passwd)
+        u = User(username=uname, password=passwd, first_name=fname, last_name=lname, email=email)
         u.set_password(passwd)
         u.save()
         return Response(status=status.HTTP_201_CREATED)
@@ -76,10 +79,13 @@ def get_apt_by_name(request):
 @permission_classes((IsAuthenticated,))
 def get_apt_by_id(request):
     aid = request.query_params.get('aid')
-    apt = Apartment.objects.filter(aid=aid)[0]
-    apt_ser = ApartmentSerializer(apt)
-    return JsonResponse(apt_ser.data, safe=True)
-
+    apts = Apartment.objects.filter(aid=aid)
+    if len(apts) > 0:
+        apt = apts[0]
+        apt_ser = ApartmentSerializer(apt)
+        return JsonResponse(apt_ser.data, safe=True)
+    else:
+        return JsonResponse({}, safe=True, status=status.HTTP_404_NOT_FOUND)
 ## ---------------------------------- User Info Related -------------------------------
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
@@ -110,18 +116,25 @@ def become_advance(request):
 @permission_classes((IsAuthenticated,))
 def get_personal_info(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.filter(uid=u)
+    adv_u = AdvancedUser.objects.filter(uid=u)[0]
     adv_ser = AdvancedUserSerializer(adv_u)
     return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_user_info(request):
-    uid = request.data.get('uid')
-    user = User.objects.get(id=uid)
-    adv_u = AdvancedUser.objects.get(uid=user)
-    adv_ser = AdvancedUserSerializer(adv_u)
-    return JsonResponse(adv_ser.data)
+    uname = request.data.get('username')
+    users = User.objects.filter(username=uname)
+    if len(users) > 0:
+        user = users[0]
+        adv_u = AdvancedUser.objects.filter(uid=user)
+        if len(adv_u) > 0:
+            _ser = AdvancedUserSerializer(adv_u[0])
+        else:
+            _ser = UserSerializer(user)
+        return JsonResponse(_ser.data)
+    else:
+        return JsonResponse({}, status=status.HTTP_404_NOT_FOUND)
 
 ## -------------------------------- User Group Potential Match ------------------------
 @api_view(['POST'])
@@ -132,7 +145,7 @@ def add_potential_match(request):
     g = Group.objects.get(gid=gid)
     pm = PotentialMatch(uid=u, gid=g)
     pm.save()
-    return JsonResponse(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
@@ -145,6 +158,13 @@ def get_potential_match(request):
         ret.append(PotentialMatchSerializer(pm).data)
     return JsonResponse(ret, safe=False)
 
+@api_view(['DELETE'])
+@permission_classes((IsAuthenticated,))
+def delete_potential_match(request):
+    u = request._request.user
+    pid = request.data.get('pid')
+    ret = PotentialMatch.objects.filter(pid=pid).delete()
+    return JsonResponse({'pid':pid})
 
 ## -------------------------------- Group Related Operation ---------------------------
 @api_view(['GET'])

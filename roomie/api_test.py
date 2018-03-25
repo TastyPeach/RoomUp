@@ -4,8 +4,9 @@ base = 'http://localhost:8001/'
 header = {'Content-Type': 'application/json'}
 # 'Authorization': 'Token xxxxxx'
 
-def test_register(uname, password):
-    payload = {'username': uname, 'password': password}
+def test_register(uname, password, fname, lname, email):
+    payload = {'username': uname, 'password': password, 'first_name': fname, \
+               'last_name': lname, 'email': email}
     r = requests.post(base + 'register', data=json.dumps(payload), headers=header)
     return r
 
@@ -41,10 +42,10 @@ def test_get_personal_info(auth):
     r = requests.get(base + 'get_personal_info', headers=header)
     return r
 
-def test_get_user_info(auth, uid):
+def test_get_user_info(auth, uname):
     header['Authorization'] = 'Token ' + auth
-    payload = {'uid': uid}
-    r = requests.get(base + 'get_user_info', data=json.dumps(paylaod), headers=header)
+    payload = {'username': uname}
+    r = requests.get(base + 'get_user_info', data=json.dumps(payload), headers=header)
     return r
 
 def test_add_potential_match(auth, gid):
@@ -56,6 +57,11 @@ def test_add_potential_match(auth, gid):
 def test_get_potential_match(auth):
     header['Authorization'] = 'Token ' + auth
     r = requests.get(base + 'get_potential_match', headers=header)
+    return r
+
+def delete_potential_match(auth, pid):
+    header['Authorization'] = 'Token ' + auth
+    r = request.delete(base + 'delete_potential_match', data=json.dumps(payload), headers=header)
     return r
 
 # ----------------------- group -------------------------
