@@ -9,7 +9,7 @@ Namely, when the user wants to search for potential roommates, save potential ma
 AdvancedUser will be assigned a gid by default, which is an auto-increment counter
 """
 class AdvancedUser(models.Model): 
-    uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE) 
+    uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, db_column='uid') 
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
     ethinicity = models.CharField(max_length=10, null=True)
@@ -27,7 +27,7 @@ class AdvancedUser(models.Model):
     gid = models.ForeignKey('Group', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Advance User with uid: " + self.uid
+        return "Advance User with uid: " + (self.uid)
     
     # def save(self, *args, **kwargs):
     #     if self._state.adding:
@@ -62,17 +62,17 @@ and creating a group requires creating an apartment.
 """    
 class Group(models.Model):
     # TODO: gid duplicate with aid?
+
     gid = models.AutoField(primary_key=True)
-    
     group_name = models.CharField(max_length=10, null=False) # for display in potential match
-    aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True)
-    peopleleft = models.IntegerField(null=False)
+    aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True, db_column='aid')
     capacity = models.IntegerField()
-    admin_uid = models.OneToOneField(AdvancedUser, on_delete=models.DO_NOTHING, null=False)
+    peopleleft = models.IntegerField(null=False)
+    admin_uid = models.OneToOneField(AdvancedUser, on_delete=models.DO_NOTHING, null=False, db_column='admin_uid')
     active = models.BooleanField(default=True)
     
     def __str__(self):
-        return "Group " + self.gid
+        return "Group " + str(self.gid)
 
 """
 User select some group as his/her 'PotentialMatch' after filter_group operation

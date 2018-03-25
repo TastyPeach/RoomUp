@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 
 from app_basic.models import *
@@ -22,7 +23,11 @@ class ApartmentSerializer(serializers.ModelSerializer):
         fields = ('aid', 'name', 'capacity', 'price', 'address', 'floorplan', 'occupied')
 
 class GroupSerializer(serializers.ModelSerializer):
-    pass
+    admin_uid = AdvancedUserSerializer(serializers.ModelSerializer)
+    class Meta:
+        model = Group
+        fields = ('gid', 'group_name', 'aid', 'peopleleft', 'admin_uid', 'active')
+
 
 class PotentialMatchSerializer(serializers.ModelSerializer):
     gid = GroupSerializer(required=True)
@@ -30,6 +35,3 @@ class PotentialMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = PotentialMatch
         fields = ('pid', 'uid', 'gid')
-        
-
-                                                                
