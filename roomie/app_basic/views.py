@@ -73,7 +73,7 @@ def get_apt_by_name(request):
 
 @api_view(['GET'])
 @parser_classes((JSONParser,)) 
-#@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def get_apt_by_id(request):
     aid = request.query_params.get('aid')
     apt = Apartment.objects.filter(aid=aid)[0]
@@ -103,7 +103,7 @@ def become_advance(request):
                          sanitary=sanitary, timetobed=timetobed, pet=pet, major=major, hobbies=hobbies, \
                          language=language, graduationyear=graduationyear, note=note, gid=None)
     adv_u.save()
-    return JsonResponse(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_201_CREATED)
     
 
 @api_view(['GET'])
@@ -139,7 +139,7 @@ def add_potential_match(request):
 def get_potential_match(request):
     u = request._request.user
     adv_u = AdvancedUser.objects.get(uid=u)
-    pms = PotentialMatchSerializer(uid=u)
+    pms = PotentialMatchSerializer(uid=adv_u)
     ret = []
     for pm in pms:
         ret.append(PotentialMatchSerializer(pm).data)
@@ -228,7 +228,7 @@ def leave_from_group(request):
 	return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['GET'])
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def get_group_info(request):
     gid = request.query_params.get('gid')
     group = Group.objects.get(gid=gid)

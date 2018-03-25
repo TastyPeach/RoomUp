@@ -40,10 +40,22 @@ group1.save()
 group2.save()
 # Group.objects.all().delete()
 
-pm1 = PotentialMatch(user1, group2)
-pm2 = PotentialMatch(user2, group1)
-pm3 = PotentialMatch(user5, group1)
-pm4 = PotentialMatch(user3, group2)
+advance1.gid = group1
+advance3.gid = group1
+advance4.gid = group1
+advance2.gid = group2
+advance5.gid = group2
+
+advance1.save()
+advance2.save()
+advance3.save()
+advance4.save()
+advance5.save()
+
+pm1 = PotentialMatch(uid=advance1, gid=group2)
+pm2 = PotentialMatch(uid=advance2, gid=group1)
+pm3 = PotentialMatch(uid=advance5, gid=group1)
+pm4 = PotentialMatch(uid=advance3, gid=group2)
 
 pm1.save()
 pm2.save()

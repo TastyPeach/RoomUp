@@ -13,7 +13,7 @@ class AdvancedUser(models.Model):
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
     ethinicity = models.CharField(max_length=10, null=True)
-    quiteness = models.IntegerField(null=True) #0-5 
+    quietness = models.IntegerField(null=True) #0-5 
     sanitary = models.IntegerField(null=True) #0-5
     timetobed = models.IntegerField(null=True) #0-5 late
     # otherthings to consider: study often, date, loud music, invite friends to home.
@@ -27,7 +27,7 @@ class AdvancedUser(models.Model):
     gid = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, db_column='gid')
 
     def __str__(self):
-        return "Advance User with uid: " + (self.uid)
+        return "Advance User with uid: " + str(self.uid)
     
     # def save(self, *args, **kwargs):
     #     if self._state.adding:
@@ -82,7 +82,9 @@ class PotentialMatch(models.Model):
     uid = models.ForeignKey(AdvancedUser, on_delete=models.CASCADE, db_column="uid")
     gid = models.ForeignKey(Group, on_delete=models.CASCADE, db_column="gid")
 
-
+    def __str__(self):
+        return "Potential Match " + str(uid) + str(gid)
+    
 # TODO
 #
 # 1. Admin verifies the group_adding request from individual user
