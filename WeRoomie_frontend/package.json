@@ -1,6 +1,6 @@
 {
-  "name": "uiucwp_fa17",
-  "version": "1.0.0",
+  "name": "WeRoomie",
+  "version": "0.0.1",
   "description": "",
   "main": "index.jsx",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "webpack",
     "dev": "webpack-dev-server --content-base public/ --history-api-fallback"
   },
-  "author": "Simon Lu",
+  "author": "Someone",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^6.7.7",
