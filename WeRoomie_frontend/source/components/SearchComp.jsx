@@ -24,23 +24,33 @@ const petOptions = [
 ]
 
 const quietnessOptions = [
-  { key: 'a', text: 'They can have pets.', value: '1' },
-  { key: 'na', text: 'I don\'t like pets', value: '0' }
+  { key: '0', text: 'Extremely Quiet', value:'0' },
+  { key: '1', text: 'Very Quiet', value: '1' },
+  { key: '2', text: 'I\'m OK with some noise.', value: '2' },
+  { key: '3', text: 'I also make noise.', value: '3' },
+  { key: '4', text: 'Noise? I don\'t care now.', value: '4' }
 ]
 
 const genderOptions = [
-  { key: 'a', text: 'They can have pets.', value: '1' },
-  { key: 'na', text: 'I don\'t like pets', value: '0' }
+  { key: 'm', text: 'All Male', value: '1' },
+  { key: 'fm', text: 'All Female', value: '0' },
+  { key: 'mfm', text: 'Mixed Gender Group', value: '2' }
 ]
 
 const sanitaryOptions = [
-  { key: 'a', text: 'They can have pets.', value: '1' },
-  { key: 'na', text: 'I don\'t like pets', value: '0' }
+  { key: '0', text: 'Fan of housekeeping', value:'0' },
+  { key: '1', text: 'Extremely Clean', value: '1' },
+  { key: '2', text: 'Clean', value: '2' },
+  { key: '3', text: 'Somewhat Clean', value: '3' },
+  { key: '4', text: 'Sanitary? I don\'t care now.', value: '4' }
 ]
 
 const timetobedOptions = [
-  { key: 'a', text: 'They can have pets.', value: '1' },
-  { key: 'na', text: 'I don\'t like pets', value: '0' }
+  { key: '0', text: 'Go to bed before 9pm.', value:'0' },
+  { key: '1', text: 'Go to bed before 11pm.', value: '1' },
+  { key: '2', text: 'Go to bed before 1am', value: '2' },
+  { key: '3', text: 'Go to bed before 3pm', value: '3' },
+  { key: '4', text: 'No need to sleep.', value: '4' }
 ]
 
 
