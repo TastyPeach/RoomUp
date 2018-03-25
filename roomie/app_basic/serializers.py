@@ -19,13 +19,14 @@ class AdvancedUserSerializer(serializers.ModelSerializer):
 class ApartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Apartment
-        fields = ('aid', 'name', 'capacity', 'price', 'address', 'floorplan', 'occupied')
+        fields = ('aid', 'name',  'price', 'address', 'floorplan', 'occupied')
 
 class GroupSerializer(serializers.ModelSerializer):
     admin_uid = AdvancedUserSerializer(serializers.ModelSerializer)
+    aid = ApartmentSerializer(required=True)
     class Meta:
         model = Group
-        fields = ('gid', 'group_name', 'aid', 'peopleleft', 'admin_uid', 'active')
+        fields = ('gid', 'group_name', 'capacity', 'aid', 'peopleleft', 'admin_uid', 'active')
 
 
 class PotentialMatchSerializer(serializers.ModelSerializer):
