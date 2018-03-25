@@ -18,19 +18,32 @@
 	padding-top:10%;
 }
 
-.entry_column1{
+.user_column1{
     float: left;
     width: 23%;
 }
-.entry_column2{
+.user_column2{
     float: left;
     width: 43%;
     color: black;
 }
-.entry_column3{
+.user_column3{
     float: right;
     width: 33%;
 }
+
+.apt_column1{
+    float: left;
+    width: 20%;
+}
+.apt_column2{
+    float: left;
+    width: 80%;
+    color: black;
+}
+
+
+
 
 /* Clear floats after the columns */
 .entry_row:after {

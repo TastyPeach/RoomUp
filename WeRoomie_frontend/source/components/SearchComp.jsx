@@ -8,6 +8,14 @@ import propTypes from 'prop-types';
 import axios from 'axios';
 
 
+/*
+
+To do: 
+Change Search Entry Type
+Add API
+
+*/
+
 //test_only
 var jsonResults=[
     {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
@@ -126,18 +134,21 @@ export default class SearchComp extends React.Component{
     generateEntries()
     { 
     
-	const listItems = jsonResults.map((addrEntry,index) =>
+	var listItems;
+    if(this.state.search_mode=="User")
+    {
+    listItems= jsonResults.map((addrEntry,index) =>
     // Correct! Key should be specified inside the array.
     (
 	 <Segment vertical key={index}>
 	 <div className="entry_row">
-	 	<div className="entry_column1">
+	 	<div className="user_column1">
 	 		  <Button content='Details' primary/>
      	</div>
-	 	<div className="entry_column2">
+	 	<div className="user_column2">
 	 	<div>{addrEntry.addr}</div>
 	 	</div>
-		<div className="entry_column3">
+		<div className="user_column3">
 	 		<Button content='Save' primary/>
             <Button content='Add to Group' primary/>
 	 	</div>
@@ -150,6 +161,31 @@ export default class SearchComp extends React.Component{
       	{listItems}
     	</Segment.Group>
   	);
+    }
+    else{
+    listItems= jsonResults.map((addrEntry,index) =>
+    // Correct! Key should be specified inside the array.
+    (
+	 <Segment vertical key={index}>
+    
+    <div className="entry_row">
+	 	<div className="apt_column1">
+	 		  <Button content='Details' primary/>
+     	</div>
+	 	<div className="apt_column2">
+	 	<div>{addrEntry.addr}</div>
+	 	</div>
+	 </div>
+            
+	</Segment>
+	)
+  	);
+  	return (
+    	<Segment.Group>
+      	{listItems}
+    	</Segment.Group>
+  	);
+    }
 		
     }
 	
@@ -167,7 +203,7 @@ export default class SearchComp extends React.Component{
 		}
         else
 		{
-           this.setState({result_display:<div></div>});
+           this.setState({search_input:e.target.value,result_display:<div></div>});
         }
     }
 	
