@@ -12,9 +12,9 @@ class AdvancedUserSerializer(serializers.ModelSerializer):
     uid = UserSerializer(required=True)
     class Meta:
         model = AdvancedUser
-        fields = ('uid', 'gid', 'gender', 'age', 'ehtinicity', 'quiteness', 'sanitary', \
+        fields = ('uid', 'gid', 'gender', 'age', 'ethinicity', 'quietness', 'sanitary', \
                   'timetobed', 'pet', 'major', 'hobbies', 'language', 'graduationyear', \
-                  'note', 'aid')
+                  'note')
 
 class ApartmentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,6 +1,6 @@
 import requests, json
 
-base = 'http://localhost:8001/'
+base = 'http://localhost:8000/'
 header = {'Content-Type': 'application/json'}
 # 'Authorization': 'Token xxxxxx'
 
@@ -59,30 +59,23 @@ def test_get_potential_match(auth):
     return r
 
 # ----------------------- group -------------------------
-def test_create_group(auth, uid, group_name):
-    payload = {'name': 'Campus Circle', 'price': 635, 'address': '1010W University Ave', 'floorplan': '2B2B', 'occupied': True, 'capacity': 4, 'group_name': group_name, 'uid': uid}
+def test_create_group(auth, group_name):
+    payload = {'name': 'Campus Circle', 'price': 635, 'address': '1010W University Ave', 'floorplan': '2B2B', 'occupied': True, 'capacity': 4, 'group_name': group_name}
     header['Authorization'] = 'Token ' + auth
     r = requests.post(base + 'create_group', data=json.dumps(payload), headers=header)
-    return r.json()
+    return r
 
-def test_add_to_group(auth, gid, uid):
-    payload = {'gid': gid, 'uid': uid}
-    header['Authorization'] = 'Token ' + auth
-    r = requests.post(base + 'add_to_group', data=json.dumps(payload), headers=header)
-    return r.json()
-
-def test_leave_from_group(auth, gid, uid, refer_uid):
-    payload = {'gid': gid, 'uid': uid, 'refer_uid': refer_uid}
-    header['Authorization'] = 'Token ' + auth
-    r = requests.post(base + 'leave_from_group', data=json.dumps(payload), headers=header)
-    return r.json()
-
-def test_get_group_info(auth, gid):
+def test_add_to_group(auth, gid):
     payload = {'gid': gid}
     header['Authorization'] = 'Token ' + auth
-    r = requests.post(base + 'get_group_info', data=json.dumps(payload), headers=header)
-    return r.json()
+    r = requests.post(base + 'add_to_group', data=json.dumps(payload), headers=header)
+    return r
 
+def test_leave_from_group(auth, gid, refer_uid):
+    payload = {'gid': gid, 'refer_uid': refer_uid}
+    header['Authorization'] = 'Token ' + auth
+    r = requests.post(base + 'leave_from_group', data=json.dumps(payload), headers=header)
+    return r
 
 if __name__ == "__main__":
     pass
