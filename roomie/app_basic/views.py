@@ -115,7 +115,7 @@ def get_personal_info(request):
     return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 def get_user_info(request):
     uid = request.data.get('uid')
     user = User.objects.get(id=uid)
@@ -145,45 +145,77 @@ def get_potential_match(request):
         ret.append(PotentialMatchSerializer(pm).data)
     return JsonResponse(ret, safe=False)
 
+# @api_view(['DELETE'])
 
 ## -------------------------------- Group Related Operation ---------------------------
+#gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def filter_group(request):
-    pass
+    gender = int(request.query_params.get('gender'))
+    timetobed = int(request.query_params.get('timetobed'))
+    quietness = int(request.query_params.get('quietness'))
+    sanitary = int(request.query_params.get('sanitary'))
+    pet = int(request.query_params.get('pet'))
+
+    ret = []
+    valid_groups = Group.objects.filter(active=True)
+    for group in valid_groups:
+        potential_users = AdvancedUser.objects.filter(gid = group)
+        is_valid = True
+        have_pet = False
+        for user in potential_users:
+            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
+            have_pet = have_pet or user.pet
+            if not valid:
+                is_valid = False
+                break;
+        if is_valid and have_pet==pet:
+           ret.append(GroupSerializer(group).data)
+
+    return JsonResponse({"group" : ret}, safe=False)
+   
+
+
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def create_group(request):
-     name = request.data.get("name")
-     price = request.data.get("price")
-     address = request.data.get("address")
-     floorplan = request.data.get("floorplan")
-     occupied = request.data.get("occupied")
+    user = request._request.user
+    advance = AdvancedUser.objects.get(uid=user)
 
-     apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
-     apt.save()
+    if advance.gid != None:
+        return Response(status=status.HTTP_409_CONFLICT)
 
-     uid = request.data.get("uid")
-     user = User.objects.get(id=uid)
-     advance = AdvancedUser.objects.get(uid=user)
-     capacity = request.data.get("capacity")
-     group_name = request.data.get("group_name")
-     group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
-     group.save()
+    name = request.data.get("name")
+    price = request.data.get("price")
+    address = request.data.get("address")
+    floorplan = request.data.get("floorplan")
+    occupied = request.data.get("occupied")
 
-     uid = request.data.get("uid")
-     user = User.objects.get(id=uid)
-     advance = AdvancedUser.objects.get(uid=user)
-     advance.gid = group
-     advance.save()
+    apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
+    apt.save()
 
-     return Response(status=status.HTTP_201_CREATED)
+    capacity = request.data.get("capacity")
+    group_name = request.data.get("group_name")
+    group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
+    group.save()
+
+    advance.gid = group
+    advance.save()
+
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
+	user = request._request.user
+	advance = AdvancedUser.objects.get(uid=user)
+
+	if advance.gid != None:
+     	return Response(status=status.HTTP_409_CONFLICT)
+
 	gid = request.data.get('gid')
 	group = Group.objects.get(gid=gid)
 	if group.peopleleft <= 0:
@@ -191,9 +223,6 @@ def add_to_group(request):
 	else:
 		group.peopleleft = group.peopleleft-1
 		group.save()
-		uid = request.data.get('uid')
-		user = User.objects.get(id=uid)
-		advance = AdvancedUser.objects.get(uid=user)
 		advance.gid = group
 		advance.save()
 	return Response(status=status.HTTP_202_ACCEPTED)
@@ -201,9 +230,12 @@ def add_to_group(request):
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def leave_from_group(request):
-	uid = request.data.get("uid")
-	user = User.objects.get(id=uid)
+	user = request._request.user
 	advance = AdvancedUser.objects.get(uid=user)
+
+	if advance.gid == None:
+		return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 	gid = request.data.get('gid')
 	group = Group.objects.get(gid=gid)
 	if group.peopleleft+1 == group.capacity:
