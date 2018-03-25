@@ -26,8 +26,7 @@ def app_login(request):
     passwd = request.data.get('password')
     user = authenticate(username=uname, password=passwd)
     if user:
-        login(request._request, user)
-        
+        login(request._request, user)     
     else:
         return Response({"token": ""}, status=status.HTTP_403_FORBIDDEN)
     
@@ -118,21 +117,89 @@ def filter_group(request):
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def create_group(request):
-    pass
+     name = request.data.get("name")
+     price = request.data.get("price")
+     address = request.data.get("address")
+     floorplan = request.data.get("floorplan")
+     occupied = request.data.get("occupied")
+
+     apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
+     apt.save()
+
+     uid = request.data.get("uid")
+     user = User.objects.get(id=uid)
+     advance = AdvancedUser.objects.get(uid=user)
+     capacity = request.data.get("capacity")
+     group_name = request.data.get("group_name")
+     group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
+     group.save()
+
+     uid = request.data.get("uid")
+     user = User.objects.get(id=uid)
+     advance = AdvancedUser.objects.get(uid=user)
+     advance.gid = group
+     advance.save()
+
+     return Response(status=status.HTTP_201_CREATED)
+
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
-    pass
+	gid = request.data.get('gid')
+	group = Group.objects.get(gid=gid)
+	if group.peopleleft <= 0:
+		return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+	else:
+		group.peopleleft = group.peopleleft-1
+		group.save()
+		uid = request.data.get('uid')
+		user = User.objects.get(id=uid)
+		advance = AdvancedUser.objects.get(uid=user)
+		advance.gid = group
+		advance.save()
+	return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def leave_from_group(request):
-    pass
+	uid = request.data.get("uid")
+	user = User.objects.get(id=uid)
+	advance = AdvancedUser.objects.get(uid=user)
+	gid = request.data.get('gid')
+	group = Group.objects.get(gid=gid)
+	if group.peopleleft+1 == group.capacity:
+		group.active = False;
+		group.save()
+		advance.gid = None;
+		advance.save()
+	elif user.username == group.admin_uid.uid.username:
+		refer_uid = request.data.get("refer_uid")
+		refer_user = User.objects.get(id=refer_uid)
+		refer_advance = AdvancedUser.objects.get(uid=refer_user)
+		group.admin_uid = refer_advance
+		group.peopleleft = group.peopleleft + 1
+		group.save()
+		advance.gid = None;
+		advance.save();
+	else:
+		advance.gid = None;
+		advance.save();
+		group.peopleleft = group.peopleleft + 1
+		group.save()
+	return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 def get_group_info(request):
-    pass
+    gid = request.query_params.get('gid')
+    group = Group.objects.get(gid=gid)
+    group_ser = GroupSerializer(group)
+    users = AdvancedUser.objects.filter(gid=group)
+    users_dict_list = []
+    for user in users:
+    	users_dict_list.append(AdvancedUserSerializer(user).data)
+    return JsonResponse({"group" : [group_ser.data], "users" : users_dict_list}, safe=False)
+
 
  
