@@ -3,20 +3,56 @@ import styles from './components.scss'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import {Header,Container,Button, Select, Input,Dropdown, Checkbox ,Card ,Image, Message,List,Segment,Icon} from 'semantic-ui-react';
+import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 
 
+//test_only
 var jsonResults=[
     {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
     {"addr":"Apt#102, 1010 University Avenue","gID":16002,"memberName":["banana","peach"]},
     {"addr":"Apt#103, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
   ];
 
-const options = [
+const searchOptions = [
   { key: 'Apt', text: 'Apt', value: 'Apt' },
   { key: 'User', text: 'User', value: 'User' },]
+
+const petOptions = [
+  { key: 'a', text: 'They can have pets.', value: '1' },
+  { key: 'na', text: 'I don\'t like pets', value: '0' }
+]
+
+const quietnessOptions = [
+  { key: '0', text: 'Extremely Quiet', value:'0' },
+  { key: '1', text: 'Very Quiet', value: '1' },
+  { key: '2', text: 'I\'m OK with some noise.', value: '2' },
+  { key: '3', text: 'I also make noise.', value: '3' },
+  { key: '4', text: 'Noise? I don\'t care now.', value: '4' }
+]
+
+const genderOptions = [
+  { key: 'm', text: 'All Male', value: '1' },
+  { key: 'fm', text: 'All Female', value: '0' },
+  { key: 'mfm', text: 'Mixed Gender Group', value: '2' }
+]
+
+const sanitaryOptions = [
+  { key: '0', text: 'Fan of housekeeping', value:'0' },
+  { key: '1', text: 'Extremely Clean', value: '1' },
+  { key: '2', text: 'Clean', value: '2' },
+  { key: '3', text: 'Somewhat Clean', value: '3' },
+  { key: '4', text: 'Sanitary? I don\'t care now.', value: '4' }
+]
+
+const timetobedOptions = [
+  { key: '0', text: 'Go to bed before 9pm.', value:'0' },
+  { key: '1', text: 'Go to bed before 11pm.', value: '1' },
+  { key: '2', text: 'Go to bed before 1am', value: '2' },
+  { key: '3', text: 'Go to bed before 3pm', value: '3' },
+  { key: '4', text: 'No need to sleep.', value: '4' }
+]
 
 
 
@@ -25,7 +61,16 @@ export default class SearchComp extends React.Component{
     constructor(){
         super();   
         this.state={
-            result_display:<div></div>
+            result_display:<div></div>,
+            search_mode:"Apt",
+            search_input:"",
+            user_filter:{
+                pet:0,
+                gender:0,
+                quietness:0,
+                sanitary:0,
+                pet:0
+            }
         }
         this.search_target="";
 		this.createRequestURL=this.createRequestURL.bind(this);
@@ -34,14 +79,39 @@ export default class SearchComp extends React.Component{
 		this.searchSubmit=this.searchSubmit.bind(this);
 		this.onChangeMode=this.onChangeMode.bind(this);
 	}
-	onChangeMode(e)
+	onChangeMode(e,d)
 	{
-		console.log("Mode Change");
+		console.log("Mode Change to ");
+        console.log(d)
+        if(this.state.search_mode=="User"){
+            //setstate
+            this.setState({search_mode:d.value,result_display:<div></div>});
+        }
+        else{
+            this.setState({search_mode:d.value,result_display:<div></div>});
+        }
 	}
 	searchSubmit(e)
 	{
-		var resultView=this.generateEntries();
-		this.setState({result_display:resultView});
+        /*console.log(requestURL);
+		let url = requestURL;
+        axios.get(url)
+         	.then((response) => {
+        var results=response.data.array;
+        for(var i=0;i<results.length;i++)
+        {
+           results.push(response.data.results[i]);
+        }
+		console.log(results);
+        //this.setState({result_display:multi_entries});
+        });*/
+        if(this.state.search_input!=""){
+            var resultView=this.generateEntries();
+            this.setState({result_display:resultView});
+        }
+        else{
+            this.setState({result_display:<div></div>});
+        }
 	}
 	
 	//under test usage
@@ -61,14 +131,15 @@ export default class SearchComp extends React.Component{
     (
 	 <Segment vertical key={index}>
 	 <div className="entry_row">
-	 	<div className="entry_column">
-	 		  <Button content='Likes' primary/>
+	 	<div className="entry_column1">
+	 		  <Button content='Details' primary/>
      	</div>
-	 	<div className="entry_column">
+	 	<div className="entry_column2">
 	 	<div>{addrEntry.addr}</div>
 	 	</div>
-		<div className="entry_column">
-	 		<Button content='Details' primary/>
+		<div className="entry_column3">
+	 		<Button content='Save' primary/>
+            <Button content='Add to Group' primary/>
 	 	</div>
 	 </div>
 	</Segment>
@@ -85,30 +156,14 @@ export default class SearchComp extends React.Component{
 	
    
     searchInputChange(e){
+        console.log(e.target.value);
         if(e.target.value!="")
         {
         var requestURL=this.createRequestURL(e.target.value);
         this.search_target=e.target.value;
-		
         console.log("Input Change");
-        
-		/*console.log(requestURL);
-		let url = requestURL;
-        axios.get(url)
-         	.then((response) => {
-        var results=response.data.array;
-        for(var i=0;i<results.length;i++)
-        {
-           results.push(response.data.results[i]);
-        }
-		console.log(results);
-        //this.setState({result_display:multi_entries});
-        });*/
-		
-		console.log(jsonResults);
 		var resultView=this.generateEntries();
-		this.setState({result_display:resultView});
-		
+		this.setState({search_input:e.target.value});
 		}
         else
 		{
@@ -118,15 +173,19 @@ export default class SearchComp extends React.Component{
 	
 
 	
-	render(){    
+	render(){ 
+        if(this.state.search_mode=="Apt")
+        {
         return (
-            <div className="searchComp">
-            <h3>Find an Apartment</h3>
+        
+              
+              <div className="searchComp">
+                <h3>Find an Apartment</h3>
                 <div className="search_panel">
                     <div className="searchInput">
-                    <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search...' action>
+                    <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search Apartments' action>
 					<input />
-    				<Select compact options={options} defaultValue='Apt' onChange={this.onChangeMode}/>
+    				<Select compact options={searchOptions} defaultValue='Apt' onChange={this.onChangeMode}/>
     				<Button type='submit' onClick={this.searchSubmit}>Search</Button>
 					</Input>
                     </div>
@@ -134,7 +193,35 @@ export default class SearchComp extends React.Component{
             	<div className="result_display">
                  {this.state.result_display}
             	</div>
+			</div>
+        
+            );
+        }
+        else{
+        return (
+            <div className="searchComp">
+            <h3>Find Your Dear Roomates</h3>
+                <div className="search_panel">
+                    <div className="searchInput">
+                    <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search Roomates' action>
+					<input />
+    				<Select compact options={searchOptions} defaultValue='User' onChange={this.onChangeMode}/>
+    				<Button type='submit' onClick={this.searchSubmit}>Search</Button>
+					</Input>
+                    </div>
+                </div>
+                <div className="filter_field">
+                     <Dropdown placeholder='Gender' compact selection options={genderOptions}/>
+                     <Dropdown placeholder='Quietness Degree' compact selection options={quietnessOptions}/>
+                     <Dropdown placeholder='Sanitary Degree' compact selection options={sanitaryOptions}/>
+                     <Dropdown placeholder='Time go to bed' compact selection options={timetobedOptions}/>
+                     <Dropdown placeholder='Pet?' compact selection options={petOptions}/>
+                </div>
+            	<div className="result_display">
+                 {this.state.result_display}
+            	</div>
 			</div>);
+        }
     }
     
     componentWillMount(){
@@ -142,4 +229,5 @@ export default class SearchComp extends React.Component{
         //nothing
     }
 }
+
 
