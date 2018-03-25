@@ -3,11 +3,12 @@ import styles from './components.scss'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider} from 'semantic-ui-react';
+import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 
 
+//test_only
 var jsonResults=[
     {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
     {"addr":"Apt#102, 1010 University Avenue","gID":16002,"memberName":["banana","peach"]},
@@ -130,14 +131,15 @@ export default class SearchComp extends React.Component{
     (
 	 <Segment vertical key={index}>
 	 <div className="entry_row">
-	 	<div className="entry_column">
-	 		  <Button content='Likes' primary/>
+	 	<div className="entry_column1">
+	 		  <Button content='Details' primary/>
      	</div>
-	 	<div className="entry_column">
+	 	<div className="entry_column2">
 	 	<div>{addrEntry.addr}</div>
 	 	</div>
-		<div className="entry_column">
-	 		<Button content='Details' primary/>
+		<div className="entry_column3">
+	 		<Button content='Save' primary/>
+            <Button content='Add to Group' primary/>
 	 	</div>
 	 </div>
 	</Segment>
@@ -175,8 +177,10 @@ export default class SearchComp extends React.Component{
         if(this.state.search_mode=="Apt")
         {
         return (
-            <div className="searchComp">
-            <h3>Find an Apartment</h3>
+        
+              
+              <div className="searchComp">
+                <h3>Find an Apartment</h3>
                 <div className="search_panel">
                     <div className="searchInput">
                     <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search Apartments' action>
@@ -189,7 +193,9 @@ export default class SearchComp extends React.Component{
             	<div className="result_display">
                  {this.state.result_display}
             	</div>
-			</div>);
+			</div>
+        
+            );
         }
         else{
         return (
