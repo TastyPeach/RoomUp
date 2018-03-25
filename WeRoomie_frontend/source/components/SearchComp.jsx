@@ -6,6 +6,7 @@ import 'semantic-ui-css/semantic.min.css';
 import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 
 /*
@@ -113,6 +114,34 @@ export default class SearchComp extends React.Component{
 		console.log(results);
         //this.setState({result_display:multi_entries});
         });*/
+        
+    /*console.log('Add Match')
+    let data = JSON.stringify({
+        password: this.state.password,
+        username: this.state.email
+    })
+
+    axios.post('url', data, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    )
+        
+    console.log('Get Match')
+    let data = JSON.stringify({
+        password: this.state.password,
+        username: this.state.email
+    })
+
+    axios.post('url', data, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    )*/
+        
+        
         if(this.state.search_input!=""){
             var resultView=this.generateEntries();
             this.setState({result_display:resultView});
