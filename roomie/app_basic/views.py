@@ -78,35 +78,72 @@ def get_apt_by_id(request):
     aid = request.query_params.get('aid')
     apt = Apartment.objects.filter(aid=aid)[0]
     apt_ser = ApartmentSerializer(apt)
-    return JsonResponse(apt_ser.data, safe=False)
+    return JsonResponse(apt_ser.data, safe=True)
 
 ## ---------------------------------- User Info Related -------------------------------
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def become_advance(request):
-    pass
+    u = request._request.user
+    gender = request.data.get('gender')
+    age = request.data.get('age')
+    ethinicity = request.data.get('ethinicity')
+    quietness = request.data.get('quietness')
+    sanitary = request.data.get('sanitary')
+    timetobed = request.data.get('timetobed')
+    # otherthings to consider: study often, date, loud music, invite friends to home.
+    pet = request.data.get('pet')
+    major = request.data.get('major')
+    hobbies = request.data.get('hobbies')
+    language = request.data.get('language')
+    graduationyear = request.data.get('graduationyear')
+    note = request.data.get('note')
+
+    adv_u = AdvancedUser(uid=u, gender=gender, age=age, ethinicity=ethinicity, quietness=quietness, \
+                         sanitary=sanitary, timetobed=timetobed, pet=pet, major=major, hobbies=hobbies, \
+                         language=language, graduationyear=graduationyear, note=note, gid=None)
+    adv_u.save()
+    return JsonResponse(status=status.HTTP_201_CREATED)
+    
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_personal_info(request):
-    pass
+    u = request._request.user
+    adv_u = AdvancedUser.objects.filter(uid=u)
+    adv_ser = AdvancedUserSerializer(adv_u)
+    return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_user_info(request):
-    pass
-
+    uid = request.data.get('uid')
+    user = User.objects.get(id=uid)
+    adv_u = AdvancedUser.objects.get(uid=user)
+    adv_ser = AdvancedUserSerializer(adv_u)
+    return JsonResponse(adv_ser.data)
 
 ## -------------------------------- User Group Potential Match ------------------------
 @api_view(['POST'])
-#@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def add_potential_match(request):
-    pass
+    u = request._request.user
+    gid = request.data.get('gid')
+    g = Group.objects.get(gid=gid)
+    pm = PotentialMatch(uid=u, gid=g)
+    pm.save()
+    return JsonResponse(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_potential_match(request):
-    pass
+    u = request._request.user
+    adv_u = AdvancedUser.objects.get(uid=u)
+    pms = PotentialMatchSerializer(uid=u)
+    ret = []
+    for pm in pms:
+        ret.append(PotentialMatchSerializer(pm).data)
+    return JsonResponse(ret, safe=False)
 
 
 ## -------------------------------- Group Related Operation ---------------------------

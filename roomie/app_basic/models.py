@@ -12,7 +12,7 @@ class AdvancedUser(models.Model):
     uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE) 
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
-    ehtinicity = models.CharField(max_length=10, null=True)
+    ethinicity = models.CharField(max_length=10, null=True)
     quiteness = models.IntegerField(null=True) #0-5 
     sanitary = models.IntegerField(null=True) #0-5
     timetobed = models.IntegerField(null=True) #0-5 late
@@ -24,7 +24,7 @@ class AdvancedUser(models.Model):
     graduationyear = models.IntegerField(null=True)
     note = models.CharField(max_length=256, null=True)
 
-    gid = models.IntegerField(null=True)
+    gid = models.ForeignKey('Group', on_delete=models.CASCADE)
 
     def __str__(self):
         return "Advance User with uid: " + self.uid
@@ -47,7 +47,6 @@ We allow two duplicate apartment information (with different aid)
 class Apartment(models.Model):
     aid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    capacity = models.IntegerField()
     price = models.IntegerField()
     address = models.CharField(max_length=50)
     floorplan = models.CharField(max_length=5)
@@ -68,6 +67,7 @@ class Group(models.Model):
     group_name = models.CharField(max_length=10, null=False) # for display in potential match
     aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True)
     peopleleft = models.IntegerField(null=False)
+    capacity = models.IntegerField()
     admin_uid = models.OneToOneField(AdvancedUser, on_delete=models.DO_NOTHING, null=False)
     active = models.BooleanField(default=True)
     
@@ -90,3 +90,5 @@ class PotentialMatch(models.Model):
 #
 # 2. When a user leave a group, broadcast a notification to all user in this group
 #    Think about how to implement this. Might require an augment in AdvancedUser table
+#
+# 3. Support inviting a user to join a group. 
