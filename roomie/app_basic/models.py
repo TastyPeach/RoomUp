@@ -12,7 +12,7 @@ class AdvancedUser(models.Model):
     uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, db_column='uid') 
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
-    ehtinicity = models.CharField(max_length=10, null=True)
+    ethinicity = models.CharField(max_length=10, null=True)
     quiteness = models.IntegerField(null=True) #0-5 
     sanitary = models.IntegerField(null=True) #0-5
     timetobed = models.IntegerField(null=True) #0-5 late
@@ -24,10 +24,10 @@ class AdvancedUser(models.Model):
     graduationyear = models.IntegerField(null=True)
     note = models.CharField(max_length=256, null=True)
 
-    gid = models.IntegerField(null=True)
+    gid = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, db_column='gid')
 
     def __str__(self):
-        return str(self.uid)
+        return "Advance User with uid: " + (self.uid)
     
     # def save(self, *args, **kwargs):
     #     if self._state.adding:
@@ -62,8 +62,8 @@ and creating a group requires creating an apartment.
 """    
 class Group(models.Model):
     # TODO: gid duplicate with aid?
+
     gid = models.AutoField(primary_key=True)
-    
     group_name = models.CharField(max_length=10, null=False) # for display in potential match
     aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True, db_column='aid')
     capacity = models.IntegerField()
@@ -79,8 +79,8 @@ User select some group as his/her 'PotentialMatch' after filter_group operation
 """
 class PotentialMatch(models.Model):
     pid = models.AutoField(primary_key=True)
-    uid = models.ForeignKey(AdvancedUser, on_delete=models.CASCADE)
-    gid = models.ForeignKey(Group, on_delete=models.CASCADE)
+    uid = models.ForeignKey(AdvancedUser, on_delete=models.CASCADE, db_column="uid")
+    gid = models.ForeignKey(Group, on_delete=models.CASCADE, db_column="gid")
 
 
 # TODO
@@ -90,3 +90,5 @@ class PotentialMatch(models.Model):
 #
 # 2. When a user leave a group, broadcast a notification to all user in this group
 #    Think about how to implement this. Might require an augment in AdvancedUser table
+#
+# 3. Support inviting a user to join a group. 
