@@ -47,7 +47,6 @@ We allow two duplicate apartment information (with different aid)
 class Apartment(models.Model):
     aid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    capacity = models.IntegerField()
     price = models.IntegerField()
     address = models.CharField(max_length=50)
     floorplan = models.CharField(max_length=5)
@@ -67,6 +66,7 @@ class Group(models.Model):
     
     group_name = models.CharField(max_length=10, null=False) # for display in potential match
     aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True, db_column='aid')
+    capacity = models.IntegerField()
     peopleleft = models.IntegerField(null=False)
     admin_uid = models.OneToOneField(AdvancedUser, on_delete=models.DO_NOTHING, null=False, db_column='admin_uid')
     active = models.BooleanField(default=True)
