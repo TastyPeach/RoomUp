@@ -114,11 +114,4 @@ export default class Home extends Component {
     	}
 	}
 	
-	/*
-	     <Segment.Group>
-         <Segment>Group1</Segment>
-         <Segment>Group2</Segment>
-         </Segment.Group>
-   */
-
 }
