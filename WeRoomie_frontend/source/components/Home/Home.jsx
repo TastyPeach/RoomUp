@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Button, Menu, Dropdown, Card, Segment} from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 import propTypes from 'prop-types'
 import styles from './Home.scss'
 import SubMenu from '../SubMenu.jsx'
+import axios from 'axios'
+import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-router-dom'
 
 //test_only
 var jsonResults=[
@@ -16,13 +17,60 @@ export default class Home extends Component {
 	constructor()
 	{
 		super();
-	    this.state={login:false};
+	    this.state={
+		login:false,
+		default_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
+		PMdisplay:<div></div>};
 		this.loginOnClick=this.loginOnClick.bind(this);
+		this.onReceivePM=this.onReceivePM.bind(this);
 	}
-	loginOnClick()
+	generatePMList(response){
+	var listItems=response.data.map((addrEntry,index) =>
+    (<Segment vertical key={index}  textAlign="center">
+		<Link to={"/"+addrEntry.gid.gid}>{addrEntry.gid.group_name}</Link>
+	 </Segment>)
+  	);
+  	return (
+    	<Segment.Group>
+      	{listItems}
+    	</Segment.Group>
+  	);
+	}
+	
+	onReceivePM(response)
 	{
-		this.setState({login:!this.state.login});
+		if(response.data.length!=0)
+		{
+		  this.setState({PMdisplay:this.generatePMList(response)});
+		}
+		else{
+		this.setState({PMdisplay:
+		 <Segment.Group>
+         <Segment>It's empty.</Segment>
+         </Segment.Group>})
+		}
 	}
+	
+	
+	loginOnClick(){
+		this.setState({login:true});
+		
+		//get potential match
+		var config={"Authorization":"Token "+this.state.default_token};
+		axios({
+    		url: 'http://18.219.12.38:8001/get_potential_match',
+    		method: 'get',
+    		headers: config
+ 			})
+ 		.then(response => {
+		this.onReceivePM(response);
+ 		}) 
+ 		.catch(err => {
+			//Error
+    		console.log(err);
+ 		});
+	}
+	
     render() {
 		if(this.state.login==false){
 			return(
@@ -42,17 +90,14 @@ export default class Home extends Component {
 		else{
         return(
 			<div>
-            <Card className="likeList">
+            <Card className="PMList">
                 <Card.Content>
                 <Card.Header>
-                    Like List
+                    PotentialMatch List
                 </Card.Header>
                 </Card.Content>
             <Card.Content>  
-                <Segment.Group>
-                <Segment><a>Group1</a></Segment>
-                <Segment><a>Group2</a></Segment>
-                </Segment.Group>
+				{this.state.PMdisplay}
             </Card.Content>
             </Card>
 			<div className="userMenu" >
@@ -68,5 +113,12 @@ export default class Home extends Component {
         )
     	}
 	}
+	
+	/*
+	     <Segment.Group>
+         <Segment>Group1</Segment>
+         <Segment>Group2</Segment>
+         </Segment.Group>
+   */
 
 }

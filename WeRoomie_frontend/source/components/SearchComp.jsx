@@ -10,11 +10,8 @@ import { browserHistory } from 'react-router';
 
 
 /*
-
 To do: 
-Change Search Entry Type
 Add API
-
 */
 
 //test_only
@@ -26,7 +23,8 @@ var jsonResults=[
 
 const searchOptions = [
   { key: 'Apt', text: 'Apt', value: 'Apt' },
-  { key: 'User', text: 'User', value: 'User' },]
+  { key: 'User', text: 'User', value: 'User' },
+]
 
 const petOptions = [
   { key: 'a', text: 'They can have pets.', value: '1' },
@@ -81,67 +79,21 @@ export default class SearchComp extends React.Component{
                 pet:0
             }
         }
-        this.search_target="";
 		this.createRequestURL=this.createRequestURL.bind(this);
 		this.searchInputChange=this.searchInputChange.bind(this);
 		this.generateEntries=this.generateEntries.bind(this);
 		this.searchSubmit=this.searchSubmit.bind(this);
 		this.onChangeMode=this.onChangeMode.bind(this);
 	}
-	onChangeMode(e,d)
-	{
-		console.log("Mode Change to ");
-        console.log(d)
-        if(this.state.search_mode=="User"){
-            //setstate
-            this.setState({search_mode:d.value,result_display:<div></div>});
-        }
-        else{
-            this.setState({search_mode:d.value,result_display:<div></div>});
-        }
+	
+	//under test usage
+	createRequestURL(inputAddr){
+		var baseUrl="http://localhost:8080/testdata";
+		var tempUrl=baseUrl+'&addr='+this.Addr;
+		return tempUrl;
 	}
-	searchSubmit(e)
-	{
-        /*console.log(requestURL);
-		let url = requestURL;
-        axios.get(url)
-         	.then((response) => {
-        var results=response.data.array;
-        for(var i=0;i<results.length;i++)
-        {
-           results.push(response.data.results[i]);
-        }
-		console.log(results);
-        //this.setState({result_display:multi_entries});
-        });*/
-        
-    /*console.log('Add Match')
-    let data = JSON.stringify({
-        password: this.state.password,
-        username: this.state.email
-    })
-
-    axios.post('url', data, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }
-    )
-        
-    console.log('Get Match')
-    let data = JSON.stringify({
-        password: this.state.password,
-        username: this.state.email
-    })
-
-    axios.post('url', data, {
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }
-    )*/
-        
-        
+	
+	searchSubmit(e){
         if(this.state.search_input!=""){
             var resultView=this.generateEntries();
             this.setState({result_display:resultView});
@@ -149,19 +101,9 @@ export default class SearchComp extends React.Component{
         else{
             this.setState({result_display:<div></div>});
         }
-	}
-	
-	//under test usage
-	createRequestURL(inputAddr)
-	{
-		var baseUrl="http://localhost:8080/testdata";
-		var tempUrl=baseUrl+'&addr='+this.Addr;
-		return tempUrl;
-	}
-	
+	}	
     
-    generateEntries()
-    { 
+    generateEntries(){ 
     
 	var listItems;
     if(this.state.search_mode=="User")
@@ -217,18 +159,11 @@ export default class SearchComp extends React.Component{
     }
 		
     }
-	
-	
    
     searchInputChange(e){
-        console.log(e.target.value);
         if(e.target.value!="")
         {
-        var requestURL=this.createRequestURL(e.target.value);
-        this.search_target=e.target.value;
-        console.log("Input Change");
-		var resultView=this.generateEntries();
-		this.setState({search_input:e.target.value});
+			this.setState({search_input:e.target.value});
 		}
         else
 		{
@@ -236,7 +171,15 @@ export default class SearchComp extends React.Component{
         }
     }
 	
-
+	onChangeMode(e,d){
+        if(this.state.search_mode=="User"){
+            //setstate
+            this.setState({search_mode:d.value,result_display:<div></div>});
+        }
+        else{
+            this.setState({search_mode:d.value,result_display:<div></div>});
+        }
+	}
 	
 	render(){ 
         if(this.state.search_mode=="Apt")

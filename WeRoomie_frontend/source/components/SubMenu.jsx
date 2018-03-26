@@ -23,6 +23,7 @@ export default class SubMenu extends Component {
         <Dropdown.Item>
         <Link to={`/becomeAdvanced`}>GoAdvanced</Link>
         </Dropdown.Item>
+		<Dropdown.Item>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
     )
