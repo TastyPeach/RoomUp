@@ -182,10 +182,12 @@ def filter_group(request):
 @permission_classes((IsAuthenticated,))
 def create_group(request):
     user = request._request.user
+    if len(AdvancedUser.objects.filter(uid=user)) == 0:
+        return Response(status=status.HTTP_410_GONE)
     advance = AdvancedUser.objects.get(uid=user)
 
     if advance.gid != None:
-        return Response(status=status.HTTP_409_CONFLICT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
     name = request.data.get("name")
     price = request.data.get("price")
@@ -210,54 +212,58 @@ def create_group(request):
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
-	user = request._request.user
-	advance = AdvancedUser.objects.get(uid=user)
+    user = request._request.user
+    if len(AdvancedUser.objects.filter(uid=user)) == 0:
+        return Response(status=status.HTTP_410_GONE)
+    advance = AdvancedUser.objects.get(uid=user)
 
-	if advance.gid != None:
-     	return Response(status=status.HTTP_409_CONFLICT)
+    if advance.gid != None:
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
-	gid = request.data.get('gid')
-	group = Group.objects.get(gid=gid)
-	if group.peopleleft <= 0:
-		return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-	else:
-		group.peopleleft = group.peopleleft-1
-		group.save()
-		advance.gid = group
-		advance.save()
-	return Response(status=status.HTTP_202_ACCEPTED)
+    gid = request.data.get('gid')
+    group = Group.objects.get(gid=gid)
+    if group.peopleleft <= 0:
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    else:
+        group.peopleleft = group.peopleleft-1
+        group.save()
+        advance.gid = group
+        advance.save()
+    return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def leave_from_group(request):
-	user = request._request.user
-	advance = AdvancedUser.objects.get(uid=user)
+    user = request._request.user
+    if len(AdvancedUser.objects.filter(uid=user)) == 0:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    advance = AdvancedUser.objects.get(uid=user)
 
-	if advance.gid == None:
-		return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    if advance.gid == None:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-	gid = request.data.get('gid')
-	group = Group.objects.get(gid=gid)
-	if group.peopleleft+1 == group.capacity:
-		group.active = False;
-		group.save()
-		advance.gid = None;
-		advance.save()
-	elif user.username == group.admin_uid.uid.username:
-		refer_uid = request.data.get("refer_uid")
-		refer_user = User.objects.get(id=refer_uid)
-		refer_advance = AdvancedUser.objects.get(uid=refer_user)
-		group.admin_uid = refer_advance
-		group.peopleleft = group.peopleleft + 1
-		group.save()
-		advance.gid = None;
-		advance.save();
-	else:
-		advance.gid = None;
-		advance.save();
-		group.peopleleft = group.peopleleft + 1
-		group.save()
-	return Response(status=status.HTTP_202_ACCEPTED)
+    gid = request.data.get('gid')
+    group = Group.objects.get(gid=gid)
+    if group.peopleleft+1 == group.capacity:
+        group.active = False;
+        group.save()
+        advance.gid = None;
+        advance.save()
+    elif user.username == group.admin_uid.uid.username:
+        refer_uid = request.data.get("refer_uid")
+        refer_user = User.objects.get(id=refer_uid)
+        refer_advance = AdvancedUser.objects.get(uid=refer_user)
+        group.admin_uid = refer_advance
+        group.peopleleft = group.peopleleft + 1
+        group.save()
+        advance.gid = None;
+        advance.save();
+    else:
+        advance.gid = None;
+        advance.save();
+        group.peopleleft = group.peopleleft + 1
+        group.save()
+    return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
@@ -268,5 +274,5 @@ def get_group_info(request):
     users = AdvancedUser.objects.filter(gid=group)
     users_dict_list = []
     for user in users:
-    	users_dict_list.append(AdvancedUserSerializer(user).data)
+        users_dict_list.append(AdvancedUserSerializer(user).data)
     return JsonResponse({"group" : [group_ser.data], "users" : users_dict_list}, safe=False)
