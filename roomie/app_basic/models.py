@@ -84,7 +84,9 @@ class PotentialMatch(models.Model):
 
     def __str__(self):
         return "Potential Match " + str(uid) + str(gid)
-    
+
+    class Meta:
+        unique_together = ('uid', 'gid')
 # TODO
 #
 # 1. Admin verifies the group_adding request from individual user

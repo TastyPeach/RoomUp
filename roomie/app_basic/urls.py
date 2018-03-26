@@ -12,6 +12,7 @@ urlpatterns = [
     path('get_user_info', views.get_user_info),
     path('add_potential_match', views.add_potential_match),
     path('get_potential_match', views.get_potential_match),
+    path('delete_potential_match', views.delete_potential_match),
     path('filter_group', views.filter_group),
     path('create_group', views.create_group),
     path('add_to_group', views.add_to_group),

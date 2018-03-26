@@ -116,12 +116,12 @@ def become_advance(request):
 @permission_classes((IsAuthenticated,))
 def get_personal_info(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.filter(uid=u)[0]
+    adv_u = AdvancedUser.objects.get(uid=u)
     adv_ser = AdvancedUserSerializer(adv_u)
     return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 def get_user_info(request):
     uname = request.data.get('username')
     users = User.objects.filter(username=uname)
@@ -142,17 +142,32 @@ def get_user_info(request):
 def add_potential_match(request):
     u = request._request.user
     gid = request.data.get('gid')
-    g = Group.objects.get(gid=gid)
-    pm = PotentialMatch(uid=u, gid=g)
-    pm.save()
-    return Response(status=status.HTTP_201_CREATED)
+    gs = Group.objects.filter(gid=gid)
+    adv_us = AdvancedUser.objects.filter(uid=u)
+
+    if len(gs) > 0 and len(adv_u) > 0:
+        pm = PotentialMatch(uid=adv_us[0], gid=gs[0])
+        try:
+            pm.save()
+            return Response(status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(status=status.HTTP_409_CONFLICT)
+
+    # Is not advanced user
+    elif len(adv_us) == 0:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    # gid is not valid
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_potential_match(request):
     u = request._request.user
     adv_u = AdvancedUser.objects.get(uid=u)
-    pms = PotentialMatchSerializer(uid=adv_u)
+    pms = PotentialMatch.objects.filter(uid=adv_u)
     ret = []
     for pm in pms:
         ret.append(PotentialMatchSerializer(pm).data)
@@ -164,66 +179,95 @@ def delete_potential_match(request):
     u = request._request.user
     pid = request.data.get('pid')
     ret = PotentialMatch.objects.filter(pid=pid).delete()
-    return JsonResponse({'pid':pid})
+    return Response(status=status.HTTP_200_OK)
 
 ## -------------------------------- Group Related Operation ---------------------------
+#gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
+#@permission_classes((IsAuthenticated,))
 def filter_group(request):
-    pass
+    gender = int(request.query_params.get('gender'))
+    timetobed = int(request.query_params.get('timetobed'))
+    quietness = int(request.query_params.get('quietness'))
+    sanitary = int(request.query_params.get('sanitary'))
+    pet = int(request.query_params.get('pet'))
+
+    ret = []
+    valid_groups = Group.objects.filter(active=True)
+    for group in valid_groups:
+        potential_users = AdvancedUser.objects.filter(gid = group)
+        is_valid = True
+        have_pet = False
+        for user in potential_users:
+            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
+            have_pet = have_pet or user.pet
+            if not valid:
+                is_valid = False
+                break;
+        if is_valid and have_pet==pet:
+           ret.append(GroupSerializer(group).data)
+
+    return JsonResponse({"group" : ret}, safe=False)
+
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def create_group(request):
-     name = request.data.get("name")
-     price = request.data.get("price")
-     address = request.data.get("address")
-     floorplan = request.data.get("floorplan")
-     occupied = request.data.get("occupied")
+    user = request._request.user
+    advance = AdvancedUser.objects.get(uid=user)
 
-     apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
-     apt.save()
+    if advance.gid != None:
+        return Response(status=status.HTTP_409_CONFLICT)
 
-     uid = request.data.get("uid")
-     user = User.objects.get(id=uid)
-     advance = AdvancedUser.objects.get(uid=user)
-     capacity = request.data.get("capacity")
-     group_name = request.data.get("group_name")
-     group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
-     group.save()
+    name = request.data.get("name")
+    price = request.data.get("price")
+    address = request.data.get("address")
+    floorplan = request.data.get("floorplan")
+    occupied = request.data.get("occupied")
 
-     uid = request.data.get("uid")
-     user = User.objects.get(id=uid)
-     advance = AdvancedUser.objects.get(uid=user)
-     advance.gid = group
-     advance.save()
+    apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
+    apt.save()
 
-     return Response(status=status.HTTP_201_CREATED)
+    capacity = request.data.get("capacity")
+    group_name = request.data.get("group_name")
+    group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
+    group.save()
+
+    advance.gid = group
+    advance.save()
+
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
+	user = request._request.user
+	advance = AdvancedUser.objects.get(uid=user)
+
+	if advance.gid != None:
+     	    return Response(status=status.HTTP_409_CONFLICT)
+
 	gid = request.data.get('gid')
 	group = Group.objects.get(gid=gid)
 	if group.peopleleft <= 0:
-		return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+	    return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 	else:
-		group.peopleleft = group.peopleleft-1
-		group.save()
-		uid = request.data.get('uid')
-		user = User.objects.get(id=uid)
-		advance = AdvancedUser.objects.get(uid=user)
-		advance.gid = group
-		advance.save()
+	    group.peopleleft = group.peopleleft-1
+	    group.save()
+	    advance.gid = group
+	    advance.save()
 	return Response(status=status.HTTP_202_ACCEPTED)
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def leave_from_group(request):
-	uid = request.data.get("uid")
-	user = User.objects.get(id=uid)
+	user = request._request.user
 	advance = AdvancedUser.objects.get(uid=user)
+
+	if advance.gid == None:
+		return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 	gid = request.data.get('gid')
 	group = Group.objects.get(gid=gid)
 	if group.peopleleft+1 == group.capacity:
