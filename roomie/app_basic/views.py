@@ -199,6 +199,9 @@ def filter_group(request):
         is_valid = True
         have_pet = False
         for user in potential_users:
+            if user.gender == None or user.timetobed == None or user.quietness == None or user.sanitary == None:
+                is_valid = False
+                break;
             valid = user.gender == gender and abs(user.timetobed-timetobed)<3 and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
             have_pet = have_pet or user.pet
             if not valid:
