@@ -3,7 +3,7 @@ import styles from './components.scss'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar} from 'semantic-ui-react';
+import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar,Card} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
@@ -11,7 +11,7 @@ import { browserHistory } from 'react-router';
 
 /*
 To do: 
-Add API
+Delete/Like button
 Pass Down of User information
 */
 
@@ -63,12 +63,10 @@ const timetobedOptions = [
   { key: '4', text: 'No need to sleep.', value: '4' }
 ]
 
-
-
 export default class SearchComp extends React.Component{
     
-    constructor(){
-        super();   
+    constructor(props){
+        super(props);   
         this.state={
             result_display:<div></div>,
             search_mode:"Apt",
@@ -79,7 +77,9 @@ export default class SearchComp extends React.Component{
                 quietness:0,
                 sanitary:0,
                 timetobed:0
-            }
+            },
+			login:this.props.login,
+			user_token:this.props.user_token
         }
 		this.createRequestURLForFilterGroup=this.createRequestURLForFilterGroup.bind(this);
 		this.searchInputChange=this.searchInputChange.bind(this);
@@ -87,12 +87,17 @@ export default class SearchComp extends React.Component{
 		this.generateEntriesForFilterGroup=this.generateEntriesForFilterGroup.bind(this);
 		this.searchSubmit=this.searchSubmit.bind(this);
 		this.onChangeMode=this.onChangeMode.bind(this);
+		this.saveButtonOnClick=this.saveButtonOnClick.bind(this);
 		
 		this.onChangeGender=this.onChangeGender.bind(this);
 		this.onChangePet=this.onChangePet.bind(this);
 		this.onChangeQuietness=this.onChangeQuietness.bind(this);
 		this.onChangeSanitary=this.onChangeSanitary.bind(this);
 		this.onChangeTimetobed=this.onChangeTimetobed.bind(this);
+		
+		this.onPMListChange=this.props.onPMListChange;
+		console.log(this.props);
+		
 	}
 	
 	onChangeGender(e,d)
@@ -139,17 +144,17 @@ export default class SearchComp extends React.Component{
 		
 		/*test group*/
 		var tempUrl=baseUrl+'&gender='+0;
-		tempUrl=tempUrl+'&quietness='+3;
-		tempUrl=tempUrl+'&sanitary='+4;
+		tempUrl=tempUrl+'&quietness='+4;
+		tempUrl=tempUrl+'&sanitary='+1;
 		tempUrl=tempUrl+'&timetobed='+2;
-		tempUrl=tempUrl+'&pet='+1;
+		tempUrl=tempUrl+'&pet='+0;
 		
 		return tempUrl;
 	}
 	
 	searchSubmit(e){
         if(this.state.search_mode=="User"){
-		var config={"Authorization":"Token 1d441aca1002c863b724c4170ec7d7f793683ad0"};
+		var config={"Authorization":"Token "+this.state.user_token};
 		var tempURL=this.createRequestURLForFilterGroup();
 	    axios({
     		url: tempURL,
@@ -162,7 +167,7 @@ export default class SearchComp extends React.Component{
  		}) 
  		.catch(err => {
 			//Error
-    		console.log(err);
+    		console.log(err.response.status);
  		});
 			
         }
@@ -178,6 +183,33 @@ export default class SearchComp extends React.Component{
         }
 	}
 	
+	saveButtonOnClick(e,d)
+	{
+		//var func=this.props.onPMListChange;
+		var gid=parseInt(d.className);
+		console.log(gid);
+		var bodyFormData = new FormData();
+		bodyFormData.set('gid', d.className);
+		axios({
+    		method: 'post',
+    		url: 'http://18.219.12.38:8001/add_potential_match',
+    		data: bodyFormData,
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			headers:{'Authorization':"Token "+this.state.user_token}
+			})
+    .then((response)=>{
+        //handle success
+		console.log("add potential match success");
+		this.props.onPMListChange();
+    })
+    .catch(function (response) {
+        //handle error
+        console.log(response);
+    });
+    }
+	
 	generateEntriesForFilterGroup(response){
 		console.log(response);
 		var gArray=response.data.group;
@@ -190,11 +222,11 @@ export default class SearchComp extends React.Component{
 	 		  <Button content='Details' primary/>
      	</div>
 	 	<div className="user_column2">
-	 		<div>{gEntry.group_name}</div>
-			<div>{gEntry.aid.name}</div>
+		    <div>Group Name: {gEntry.group_name}</div>
+			<div>Apt: {gEntry.aid.name}</div>
 	 	</div>
 		<div className="user_column3">
-	 		<Button content='Save' primary/>
+	 		<Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>
             <Button content='Add to Group' primary/>
 	 	</div>
 	 </div>
@@ -214,7 +246,6 @@ export default class SearchComp extends React.Component{
     if(this.state.search_mode=="User")
     {
     listItems= jsonResults.map((addrEntry,index) =>
-    // Correct! Key should be specified inside the array.
     (
 	 <Segment vertical key={index}>
 	 <div className="entry_row">
@@ -291,7 +322,6 @@ export default class SearchComp extends React.Component{
         {
         return (
         
-              
               <div className="searchComp">
                 <h3>Find an Apartment</h3>
                 <div className="search_panel">
@@ -338,8 +368,7 @@ export default class SearchComp extends React.Component{
     }
     
     componentWillMount(){
-        console.log("start");
-        //nothing
+        console.log("Search Component Mount");
     }
 }
 

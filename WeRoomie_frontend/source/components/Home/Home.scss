@@ -1,4 +1,4 @@
-.Home {
+.MainComp {
     color: darkblue;
     text-align: center;
     position: absolute;
@@ -18,4 +18,20 @@
     position: absolute;
     transform: translate(0, 10%);
     left:2%;
+}
+
+.PMList_column1{
+    float: left;
+    width: 50%;
+}
+.PMList_column2{
+    float: left;
+    width: 50%;
+    color: black;
+}
+
+.entry_row:after {
+    content: "";
+    display: table;
+    clear: both;
 }

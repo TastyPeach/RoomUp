@@ -6,6 +6,11 @@ import SubMenu from '../SubMenu.jsx'
 import axios from 'axios'
 import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-router-dom'
 
+
+import SearchComp from '../SearchComp.jsx';
+import GroupDetail from '../GroupDetail.jsx';
+
+
 //test_only
 var jsonResults=[
     {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
@@ -14,20 +19,76 @@ var jsonResults=[
   ];
 
 export default class Home extends Component {
-	constructor()
-	{
+	constructor(){
 		super();
 	    this.state={
 		login:false,
-		default_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
+		user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
 		PMdisplay:<div></div>};
 		this.loginOnClick=this.loginOnClick.bind(this);
 		this.onReceivePM=this.onReceivePM.bind(this);
+		this.onPMListChange=this.onPMListChange.bind(this);
+		this.onClickDeletePMEntry=this.onClickDeletePMEntry.bind(this);
 	}
+	
+	onClickDeletePMEntry(e,d)
+	{
+		var pid=parseInt(d.className);
+		console.log("Delete Button Hit ON PID:"+pid);
+		
+		var bodyFormData = new FormData();
+		bodyFormData.set('pid', d.className);
+		axios({
+    		method: 'DELETE',
+    		url: 'http://18.219.12.38:8001/delete_potential_match',
+    		data: bodyFormData,
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			headers:{'Authorization':"Token "+this.state.user_token}
+			})
+    .then((response)=>{
+        //handle success
+		console.log("DELETE potential match success");
+		this.onPMListChange();
+    })
+    .catch(function (response) {
+        //handle error
+        console.log(response);
+    });
+		
+	}
+	
+	onPMListChange()
+	{
+	    var config={"Authorization":"Token "+this.state.user_token};
+		axios({
+    		url: 'http://18.219.12.38:8001/get_potential_match',
+    		method: 'get',
+    		headers: config
+ 			})
+ 		.then(response => {
+		this.onReceivePM(response);
+ 		}) 
+ 		.catch(err => {
+			//Error
+    		console.log(err);
+ 		});
+	}
+	
 	generatePMList(response){
-	var listItems=response.data.map((addrEntry,index) =>
+	var listItems=response.data.map((PMEntry,index) =>
     (<Segment vertical key={index}  textAlign="center">
-		<Link to={"/"+addrEntry.gid.gid}>{addrEntry.gid.group_name}</Link>
+			
+	   <div className="entry_row">
+	 	<div className="PMList_column1">
+			<Link to={"/"+PMEntry.gid.gid}>{PMEntry.gid.group_name}</Link>
+	 	</div>
+		<div className="PMList_column2">
+	 		<Button onClick={this.onClickDeletePMEntry} content='Delete' className={""+PMEntry.pid} primary/>
+	 	</div>
+	 </div>	
+			
 	 </Segment>)
   	);
   	return (
@@ -56,7 +117,7 @@ export default class Home extends Component {
 		this.setState({login:true});
 		
 		//get potential match
-		var config={"Authorization":"Token "+this.state.default_token};
+		var config={"Authorization":"Token "+this.state.user_token};
 		axios({
     		url: 'http://18.219.12.38:8001/get_potential_match',
     		method: 'get',
@@ -72,25 +133,20 @@ export default class Home extends Component {
 	}
 	
     render() {
-		if(this.state.login==false){
-			return(
-			<div>
+		
+		var temp;
+		
+		if(this.state.login==false)
+		{
+		temp=(			
 			<div className="userMenu" >
 				<Button onClick={this.loginOnClick}>Login</Button>
-		   	</div>
-            <div className="Home">
-                <h1>WeRoomie</h1>
-                <div className="child">
-                {this.props.children}
-                </div>
-            </div>
-			</div>
-        	)
+		   	</div>);
 		}
 		else{
-        return(
-			<div>
-            <Card className="PMList">
+			temp=(
+				<div>
+				<Card className="PMList">
                 <Card.Content>
                 <Card.Header>
                     PotentialMatch List
@@ -102,16 +158,24 @@ export default class Home extends Component {
             </Card>
 			<div className="userMenu" >
 				<SubMenu></SubMenu>
-		   	</div>
-            <div className="Home">
+					</div></div>);
+		}
+			return(			
+			<div>
+				{temp}
+            <div className="MainComp">
                 <h1>WeRoomie</h1>
                 <div className="child">
-                {this.props.children}
-            </div>
+    		    <Switch>
+                 <Route exact path="/"><Redirect to="/search" push/></Route>
+                 <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
+				 <Route path="/:gid" component={GroupDetail}></Route>
+                </Switch>
+                </div>
             </div>
 			</div>
-        )
-    	}
+        	);
 	}
 	
 }

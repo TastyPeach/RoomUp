@@ -18,13 +18,9 @@ render(
     // Define your router and replace <Home /> with it!
     <Router>
         <Home>
-            <Switch>
-                <Route exact path="/"><Redirect to="/search" push/></Route>
-                <Route exact path="/search" component={SearchComp}></Route>
-                <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
-				<Route path="/:gid" component={GroupDetail}></Route>
-            </Switch>
         </Home>
     </Router>
     ,document.getElementById('app')
 );
+
+
