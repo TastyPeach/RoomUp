@@ -236,7 +236,8 @@ export default class SearchComp extends React.Component{
 	 <Segment vertical key={index}>
 	 <div className="entry_row">
 	 	<div className="user_column1">
-	 		  <Button content='Details' primary/>
+	 		  <Button content='Details' primary onClick={()=>{this.props.history.push(""+gEntry.gid);
+															 console.log("Details Button Hit");}}/>
      	</div>
 	 	<div className="user_column2">
 		    <div>Group Name: {gEntry.group_name}</div>

@@ -21,8 +21,8 @@ export default class GroupDetail extends React.Component{
         }
         this.next_id=0;
         this.prev_id=0;
-        this.changeToPrevID=this.changeToPrevID.bind(this);
-        this.changeToNextID=this.changeToNextID.bind(this);
+        this.changeToPrevGroup=this.changeToPrevGroup.bind(this);
+        this.changeToNextGrup=this.changeToNextGroup.bind(this);
     }
 
     render(){
@@ -31,68 +31,27 @@ export default class GroupDetail extends React.Component{
             <div className="searchComp">
             <h3>Detail View</h3>
             <Button.Group>
-             <Button onClick={this.changeToPrevID}>Prev in MovieID</Button>
+             <Button onClick={this.changeToPrevGroup}>Your Previous Group</Button>
              <Button.Or text='Or' />
-             <Link to={"/searchComp"}> 
+             <Link to={"/search"}> 
              <Button color="green">Back to Search</Button>
              </Link>
              <Button.Or text='Or' />
-             <Button onClick={this.changeToNextID}>Next in MovieID</Button>
+             <Button onClick={this.changeToNextGroup}>Your Next Group</Button>
              </Button.Group>
-                <div className="prompt">
-                    {this.state.prompt}
-                </div>
-                <div className="result_display">
-                    {this.state.result_display}
-                </div>
+             <div className="result_display">
+                    Some More Details Here
+             </div>
             </div>);
     }
     
-    changeToPrevID()
+    changeToPrevGroup()
     {
-        var results=[];
-        var tempUrl=this.baseUrl+this.prev_id+this.apikey;
-        let url = tempUrl;
-        axios.get(url)
-                .then((response) => {
-                console.log(response);
-        let results=response.data;
-        let single_entry=this.generate_entry(results.original_title,results.poster_path,results.overview);
-        let temp=this.prev_id;
-       this.next_id=temp+1;
-       this.prev_id=temp-1;
-       console.log(this.next_id);
-        this.setState({result_display:single_entry,
-                       movie_id:temp
-                      });
-            });
     }
 
-    changeToNextID()
+    changeToNextGroup()
     {
-        console.log("detailView");
-        console.log(this.props.match.params.movie_id);
-        console.log(this.props.match.params.keyword);
-        var results=[];
-        var tempUrl=this.baseUrl+this.next_id+this.apikey;
-        console.log(tempUrl);
-        console.log("get");
-        let url = tempUrl;
-        axios.get(url)
-                .then((response) => {
-                console.log(response);
-        let results=response.data;
-        let single_entry=this.generate_entry(results.original_title,results.poster_path,results.overview);
-        let temp=this.next_id;
-       this.next_id=temp+1;
-       this.prev_id=temp-1;
-       console.log(this.next_id);
-        this.setState({result_display:single_entry,
-                       movie_id:temp
-                      });
-            });
-
-        }
+    }
     
     generate_entry(m_original_title,m_poster_path,m_overview)
     { 
@@ -110,26 +69,6 @@ export default class GroupDetail extends React.Component{
     }
     
     componentWillMount(){
-        console.log("detailView");
-        console.log(this.props.match.params.movie_id);
-        var results=[];
-        var tempUrl=this.baseUrl+this.props.match.params.movie_id+this.apikey;
-        console.log(tempUrl);
-        console.log("get");
-        let url = tempUrl;
-        axios.get(url)
-                .then((response) => {
-                console.log(response);
-        let results=response.data;
-        let single_entry=this.generate_entry(results.original_title,results.poster_path,results.overview);
-        let temp=this.props.match.params.movie_id;
-       this.next_id=Number(temp)+1;
-       this.prev_id=Number(temp)-1;
-       console.log(this.next_id);
-        this.setState({result_display:single_entry,
-                       movie_id:this.props.match.params.movie_id
-                      });
-            });
-
-        }
+        console.log("DetailView Enter");
+	}
 }
