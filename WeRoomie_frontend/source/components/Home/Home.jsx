@@ -29,6 +29,12 @@ export default class Home extends Component {
 		this.onReceivePM=this.onReceivePM.bind(this);
 		this.onPMListChange=this.onPMListChange.bind(this);
 		this.onClickDeletePMEntry=this.onClickDeletePMEntry.bind(this);
+		this.toLogout=this.toLogout.bind(this);
+	}
+	
+	toLogout()
+	{
+		this.setState({login:false});
 	}
 	
 	onClickDeletePMEntry(e,d)
@@ -133,19 +139,10 @@ export default class Home extends Component {
 	}
 	
     render() {
-		
-		var temp;
-		
-		if(this.state.login==false)
+		if(this.state.login==true)
 		{
-		temp=(			
-			<div className="userMenu" >
-				<Button onClick={this.loginOnClick}>Login</Button>
-		   	</div>);
-		}
-		else{
-			temp=(
-				<div>
+			return(			
+			<div>
 				<Card className="PMList">
                 <Card.Content>
                 <Card.Header>
@@ -157,12 +154,8 @@ export default class Home extends Component {
             </Card.Content>
             </Card>
 			<div className="userMenu" >
-				<SubMenu></SubMenu>
-					</div></div>);
-		}
-			return(			
-			<div>
-				{temp}
+				<SubMenu onClickLogout={this.toLogout}></SubMenu>
+			</div>
             <div className="MainComp">
                 <h1>WeRoomie</h1>
                 <div className="child">
@@ -176,6 +169,28 @@ export default class Home extends Component {
             </div>
 			</div>
         	);
+	     }
+		else
+			{
+		    return(			
+			<div>
+				<div className="userMenu" >
+				<Button onClick={this.loginOnClick}>Login</Button>
+		   	</div>
+            <div className="MainComp">
+                <h1>WeRoomie</h1>
+                <div className="child">
+    		    <Switch>
+                 <Route exact path="/"><Redirect to="/search" push/></Route>
+                 <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
+				 <Route path="/:gid" component={GroupDetail}></Route>
+                </Switch>
+                </div>
+            </div>
+			</div>
+        	);	
+			}
 	}
 	
 }

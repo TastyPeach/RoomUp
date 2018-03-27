@@ -3,7 +3,7 @@ import styles from './components.scss'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List,Segment,Grid, Divider,Sidebar,Card} from 'semantic-ui-react';
+import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List, Segment, Grid, Divider,Sidebar,Card, Modal} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
@@ -74,12 +74,13 @@ export default class SearchComp extends React.Component{
             user_filter:{
                 pet:0,
                 gender:0,
-                quietness:0,
-                sanitary:0,
-                timetobed:0
+                quietness:4,
+                sanitary:1,
+                timetobed:2
             },
 			login:this.props.login,
-			user_token:this.props.user_token
+			user_token:this.props.user_token,
+			modalShow:false
         }
 		this.createRequestURLForFilterGroup=this.createRequestURLForFilterGroup.bind(this);
 		this.searchInputChange=this.searchInputChange.bind(this);
@@ -95,9 +96,15 @@ export default class SearchComp extends React.Component{
 		this.onChangeSanitary=this.onChangeSanitary.bind(this);
 		this.onChangeTimetobed=this.onChangeTimetobed.bind(this);
 		
+		this.closeModal=this.closeModal.bind(this);
 		this.onPMListChange=this.props.onPMListChange;
 		console.log(this.props);
 		
+	}
+	
+	closeModal()
+	{
+		this.setState({modalShow:false});
 	}
 	
 	onChangeGender(e,d)
@@ -136,24 +143,30 @@ export default class SearchComp extends React.Component{
 		//http://18.219.12.38:8000/filter_group?gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
 		var baseUrl="http://18.219.12.38:8001/filter_group?";
 		
-		/*var tempUrl=baseUrl+'&gender='+this.state.user_filter.gender;
+		var tempUrl=baseUrl+'&gender='+this.state.user_filter.gender;
 		tempUrl=tempUrl+'&quietness='+this.state.user_filter.quietness;
 		tempUrl=tempUrl+'&sanitary='+this.state.user_filter.sanitary;
 		tempUrl=tempUrl+'&timetobed='+this.state.user_filter.timetobed;
-		tempUrl=tempUrl+'&pet='+this.state.user_filter.pet;*/
+		tempUrl=tempUrl+'&pet='+this.state.user_filter.pet;
+		
+		console.log(tempUrl);
 		
 		/*test group*/
-		var tempUrl=baseUrl+'&gender='+0;
+		/*tempUrl=baseUrl+'&gender='+0;
 		tempUrl=tempUrl+'&quietness='+4;
 		tempUrl=tempUrl+'&sanitary='+1;
 		tempUrl=tempUrl+'&timetobed='+2;
 		tempUrl=tempUrl+'&pet='+0;
+		console.log(tempUrl)*/
 		
 		return tempUrl;
 	}
 	
 	searchSubmit(e){
         if(this.state.search_mode=="User"){
+		
+		if(this.state.login==true)
+		{
 		var config={"Authorization":"Token "+this.state.user_token};
 		var tempURL=this.createRequestURLForFilterGroup();
 	    axios({
@@ -169,7 +182,11 @@ export default class SearchComp extends React.Component{
 			//Error
     		console.log(err.response.status);
  		});
-			
+		}
+		else
+			{
+				this.setState({modalShow:true});
+			}
         }
         else{
 			//Mode is Apt
@@ -321,15 +338,14 @@ export default class SearchComp extends React.Component{
         if(this.state.search_mode=="Apt")
         {
         return (
-        
-              <div className="searchComp">
+           <div className="searchComp">
                 <h3>Find an Apartment</h3>
                 <div className="search_panel">
                     <div className="searchInput">
                     <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search Apartments' action>
 					<input />
     				<Select compact options={searchOptions} defaultValue='Apt' onChange={this.onChangeMode}/>
-    				<Button type='submit' onClick={this.searchSubmit}>Search</Button>
+					<Button type='submit' onClick={this.searchSubmit}>Search</Button>
 					</Input>
                     </div>
                 </div>
@@ -343,6 +359,17 @@ export default class SearchComp extends React.Component{
         else{
         return (
             <div className="searchComp">
+		  <Modal open={this.state.modalShow} onClose={this.closeModal}>
+          <Modal.Header>
+            Not Logged in.
+          </Modal.Header>
+          <Modal.Content>
+            <p>Search by User group is an advanced function. You have to log in to proceed.</p>
+          </Modal.Content>
+          <Modal.Actions>
+             <Button positive content='Sure I will do.' onClick={this.closeModal}/>
+          </Modal.Actions>
+        </Modal>
             <h3>Find Your Dear Roomates</h3>
                 <div className="search_panel">
                     <div className="searchInput">
@@ -354,11 +381,11 @@ export default class SearchComp extends React.Component{
                     </div>
                 </div>
                 <div className="filter_field">
-                     <Dropdown placeholder='Gender' onChange={this.onChangeGender} compact selection options={genderOptions}/>
-                     <Dropdown placeholder='Quietness Degree' onChange={this.onChangeQuietness} compact selection options={quietnessOptions}/>
-                     <Dropdown placeholder='Sanitary Degree' onChange={this.onChangeSanitary} compact selection options={sanitaryOptions}/>
-                     <Dropdown placeholder='Time go to bed' onChange={this.onChangeTimetobed} compact selection options={timetobedOptions}/>
-                     <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions}/>
+                     <Dropdown placeholder='Gender' onChange={this.onChangeGender} compact selection options={genderOptions}  defaultValue={"0"}/>
+                     <Dropdown placeholder='Quietness Degree' onChange={this.onChangeQuietness} compact selection options={quietnessOptions} defaultValue={"4"}/>
+                     <Dropdown placeholder='Sanitary Degree' onChange={this.onChangeSanitary} compact selection options={sanitaryOptions} defaultValue={"1"}/>
+                     <Dropdown placeholder='Time go to bed' onChange={this.onChangeTimetobed} compact selection options={timetobedOptions} defaultValue={"2"}/>
+                     <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions} defaultValue={"0"}/>
                 </div>
             	<div className="result_display">
                  {this.state.result_display}

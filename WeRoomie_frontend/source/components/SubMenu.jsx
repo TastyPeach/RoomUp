@@ -3,9 +3,9 @@ import { Button, Menu, Dropdown } from 'semantic-ui-react'
 import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-router-dom'
 
 export default class SubMenu extends Component {
-  constructor()
+  constructor(props)
 	{
-		super();
+		super(props);
 		this.state = { activeItem: 'likes' }
 	}
   
@@ -23,7 +23,7 @@ export default class SubMenu extends Component {
         <Dropdown.Item>
         <Link to={`/becomeAdvanced`}>GoAdvanced</Link>
         </Dropdown.Item>
-		<Dropdown.Item>Logout</Dropdown.Item>
+		<Dropdown.Item onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
     )
