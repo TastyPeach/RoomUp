@@ -12,8 +12,6 @@ export default class GroupDetail extends React.Component{
     
     constructor(){
         super();
-        this.baseUrl='https://api.themoviedb.org/3/movie/'
-        this.apikey='?api_key=11ed5ad7b3eec295ef96c0ab0266446f';
         this.state={
             movie_id:0,
             prompt:<div></div>,

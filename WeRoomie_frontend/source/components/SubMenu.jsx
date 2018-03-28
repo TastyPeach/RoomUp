@@ -19,7 +19,9 @@ export default class SubMenu extends Component {
         <Dropdown.Item>Messages</Dropdown.Item>
         <Dropdown.Divider/>
         <Dropdown.Header>Settings</Dropdown.Header>
-        <Dropdown.Item>Profile</Dropdown.Item>
+		<Dropdown.Item>
+			<Link to={`/UserProfile`}>UserProfile</Link>
+		</Dropdown.Item>
         <Dropdown.Item>
         <Link to={`/becomeAdvanced`}>GoAdvanced</Link>
         </Dropdown.Item>

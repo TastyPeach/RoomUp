@@ -9,6 +9,7 @@ import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-rout
 
 import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
+import UserProfile from '../UserProfile.jsx';
 
 
 //test_only
@@ -157,12 +158,13 @@ export default class Home extends Component {
 				<SubMenu onClickLogout={this.toLogout}></SubMenu>
 			</div>
             <div className="MainComp">
-                <h1>WeRoomie</h1>
+                <h1>EasyRoomies</h1>
                 <div className="child">
     		    <Switch>
                  <Route exact path="/"><Redirect to="/search" push/></Route>
                  <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
+				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
                 </Switch>
                 </div>
@@ -178,12 +180,13 @@ export default class Home extends Component {
 				<Button onClick={this.loginOnClick}>Login</Button>
 		   	</div>
             <div className="MainComp">
-                <h1>WeRoomie</h1>
+                <h1>EasyRoomies</h1>
                 <div className="child">
     		    <Switch>
                  <Route exact path="/"><Redirect to="/search" push/></Route>
                  <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
+				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
                 </Switch>
                 </div>

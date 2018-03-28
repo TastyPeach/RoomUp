@@ -24,7 +24,7 @@ var jsonResults=[
 
 const searchOptions = [
   { key: 'Apt', text: 'Apt', value: 'Apt' },
-  { key: 'User', text: 'User', value: 'User' },
+  { key: 'Group', text: 'Group', value: 'Group' },
 ]
 
 const petOptions = [
@@ -80,7 +80,8 @@ export default class SearchComp extends React.Component{
             },
 			login:this.props.login,
 			user_token:this.props.user_token,
-			modalShow:false
+			modalShow:false,
+			addToGroupModalShow:false
         }
 		this.createRequestURLForFilterGroup=this.createRequestURLForFilterGroup.bind(this);
 		this.searchInputChange=this.searchInputChange.bind(this);
@@ -89,6 +90,7 @@ export default class SearchComp extends React.Component{
 		this.searchSubmit=this.searchSubmit.bind(this);
 		this.onChangeMode=this.onChangeMode.bind(this);
 		this.saveButtonOnClick=this.saveButtonOnClick.bind(this);
+		this.addButtonOnClick=this.addButtonOnClick.bind(this);
 		
 		this.onChangeGender=this.onChangeGender.bind(this);
 		this.onChangePet=this.onChangePet.bind(this);
@@ -97,7 +99,12 @@ export default class SearchComp extends React.Component{
 		this.onChangeTimetobed=this.onChangeTimetobed.bind(this);
 		
 		this.closeModal=this.closeModal.bind(this);
+		this.closeAddToGroupModal=this.closeAddToGroupModal.bind(this);
+		this.showAddToGroupModal=this.showAddToGroupModal.bind(this);
+		
+		
 		this.onPMListChange=this.props.onPMListChange;
+		
 		console.log(this.props);
 		
 	}
@@ -105,6 +112,15 @@ export default class SearchComp extends React.Component{
 	closeModal()
 	{
 		this.setState({modalShow:false});
+	}
+	
+	closeAddToGroupModal()
+	{
+		this.setState({addToGroupModalShow:false});
+	}
+	showAddToGroupModal()
+	{
+		this.setState({addToGroupModalShow:true});
 	}
 	
 	onChangeGender(e,d)
@@ -150,21 +166,11 @@ export default class SearchComp extends React.Component{
 		tempUrl=tempUrl+'&pet='+this.state.user_filter.pet;
 		
 		console.log(tempUrl);
-		
-		/*test group*/
-		/*tempUrl=baseUrl+'&gender='+0;
-		tempUrl=tempUrl+'&quietness='+4;
-		tempUrl=tempUrl+'&sanitary='+1;
-		tempUrl=tempUrl+'&timetobed='+2;
-		tempUrl=tempUrl+'&pet='+0;
-		console.log(tempUrl)*/
-		
 		return tempUrl;
 	}
 	
 	searchSubmit(e){
-        if(this.state.search_mode=="User"){
-		
+        if(this.state.search_mode=="Group"){
 		if(this.state.login==true)
 		{
 		var config={"Authorization":"Token "+this.state.user_token};
@@ -197,6 +203,7 @@ export default class SearchComp extends React.Component{
 			  var resultView=this.generateEntriesForTest();
               this.setState({result_display:resultView});
 			}
+			console.log("Submit Button Hit");
         }
 	}
 	
@@ -227,6 +234,34 @@ export default class SearchComp extends React.Component{
     });
     }
 	
+	addButtonOnClick(e,d)
+	{
+		//var func=this.props.onPMListChange;
+		var gid=parseInt(d.className);
+		console.log(gid);
+		var bodyFormData = new FormData();
+		bodyFormData.set('gid', d.className);
+		axios({
+    		method: 'post',
+    		url: 'http://18.219.12.38:8001/add_to_group',
+    		data: bodyFormData,
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			headers:{'Authorization':"Token "+this.state.user_token}
+			})
+    .then(response=>{
+        //handle success
+		this.showAddToGroupModal();
+		console.log("add to group success");
+    })
+    .catch(function (response) {
+        //handle error
+        console.log(response);
+    });
+    }
+	
+	
 	generateEntriesForFilterGroup(response){
 		console.log(response);
 		var gArray=response.data.group;
@@ -245,7 +280,7 @@ export default class SearchComp extends React.Component{
 	 	</div>
 		<div className="user_column3">
 	 		<Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>
-            <Button content='Add to Group' primary/>
+            <Button className={""+gEntry.gid} onClick={this.addButtonOnClick} content='Add to Group' primary/>
 	 	</div>
 	 </div>
 	</Segment>
@@ -360,7 +395,7 @@ export default class SearchComp extends React.Component{
         else{
         return (
             <div className="searchComp">
-		  <Modal open={this.state.modalShow} onClose={this.closeModal}>
+		  <Modal open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
           <Modal.Header>
             Not Logged in.
           </Modal.Header>
@@ -371,12 +406,26 @@ export default class SearchComp extends React.Component{
              <Button positive content='Sure I will do.' onClick={this.closeModal}/>
           </Modal.Actions>
         </Modal>
+		
+		<Modal open={this.state.addToGroupModalShow} onClose={this.closeAddToGroupModal} size={"mini"}>
+          <Modal.Header>
+            Add to Group
+          </Modal.Header>
+          <Modal.Content>
+            <p>Add to group is successful.</p>
+          </Modal.Content>
+          <Modal.Actions>
+             <Button positive content='Continue.' onClick={this.closeAddToGroupModal}/>
+          </Modal.Actions>
+        </Modal>
+		
+		
             <h3>Find Your Dear Roomates</h3>
                 <div className="search_panel">
                     <div className="searchInput">
-                    <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Search Roomates' action>
+                    <Input onChange={this.searchInputChange} size='small' type='text' placeholder='Add Some Tags' action>
 					<input />
-    				<Select compact options={searchOptions} defaultValue='User' onChange={this.onChangeMode}/>
+    				<Select compact options={searchOptions} defaultValue='Group' onChange={this.onChangeMode}/>
     				<Button type='submit' onClick={this.searchSubmit}>Search</Button>
 					</Input>
                     </div>
