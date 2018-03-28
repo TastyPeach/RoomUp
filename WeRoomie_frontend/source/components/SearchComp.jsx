@@ -403,7 +403,7 @@ export default class SearchComp extends React.Component{
         else{
         return (
             <div className="searchComp">
-		  <Modal dimmer={dimmer} style={inlineStyle.modal} open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
+		  <Modal style={inlineStyle.modal} open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
           <Modal.Header>
             Not Logged in.
           </Modal.Header>
@@ -415,7 +415,7 @@ export default class SearchComp extends React.Component{
           </Modal.Actions>
         </Modal>
 		
-		<Modal dimmer={dimmer} style={inlineStyle.modal} open={this.state.addToGroupModalShow} onClose={this.closeAddToGroupModal} size={"mini"}>
+		<Modal style={inlineStyle.modal} open={this.state.addToGroupModalShow} onClose={this.closeAddToGroupModal} size={"mini"}>
           <Modal.Header>
             Add to Group
           </Modal.Header>
