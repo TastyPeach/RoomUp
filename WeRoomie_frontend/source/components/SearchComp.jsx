@@ -15,6 +15,14 @@ Delete/Like button
 Pass Down of User information
 */
 
+const inlineStyle={
+	modal:{
+		marginTop: '0px !important',
+		marginLeft: 'auto',
+		marginRight: 'auto'
+	}
+};
+
 //test_only
 var jsonResults=[
     {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
@@ -395,7 +403,7 @@ export default class SearchComp extends React.Component{
         else{
         return (
             <div className="searchComp">
-		  <Modal open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
+		  <Modal dimmer={dimmer} style={inlineStyle.modal} open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
           <Modal.Header>
             Not Logged in.
           </Modal.Header>
@@ -407,7 +415,7 @@ export default class SearchComp extends React.Component{
           </Modal.Actions>
         </Modal>
 		
-		<Modal open={this.state.addToGroupModalShow} onClose={this.closeAddToGroupModal} size={"mini"}>
+		<Modal dimmer={dimmer} style={inlineStyle.modal} open={this.state.addToGroupModalShow} onClose={this.closeAddToGroupModal} size={"mini"}>
           <Modal.Header>
             Add to Group
           </Modal.Header>
