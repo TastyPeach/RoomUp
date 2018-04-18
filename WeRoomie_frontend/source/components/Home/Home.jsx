@@ -158,7 +158,7 @@ export default class Home extends Component {
 				<SubMenu onClickLogout={this.toLogout}></SubMenu>
 			</div>
             <div className="MainComp">
-                <h1>EasyRoomies</h1>
+                <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
                  <Route exact path="/"><Redirect to="/search" push/></Route>
@@ -180,7 +180,7 @@ export default class Home extends Component {
 				<Button onClick={this.loginOnClick}>Login</Button>
 		   	</div>
             <div className="MainComp">
-                <h1>EasyRoomies</h1>
+                <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
                  <Route exact path="/"><Redirect to="/search" push/></Route>
