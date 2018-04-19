@@ -10,6 +10,8 @@ import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-rout
 import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
+import Background from '../../assets/image.png'
+
 
 
 //test_only
@@ -18,6 +20,12 @@ var jsonResults=[
     {"addr":"Apt#102, 1010 University Avenue","gID":16002,"memberName":["banana","peach"]},
     {"addr":"Apt#103, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
   ];
+
+ var sectionStyle = {
+	width: "100%",
+	height: "380px",
+	backgroundImage: `url(${Background})` 
+  }; 
 
 export default class Home extends Component {
 	constructor(){
@@ -143,7 +151,11 @@ export default class Home extends Component {
 		if(this.state.login==true)
 		{
 			return(			
-			<div>
+				<div>	
+				<div className= "div-right">
+				<SubMenu onClickLogout={this.toLogout}></SubMenu>
+		   	    </div>		
+			    <div style = {sectionStyle}>
 				<Card className="PMList">
                 <Card.Content>
                 <Card.Header>
@@ -154,9 +166,6 @@ export default class Home extends Component {
 				{this.state.PMdisplay}
             </Card.Content>
             </Card>
-			<div className="userMenu" >
-				<SubMenu onClickLogout={this.toLogout}></SubMenu>
-			</div>
             <div className="MainComp">
                 <h1>RoomUp</h1>
                 <div className="child">
@@ -169,6 +178,7 @@ export default class Home extends Component {
                 </Switch>
                 </div>
             </div>
+			</div>
 			</div>
         	);
 	     }
@@ -176,9 +186,11 @@ export default class Home extends Component {
 			{
 		    return(			
 			<div>
-				<div className="userMenu" >
-				<Button onClick={this.loginOnClick}>Login</Button>
-		   	</div>
+			<div className= "div-right" >
+				<Button className = "buttonStyle" basic onClick={this.loginOnClick}>Login</Button>
+		   	</div>	
+			<div style = {sectionStyle}>
+
             <div className="MainComp">
                 <h1>RoomUp</h1>
                 <div className="child">
@@ -191,6 +203,7 @@ export default class Home extends Component {
                 </Switch>
                 </div>
             </div>
+			</div>
 			</div>
         	);	
 			}

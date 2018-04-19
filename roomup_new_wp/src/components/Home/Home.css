@@ -8,11 +8,16 @@
     width: 50%;
 }
 
-.userMenu{
-	position: absolute;
-	top:2%;
-	right:10%;
+.div-right { 
+    text-align:right;
+    margin:0px auto 0px auto;
+    height:54px;
+} 
+
+.buttonStyle{
+    height: 100%;
 }
+
 
 .PMList{
     position: absolute;

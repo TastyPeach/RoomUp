@@ -12,6 +12,14 @@ export default class SubMenu extends Component {
   render() {
     const { activeItem } = this.state
     return (
+    <Menu size= 'mini' compact> 
+      <Menu.Item>
+        PotentialMatches
+      </Menu.Item>  
+      <Menu.Item>
+        Messages
+      </Menu.Item> 
+      <Menu.Item>
     <Dropdown text='You' pointing className='link item'>
       <Dropdown.Menu>
         <Dropdown.Header>Matching</Dropdown.Header>
@@ -19,15 +27,17 @@ export default class SubMenu extends Component {
         <Dropdown.Item>Messages</Dropdown.Item>
         <Dropdown.Divider/>
         <Dropdown.Header>Settings</Dropdown.Header>
-		<Dropdown.Item>
-			<Link to={`/UserProfile`}>UserProfile</Link>
-		</Dropdown.Item>
+    <Dropdown.Item>
+      <Link to={`/UserProfile`}>UserProfile</Link>
+    </Dropdown.Item>
         <Dropdown.Item>
         <Link to={`/becomeAdvanced`}>GoAdvanced</Link>
         </Dropdown.Item>
-		<Dropdown.Item onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
+    <Dropdown.Item onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
+    </Menu.Item>
+    </Menu>
     )
   }
 }
