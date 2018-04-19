@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.utils import IntegrityError
 from django.contrib.auth import logout, login, authenticate
+from django.shortcuts import render_to_response
 
 from .models import *
 from .serializers import *
@@ -15,9 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 
 def index(request):
-    my_dick = {'insert_me' : "Hello I am from views.py"}
-    return render(request, 'app_basic/index.html', context=my_dick)
-
+    return render_to_response('index.html')
 ## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
 @parser_classes((JSONParser,))
@@ -121,9 +120,9 @@ def get_personal_info(request):
     return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def get_user_info(request):
-    uname = request.data.get('username')
+    uname = request.query_params.get('username')
     users = User.objects.filter(username=uname)
     if len(users) > 0:
         user = users[0]
@@ -145,11 +144,13 @@ def add_potential_match(request):
     gs = Group.objects.filter(gid=gid)
     adv_us = AdvancedUser.objects.filter(uid=u)
 
-    if len(gs) > 0 and len(adv_u) > 0:
+    if len(gs) > 0 and len(adv_us) > 0:
         pm = PotentialMatch(uid=adv_us[0], gid=gs[0])
         try:
             pm.save()
             return Response(status=status.HTTP_201_CREATED)
+
+        # duplicate potential match
         except IntegrityError:
             return Response(status=status.HTTP_409_CONFLICT)
 
@@ -184,7 +185,7 @@ def delete_potential_match(request):
 ## -------------------------------- Group Related Operation ---------------------------
 #gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
 @api_view(['GET'])
-#@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def filter_group(request):
     gender = int(request.query_params.get('gender'))
     timetobed = int(request.query_params.get('timetobed'))
@@ -199,10 +200,12 @@ def filter_group(request):
         is_valid = True
         have_pet = False
         for user in potential_users:
-            if user.gender == None or user.timetobed == None or user.quietness == None or user.sanitary == None:
+            if user.gender == None or user.timetobed == None or \
+               user.quietness == None or user.sanitary == None:
                 is_valid = False
                 break;
-            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
+            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 \
+                    and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
             have_pet = have_pet or user.pet
             if not valid:
                 is_valid = False
@@ -217,24 +220,37 @@ def filter_group(request):
 @permission_classes((IsAuthenticated,))
 def create_group(request):
     user = request._request.user
+    # no longer advanced user - 410
     if len(AdvancedUser.objects.filter(uid=user)) == 0:
         return Response(status=status.HTTP_410_GONE)
-    advance = AdvancedUser.objects.get(uid=user)
 
+    advance = AdvancedUser.objects.get(uid=user)
+    # already in a group - 403
     if advance.gid != None:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+    # Get apartment related parameter
     name = request.data.get("name")
     price = request.data.get("price")
     address = request.data.get("address")
     floorplan = request.data.get("floorplan")
     occupied = request.data.get("occupied")
 
+    # Get group related parameter
+    capacity = request.data.get("capacity")
+    group_name = request.data.get("group_name")
+
+    # group name too long
+    if len(group_name) > 10:
+        return JsonResponse({'error': 'group name too long'}, status=status.HTTP_400_BAD_REQUEST)
+    if len(name) > 50:
+        return JsonResponse({'error': 'apartment name too long'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Save apartment
     apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
     apt.save()
 
-    capacity = request.data.get("capacity")
-    group_name = request.data.get("group_name")
+    # Save group
     group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
     group.save()
 
@@ -248,15 +264,19 @@ def create_group(request):
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
     user = request._request.user
+    # no longer advanced user - 410
     if len(AdvancedUser.objects.filter(uid=user)) == 0:
         return Response(status=status.HTTP_410_GONE)
-    advance = AdvancedUser.objects.get(uid=user)
 
+    advance = AdvancedUser.objects.get(uid=user)
+    # already in a group - 403
     if advance.gid != None:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     gid = request.data.get('gid')
     group = Group.objects.get(gid=gid)
+
+    # attempt to join a full group - Consider 403? 406 refers to content type...
     if group.peopleleft <= 0:
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     else:
