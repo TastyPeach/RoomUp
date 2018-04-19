@@ -1,0 +1,57 @@
+.searchComp {
+    color: skyblue;
+    text-align: center;
+    position: absolute;
+    width:100%;
+    height: 1000px;
+}
+
+.search_panel{
+}
+
+.searchInput{
+	width:auto;
+}
+
+.result_display{
+    width: 100%;
+	padding-top:10%;
+	color:black;
+}
+
+.user_column1{
+    float: left;
+    width: 23%;
+}
+.user_column2{
+    float: left;
+    width: 43%;
+    color: black;
+}
+.user_column3{
+    float: right;
+    width: 33%;
+}
+
+.apt_column1{
+    float: left;
+    width: 20%;
+}
+.apt_column2{
+    float: left;
+    width: 80%;
+    color: black;
+}
+
+
+/* Clear floats after the columns */
+.entry_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.filter_field{
+    position: relative;
+    padding-top:5%;
+}
