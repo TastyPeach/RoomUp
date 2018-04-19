@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'app_basic',
     'rest_framework',
     'rest_framework.authtoken',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,18 @@ REST_FRAMEWORK = {
             'rest_framework.permissions.AllowAny',
         )
 }
+
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "app_basic.routing.channel_routing",
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

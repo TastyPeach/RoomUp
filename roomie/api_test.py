@@ -1,6 +1,6 @@
 import requests, json
 
-base = 'http://localhost:8001/'
+base = 'http://localhost:8000/'
 header = {'Content-Type': 'application/json'}
 # 'Authorization': 'Token xxxxxx'
 

@@ -3,6 +3,11 @@ from rest_framework import serializers
 from app_basic.models import *
 from django.contrib.auth.models import User
 
+# class MessageSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Message 
+#         fileds = ('room', 'handle', 'id' , 'message', 'timestamp')
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

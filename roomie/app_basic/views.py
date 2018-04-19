@@ -14,9 +14,41 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 
+from django.forms.models import model_to_dict
+from datetime import date, datetime
+
+## about a chat room
+
+def chat_room(request, label):
+    # If the room with the given label doesn't exist, automatically create it
+    # upon first visit (a la etherpad).
+    # print (type(label))
+    # print (label)
+    room, created = Room.objects.get_or_create(label=label)
+
+    # We want to show the last 50 messages, ordered most-recent-last
+    messages = reversed(room.messages.order_by('-timestamp')[:50])
+    ms = []
+    for message in messages:
+        m = model_to_dict(message)
+        print(m)
+        if isinstance(m['timestamp'], (datetime, date)):
+            m['timestamp'] = m['timestamp'].strftime('%Y-%m-%d %H:%M') #.isoformat()
+            ms.append(m)
+            # print(m)
+    # print(room.messages.order_by('-timestamp')[:50])
+    print(ms)
+    
+    return render(request, "app_basic/room.html", {
+        'room': room,
+        'messages': ms,
+    })
+
+
 def index(request):
     my_dick = {'insert_me' : "Hello I am from views.py"}
     return render(request, 'app_basic/index.html', context=my_dick)
+
 
 ## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
