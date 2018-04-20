@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Menu, Dropdown, Card, Segment} from 'semantic-ui-react'
+import { Button, Menu, Dropdown, Card, Segment, Divider} from 'semantic-ui-react'
 import propTypes from 'prop-types'
 import styles from './Home.css'
 import SubMenu from '../SubMenu.jsx'
@@ -10,7 +10,6 @@ import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-rout
 import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
-import Background from '../../assets/image.png'
 
 
 
@@ -21,11 +20,7 @@ var jsonResults=[
     {"addr":"Apt#103, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
   ];
 
- var sectionStyle = {
-	width: "100%",
-	height: "380px",
-	backgroundImage: `url(${Background})` 
-  }; 
+
 
 export default class Home extends Component {
 	constructor(){
@@ -152,10 +147,11 @@ export default class Home extends Component {
 		{
 			return(			
 				<div>	
-				<div className= "div-right">
+				<div className= "submenu">
 				<SubMenu onClickLogout={this.toLogout}></SubMenu>
-		   	    </div>		
-			    <div style = {sectionStyle}>
+		   	    </div>
+				<Divider fitted/>   		
+			    <div>
 				<Card className="PMList">
                 <Card.Content>
                 <Card.Header>
@@ -187,10 +183,13 @@ export default class Home extends Component {
 		    return(			
 			<div>
 			<div className= "div-right" >
-				<Button className = "buttonStyle" basic onClick={this.loginOnClick}>Login</Button>
+			<Button.Group>	
+				<Button  className = "ButtonGroup" basic onClick={this.loginOnClick}>Register</Button>
+				<Button  className = "ButtonGroup" basic onClick={this.loginOnClick}>Login</Button>
+			</Button.Group>	
 		   	</div>	
-			<div style = {sectionStyle}>
-
+			<Divider fitted/>   
+			<div>
             <div className="MainComp">
                 <h1>RoomUp</h1>
                 <div className="child">
