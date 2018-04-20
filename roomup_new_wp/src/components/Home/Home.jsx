@@ -166,8 +166,7 @@ export default class Home extends Component {
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/"><Redirect to="/search" push/></Route>
-                 <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
 				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
@@ -194,8 +193,8 @@ export default class Home extends Component {
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/"><Redirect to="/search" push/></Route>
-                 <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
 				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
