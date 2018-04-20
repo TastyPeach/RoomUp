@@ -31,7 +31,7 @@ export default class SubMenu extends Component {
           </Dropdown.Menu>
         </Dropdown>
         <Button.Group>	
-        <Button basic >Register</Button>
+        <Button basic >Messages</Button>
         </Button.Group>	
       </div>  
     )
