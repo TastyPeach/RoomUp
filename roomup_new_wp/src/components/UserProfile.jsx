@@ -26,7 +26,7 @@ export default class UserProfile extends React.Component{
 	{
 		var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-    		url: 'http://18.219.12.38:8001/get_personal_info',
+    		url: 'http://18.219.12.38:8001/search/get_personal_info',
     		method: 'get',
     		headers: config
  			})
@@ -49,7 +49,7 @@ export default class UserProfile extends React.Component{
 		bodyFormData.set('gid', gid);
 		axios({
     		method: 'post',
-    		url: 'http://18.219.12.38:8001/leave_from_group',
+    		url: 'http://18.219.12.38:8001/search/leave_from_group',
     		data: bodyFormData,
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
