@@ -3,7 +3,7 @@ import styles from './components.css'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import { Container,Button, Select, Input,Dropdown, Checkbox ,Card ,Image, Message} from 'semantic-ui-react';
+import { Container,Button, Select, Input,Dropdown, Checkbox ,Card ,Image, Message, Grid,Segment} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 
@@ -13,60 +13,64 @@ export default class GroupDetail extends React.Component{
     constructor(){
         super();
         this.state={
-            movie_id:0,
-            prompt:<div></div>,
-            result_display:<div></div>
+            GroupViewDetails:<div></div>,
+			user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
         }
-        this.next_id=0;
-        this.prev_id=0;
-        this.changeToPrevGroup=this.changeToPrevGroup.bind(this);
-        this.changeToNextGrup=this.changeToNextGroup.bind(this);
+
+        this.generateGroupDetailsView=this.generateGroupDetailsView.bind(this);
+        this.loadGroupProfile();
     }
+
+    loadGroupProfile()
+	{
+		var config={"Authorization":"Token "+this.state.user_token};
+		axios({
+    		url: 'http://18.219.12.38:8001/search/get_group_info?gid=1',
+    		method: 'get',
+    		headers: config
+ 			})
+ 		.then(response => {
+		  console.log(response);
+		  this.generateGroupDetailsView(response);
+ 		}) 
+ 		.catch(err => {
+			//Error
+    		console.log(err);
+ 		});	
+	}
+
+    generateGroupDetailsView(response)
+	{
+		this.setState({GroupViewDetails:(
+		<Grid columns={1} divided>
+    	<Grid.Row stretched>
+      	<Grid.Column>
+        	<Segment>Nickname:{" "+response.data.users.id}</Segment>
+        	{/* <Segment>First Name:{" "+response.data.uid.first_name}</Segment>
+			<Segment>Last Name:{" "+response.data.uid.last_name}</Segment> */}
+      	</Grid.Column>
+    	</Grid.Row>
+  		</Grid>)});
+	}
 
     render(){
         
         return (
             <div className="searchComp">
-            <h3>Detail View</h3>
+            <h3>Group Details</h3>
             <Button.Group>
-             <Button onClick={this.changeToPrevGroup}>Your Previous Group</Button>
-             <Button.Or text='Or' />
              <Link to={"/search"}> 
              <Button color="green">Back to Search</Button>
              </Link>
-             <Button.Or text='Or' />
-             <Button onClick={this.changeToNextGroup}>Your Next Group</Button>
              </Button.Group>
              <div className="result_display">
-                    Some More Details Here
+				 {this.state.GroupViewDetails}
              </div>
             </div>);
     }
-    
-    changeToPrevGroup()
-    {
-    }
 
-    changeToNextGroup()
-    {
-    }
-    
-    generate_entry(m_original_title,m_poster_path,m_overview)
-    { 
-        return(
-            <div className="entry">
-            <Container Text>
-            <h2 className="entry_title">{m_original_title}</h2>
-            <div className="entry_image">
-              <Image fluid src={"https://image.tmdb.org/t/p/w500" + m_poster_path}></Image>
-            </div>
-            <div className="entry_overview">{m_overview}</div>
-                </Container>
-            </div>
-        );
-    }
     
     componentWillMount(){
-        console.log("DetailView Enter");
+        console.log("UserProfile Enter");
 	}
 }
