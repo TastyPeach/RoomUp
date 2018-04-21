@@ -38,11 +38,11 @@
 
 .PMList_column1{
     float: left;
-    width: 50%;
+    width: 100px;
 }
 .PMList_column2{
     float: left;
-    width: 50%;
+    width: 100px;
     color: black;
 }
 

@@ -112,7 +112,7 @@ export default class UserProfile extends React.Component{
             <div className="searchComp">
             <h3>User Profile</h3>
             <Button.Group>
-             <Link to={"/search"}> 
+             <Link to={"/"}> 
              <Button color="green">Back to Search</Button>
              </Link>
              </Button.Group>
