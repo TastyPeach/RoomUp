@@ -32,6 +32,7 @@ export default class SubMenu extends Component {
         </Dropdown>
         <Button.Group>	
         <Button basic >Messages</Button>
+		<Button basic onClick={this.props.onClickShowSidebar}>SavedMatch</Button>
         </Button.Group>	
       </div>  
     )

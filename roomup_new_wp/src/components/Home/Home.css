@@ -8,6 +8,10 @@
     width: 50%;
 }
 
+.placeHolder{
+	height:  2000px;
+}
+
 .div-right { 
     text-align:right;
     margin:0px auto 0px auto;
@@ -34,11 +38,11 @@
 
 .PMList_column1{
     float: left;
-    width: 50%;
+    width: 100px;
 }
 .PMList_column2{
     float: left;
-    width: 50%;
+    width: 100px;
     color: black;
 }
 
