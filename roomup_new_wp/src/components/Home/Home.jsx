@@ -170,18 +170,6 @@ export default class Home extends Component {
 			  <div className="placeHolder"/>
           </Sidebar.Pusher>
         </Sidebar.Pushable>					
-			
-					
-					<Card className="PMList">
-                <Card.Content>
-                <Card.Header>
-                    PotentialMatch List
-                </Card.Header>
-                </Card.Content>
-            <Card.Content>  
-				{this.state.PMdisplay}
-            </Card.Content>
-         </Card>
 					
             <div className="MainComp">
                 <h1>RoomUp</h1>
