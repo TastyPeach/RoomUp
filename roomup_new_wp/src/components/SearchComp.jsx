@@ -165,7 +165,7 @@ export default class SearchComp extends React.Component{
 	//under test usage
 	createRequestURLForFilterGroup(){
 		//http://18.219.12.38:8000/filter_group?gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
-		var baseUrl="http://18.219.12.38:8001/search/filter_group?";
+		var baseUrl="http://18.219.12.38:8001/filter_group?";
 		
 		var tempUrl=baseUrl+'&gender='+this.state.user_filter.gender;
 		tempUrl=tempUrl+'&quietness='+this.state.user_filter.quietness;
@@ -224,7 +224,7 @@ export default class SearchComp extends React.Component{
 		bodyFormData.set('gid', d.className);
 		axios({
     		method: 'post',
-    		url: 'http://18.219.12.38:8001/search/add_potential_match',
+    		url: 'http://18.219.12.38:8001/add_potential_match',
     		data: bodyFormData,
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
@@ -251,7 +251,7 @@ export default class SearchComp extends React.Component{
 		bodyFormData.set('gid', d.className);
 		axios({
     		method: 'post',
-    		url: 'http://18.219.12.38:8001/search/add_to_group',
+    		url: 'http://18.219.12.38:8001/add_to_group',
     		data: bodyFormData,
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
