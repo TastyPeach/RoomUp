@@ -57,7 +57,7 @@ export default class Home extends Component {
 		bodyFormData.set('pid', d.className);
 		axios({
     		method: 'DELETE',
-    		url: 'http://18.219.12.38:8001/search/delete_potential_match',
+    		url: 'http://18.219.12.38:8001/delete_potential_match',
     		data: bodyFormData,
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
@@ -80,7 +80,7 @@ export default class Home extends Component {
 	{
 	    var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-    		url: 'http://18.219.12.38:8001/search/get_potential_match',
+    		url: 'http://18.219.12.38:8001/get_potential_match',
     		method: 'get',
     		headers: config
  			})
@@ -136,7 +136,7 @@ export default class Home extends Component {
 		//get potential match
 		var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-    		url: 'http://18.219.12.38:8001/search/get_potential_match',
+    		url: 'http://18.219.12.38:8001/get_potential_match',
     		method: 'get',
     		headers: config
  			})
@@ -187,8 +187,7 @@ export default class Home extends Component {
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/"><Redirect to="/search" push/></Route>
-                 <Route exact path="/search" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={AdvancedUserReg}></Route>
 				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
