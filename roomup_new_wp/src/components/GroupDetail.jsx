@@ -26,11 +26,7 @@ export default class GroupDetail extends React.Component{
 	{
         var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-<<<<<<< HEAD
-    		url: 'http://18.219.12.38:8001/get_group_info?gid=1',
-=======
             url: 'http://18.219.12.38:8001/get_group_info?gid=3' ,
->>>>>>> a668e4e6ff2f1831463f6b6c6c6bc7277c931d93
     		method: 'get',
     		headers: config
  			})
