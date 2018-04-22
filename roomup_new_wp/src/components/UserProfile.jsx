@@ -99,7 +99,7 @@ export default class UserProfile extends React.Component{
 					<Segment>GID:You don't belong to any group.</Segment>
 				</Grid.Column>
 				<Grid.Column>
-				<Segment>Go and add one!</Segment>
+				<Button color="blue" as={Link} to='/'>Go and add one!</Button>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
