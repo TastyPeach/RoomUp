@@ -15,18 +15,20 @@ export default class GroupDetail extends React.Component{
         this.state={
             GroupViewDetails:<div></div>,
             user_token:this.props.user_token,
-            gid: this.props.gid
+            modalOpen: false,
+			gid: this.props.gid
         }
-
+		console.log(this.props.gid);
         this.generateGroupDetailsView=this.generateGroupDetailsView.bind(this);
         this.loadGroupProfile();
     }
 
     loadGroupProfile()
 	{
+		var urlAddr='http://18.219.12.38:8001/get_group_info?gid='+this.state.gid;
         var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-            url: 'http://18.219.12.38:8001/get_group_info?gid=' + this.props.gid ,
+            url: urlAddr,
     		method: 'get',
     		headers: config
  			})
@@ -42,14 +44,6 @@ export default class GroupDetail extends React.Component{
 
     generateGroupDetailsView(response)
 	{
-        var ad_gender = response.data.group[0].admin_uid.gender;
-        var ad_quietness = response.data.group[0].admin_uid.quietness;
-        var ad_sanitary = response.data.group[0].admin_uid.sanitary;
-        var gender = ['Male', 'Female'];
-        var quietness = ['Extremely Quiet', 'Very Quiet', 'Medium Quiet', 'Noisy', 'Very Noisy']
-        var sanitary = ['Extremely Clean', 'Very Clean', 'Medium Clean', 'Sloppy', 'Very Sloppy']
-        //console.log(gender[gender_id]);
-
 		this.setState({GroupViewDetails:(
         <Table celled padded>
         <Table.Header>
@@ -85,6 +79,7 @@ export default class GroupDetail extends React.Component{
             <Table.Cell>{" "+response.data.group[0].aid.price}</Table.Cell>
             <Table.Cell>{" "+response.data.group[0].aid.address}</Table.Cell>
             <Table.Cell>{" "+response.data.group[0].aid.floorplan}</Table.Cell>
+
         </Table.Row>
         </Table.Body>
 
@@ -107,39 +102,13 @@ export default class GroupDetail extends React.Component{
 
         <Table.Body> 
         <Table.Row textAlign='center'>
-            <Table.Cell>{" "+gender[ad_gender]}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{gender[user.gender]}</Table.Cell>)}
+            <Table.Cell >{" "+response.data.group[0].admin_uid.gender}</Table.Cell>   
+            {response.data.users.map((user,i) => <Table.Cell>{user.uid.username}</Table.Cell>)}
             {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
         </Table.Row>
         </Table.Body>
-
-        <Table.Body> 
-        <Table.Row textAlign='center'>
-            <Table.Cell>{" "+quietness[ad_quietness]}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{quietness[user.quietness]}</Table.Cell>)}
-            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
-        </Table.Row>
-        </Table.Body>
-
-        <Table.Body> 
-        <Table.Row textAlign='center'>
-            <Table.Cell>{" "+sanitary[ad_sanitary]}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{sanitary[user.sanitary]}</Table.Cell>)}
-            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
-        </Table.Row>
-        </Table.Body>
-
-        <Table.Body> 
-        <Table.Row textAlign='center'>
-            <Table.Cell>{" "+response.data.group[0].admin_uid.major}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{user.major}</Table.Cell>)}
-            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
-        </Table.Row>
-        </Table.Body>
-
-        </Table>  
-
-                )});
+        </Table>    
+		)});
 	}
 
     render(){
@@ -147,8 +116,8 @@ export default class GroupDetail extends React.Component{
             <div className="searchComp">
             <h3>Group Details</h3>
             <Button.Group>
-             <Link to={""}> 
-             <Button color="green">Back to Search1</Button>
+             <Link to={"/"}> 
+             <Button color="green">Back to Search</Button>
              </Link>
              </Button.Group>
              <div className="result_display" >
@@ -156,8 +125,9 @@ export default class GroupDetail extends React.Component{
              </div>
             </div>);
     }
+
     
     componentWillMount(){
-        console.log("UserProfile Enter");
+        console.log("GroupDetail Enter");
 	}
 }

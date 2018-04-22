@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
 import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List, Segment, Grid, Divider,Sidebar,Card, Modal} from 'semantic-ui-react';
-import propTypes from 'prop-types';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 
@@ -87,7 +86,6 @@ export default class SearchComp extends React.Component{
                 timetobed:2
             },
 			login:this.props.login,
-			user_token:this.props.user_token,
 			modalShow:false,
 			addToGroupModalShow:false
         }
@@ -112,7 +110,7 @@ export default class SearchComp extends React.Component{
 		
 		
 		this.onPMListChange=this.props.onPMListChange;
-		
+		this.getUserToken=this.props.getUserToken;
 		console.log(this.props);
 		
 	}
@@ -181,7 +179,7 @@ export default class SearchComp extends React.Component{
         if(this.state.search_mode=="Group"){
 		if(this.state.login==true)
 		{
-		var config={"Authorization":"Token "+this.state.user_token};
+		var config={"Authorization":"Token "+this.getUserToken()};
 		var tempURL=this.createRequestURLForFilterGroup();
 	    axios({
     		url: tempURL,
@@ -217,6 +215,7 @@ export default class SearchComp extends React.Component{
 	
 	saveButtonOnClick(e,d)
 	{
+		console.log(this.getUserToken());
 		//var func=this.props.onPMListChange;
 		var gid=parseInt(d.className);
 		console.log(gid);
@@ -229,7 +228,7 @@ export default class SearchComp extends React.Component{
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
 				}},
-			headers:{'Authorization':"Token "+this.state.user_token}
+			headers:{'Authorization':"Token "+this.getUserToken()}
 			})
     .then((response)=>{
         //handle success
@@ -256,7 +255,7 @@ export default class SearchComp extends React.Component{
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',
 				}},
-			headers:{'Authorization':"Token "+this.state.user_token}
+			headers:{'Authorization':"Token "+this.getUserToken()}
 			})
     .then(response=>{
         //handle success
