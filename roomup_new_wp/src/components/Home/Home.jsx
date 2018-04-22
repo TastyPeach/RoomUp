@@ -21,14 +21,6 @@ const inlineStyle={
 };
 
 
-
-//test_only
-var jsonResults=[
-    {"addr":"Apt#101, 1010 University Avenue","gID":16001,"memberName":["apple"]},
-    {"addr":"Apt#102, 1010 University Avenue","gID":16002,"memberName":["banana","peach"]},
-    {"addr":"Apt#103, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
-  ];
-
   export default class Home extends Component {
 	constructor(){
 		super();
@@ -291,7 +283,7 @@ var jsonResults=[
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
-				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
+				 <Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
             </div>

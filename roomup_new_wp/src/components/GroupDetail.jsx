@@ -14,19 +14,21 @@ export default class GroupDetail extends React.Component{
         super(props);
         this.state={
             GroupViewDetails:<div></div>,
-            user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
-            modalOpen: false
+            user_token:this.props.user_token,
+            modalOpen: false,
+			gid: this.props.gid
         }
-
+		console.log(this.props.gid);
         this.generateGroupDetailsView=this.generateGroupDetailsView.bind(this);
         this.loadGroupProfile();
     }
 
     loadGroupProfile()
 	{
+		var urlAddr='http://18.219.12.38:8001/get_group_info?gid='+this.state.gid;
         var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-            url: 'http://18.219.12.38:8001/get_group_info?gid=3' ,
+            url: urlAddr,
     		method: 'get',
     		headers: config
  			})
@@ -106,12 +108,10 @@ export default class GroupDetail extends React.Component{
         </Table.Row>
         </Table.Body>
         </Table>    
-
-                )});
+		)});
 	}
 
     render(){
-        console.log(this.props.params)
         return (
             <div className="searchComp">
             <h3>Group Details</h3>
