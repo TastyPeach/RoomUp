@@ -116,7 +116,7 @@ export default class GroupDetail extends React.Component{
         <Table.Body> 
         <Table.Row textAlign='center'>
             <Table.Cell>{" "+quietness[ad_quietness]}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{quietness[user.gender]}</Table.Cell>)}
+            {response.data.users.map((user,i) => <Table.Cell>{quietness[user.quietness]}</Table.Cell>)}
             {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
         </Table.Row>
         </Table.Body>
@@ -124,7 +124,7 @@ export default class GroupDetail extends React.Component{
         <Table.Body> 
         <Table.Row textAlign='center'>
             <Table.Cell>{" "+sanitary[ad_sanitary]}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{sanitary[user.gender]}</Table.Cell>)}
+            {response.data.users.map((user,i) => <Table.Cell>{sanitary[user.sanitary]}</Table.Cell>)}
             {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
         </Table.Row>
         </Table.Body>
@@ -148,7 +148,7 @@ export default class GroupDetail extends React.Component{
             <h3>Group Details</h3>
             <Button.Group>
              <Link to={""}> 
-             <Button color="green">Back to Search</Button>
+             <Button color="green">Back to Search1</Button>
              </Link>
              </Button.Group>
              <div className="result_display" >

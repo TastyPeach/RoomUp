@@ -10,7 +10,8 @@ import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
-import GoAdvancedSuccess from '../GoAdvancedSuccess.jsx'
+import GoAdvancedSuccess from '../GoAdvancedSuccess.jsx';
+import CreateGroup from '../CreateGroup.jsx'
 
 
 
@@ -284,6 +285,7 @@ const inlineStyle={
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
+				 <Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
