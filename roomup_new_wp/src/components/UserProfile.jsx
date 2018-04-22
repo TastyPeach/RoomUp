@@ -10,23 +10,25 @@ import axios from 'axios';
 export default class UserProfile extends React.Component{
     
     
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
 			UserDetailsView:<div></div>,
-			user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
+			user_token: this.props.user_token,
 			gid:null
         }
 		this.generateUserDetailsView=this.generateUserDetailsView.bind(this);
 		this.leaveGroupButtonOnClick=this.leaveGroupButtonOnClick.bind(this);
 		this.loadUserProfile=this.loadUserProfile.bind(this);
 		this.loadUserProfile();
+	    console.log(this.props);
+		console.log(this.props.user_token);
     }
 	loadUserProfile()
 	{
 		var config={"Authorization":"Token "+this.state.user_token};
 		axios({
-    		url: 'http://18.219.12.38:8001/search/get_personal_info',
+    		url: 'http://18.219.12.38:8001/get_personal_info',
     		method: 'get',
     		headers: config
  			})
@@ -49,7 +51,7 @@ export default class UserProfile extends React.Component{
 		bodyFormData.set('gid', gid);
 		axios({
     		method: 'post',
-    		url: 'http://18.219.12.38:8001/search/leave_from_group',
+    		url: 'http://18.219.12.38:8001/leave_from_group',
     		data: bodyFormData,
     		config: { headers: {
 				'Content-Type': 'multipart/form-data',

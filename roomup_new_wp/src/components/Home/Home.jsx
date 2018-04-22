@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Menu, Dropdown, Card, Segment, Divider, Sidebar, Image, Icon, Header} from 'semantic-ui-react'
+import { Button, Menu, Dropdown, Card, Segment, Divider, Sidebar, Image, Icon, Header, Modal, Input,Form} from 'semantic-ui-react'
 import propTypes from 'prop-types'
 import styles from './Home.css'
 import SubMenu from '../SubMenu.jsx'
@@ -10,6 +10,15 @@ import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
+
+
+const inlineStyle={
+	modal:{
+		marginTop: '0px !important',
+		marginLeft: 'auto',
+		marginRight: 'auto'
+	}
+};
 
 
 
@@ -29,14 +38,95 @@ export default class Home extends Component {
 		login:false,
 		user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
 		PMdisplay:<div></div>,
-		sidebarVisible: false};
+		sidebarVisible: false,
+		regModalShow: false,
+		fname:'',
+		lname:'',
+		email:'',
+		username:'',
+		password:''};
 		this.toggleSidebar=this.toggleSidebar.bind(this);
 		this.loginOnClick=this.loginOnClick.bind(this);
 		this.onReceivePM=this.onReceivePM.bind(this);
 		this.onPMListChange=this.onPMListChange.bind(this);
 		this.onClickDeletePMEntry=this.onClickDeletePMEntry.bind(this);
 		this.toLogout=this.toLogout.bind(this);
+		this.openRegModal=this.openRegModal.bind(this);
+		this.closeRegModal=this.closeRegModal.bind(this);
+		this.handleRegInputChange=this.handleRegInputChange.bind(this);
+		this.onSubmitRegistration=this.onSubmitRegistration.bind(this);
+		this.doLogin=this.doLogin.bind(this);
 	}
+	
+	handleRegInputChange(e, { name, value })
+	{this.setState({ [name]: value });}
+	
+	doLogin()
+	{
+	    var bodyFormData = new FormData();
+		bodyFormData.set('username', this.state.username);
+		bodyFormData.set('password', this.state.password);
+		axios({
+    		method: 'POST',
+    		url: 'http://18.219.12.38:8001/login',
+    		data: bodyFormData,
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			})
+    .then((response)=>{
+        //handle success
+		this.setState({ login: !this.state.login });
+		this.setState({ user_token: response.data.token });
+		console.log("Login Success");
+		console.log(this.state.user_token);
+    })
+    .catch(function (response) {
+        //handle error
+		console.log("Login Failed")
+    });
+		
+	}
+	
+	onSubmitRegistration()
+	{
+	    var bodyFormData = new FormData();
+		bodyFormData.set('username', this.state.username);
+		bodyFormData.set('password', this.state.password);
+		bodyFormData.set('first_name', this.state.fname);
+		bodyFormData.set('last_name', this.state.lname);
+		bodyFormData.set('email', this.state.email);
+		axios({
+    		method: 'POST',
+    		url: 'http://18.219.12.38:8001/register',
+    		data: bodyFormData,
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			})
+    .then((response)=>{
+        //handle success
+		console.log("Registration Success");
+		this.doLogin();
+    })
+    .catch(function (response) {
+        //handle error
+		console.log("Registration Failed")
+        console.log(response);
+    });
+		
+	}
+	
+	openRegModal()
+	{
+		this.setState({ regModalShow: !this.state.regModalShow });
+	}
+	
+	closeRegModal()
+	{
+		this.setState({ regModalShow: !this.state.regModalShow });
+	}
+	
 	toggleSidebar()
 	{
 		this.setState({ sidebarVisible: !this.state.sidebarVisible });
@@ -186,14 +276,41 @@ export default class Home extends Component {
 			</div>
         	);
 	     }
+		
+		
 		else
 			{
 
 		    return(			
 			<div>
+					
+		  <Modal style={inlineStyle.modal} open={this.state.regModalShow} onClose={this.closeRegModal} size={"large"}>
+          <Modal.Header>
+            Not Logged in.
+          </Modal.Header>
+          <Modal.Content>
+      <Form>
+        <Form.Group widths='equal'>
+          <Form.Field control={Input} label='First name' placeholder='First name' name='fname'  onChange={this.handleRegInputChange}/>
+          <Form.Field control={Input} label='Last name' placeholder='Last name' name='lname'  onChange={this.handleRegInputChange}/>
+        </Form.Group>
+		 <Form.Group widths='equal'>
+         <Form.Field control={Input} label='Username' placeholder='Username' name='username'  onChange={this.handleRegInputChange}/>
+		 <Form.Field control={Input} label='Password' placeholder='Password' name='password'  onChange={this.handleRegInputChange}/>
+	    </Form.Group>
+		<Form.Field control={Input} label='Email' placeholder='Email' name='email' onChange={this.handleRegInputChange}/>
+      </Form>
+          </Modal.Content>
+          <Modal.Actions>
+			 <Button content='Cancel.' onClick={this.closeRegModal}/>
+             <Button positive content='Submit' onClick={this.onSubmitRegistration}/>
+          </Modal.Actions>
+        </Modal>
+					
+			
 			<div className= "div-right" >
 			<Button.Group>	
-				<Button  className = "ButtonGroup" basic onClick={this.loginOnClick}>Register</Button>
+				<Button  className = "ButtonGroup" basic onClick={this.openRegModal}>Register</Button>
 				<Button  className = "ButtonGroup" basic onClick={this.loginOnClick}>Login</Button>
 			</Button.Group>	
 		   	</div>	
@@ -204,8 +321,8 @@ export default class Home extends Component {
                 <div className="child">
     		    <Switch>
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
-				 <Route exact path="/UserProfile" component={UserProfile}></Route>
 				 <Route path="/:gid" component={GroupDetail}></Route>
                 </Switch>
                 </div>

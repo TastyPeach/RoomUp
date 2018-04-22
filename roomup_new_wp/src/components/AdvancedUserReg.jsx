@@ -150,7 +150,7 @@ export default class AdvancedUserReg extends React.Component{
     
 
     createRequestURLForBecomeAdvancedUser(){
-        var baseUrl="http://18.219.12.38:8001/search/become_advance";
+        var baseUrl="http://18.219.12.38:8001/become_advance";
 
         console.log(this.state.user_filter);
 		
