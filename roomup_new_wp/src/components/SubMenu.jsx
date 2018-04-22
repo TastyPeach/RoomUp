@@ -10,7 +10,6 @@ export default class SubMenu extends Component {
 		super(props);
 		this.state = { activeItem: 'likes' }
 	}
-
   
   render() {
     const { activeItem } = this.state
