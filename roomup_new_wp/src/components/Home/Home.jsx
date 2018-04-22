@@ -266,7 +266,7 @@ var jsonResults=[
     		    <Switch>
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={AdvancedUserReg}></Route>
-				 <Route exact path="/UserProfile" component={UserProfile}></Route>
+				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
