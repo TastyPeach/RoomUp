@@ -79,8 +79,7 @@ export default class AdvancedUserReg extends React.Component{
         this.onChangeMajor=this.onChangeMajor.bind(this);
         this.onChangeNote=this.onChangeNote.bind(this);
         this.createRequestURLForBecomeAdvancedUser=this.createRequestURLForBecomeAdvancedUser.bind(this);
-		
-		
+		this.generateAdvancedUserView=this.generateAdvancedUserView.bind(this);
 		console.log(this.props);
 		
     }
@@ -183,31 +182,11 @@ export default class AdvancedUserReg extends React.Component{
             //handle error
             console.log(response);
         });
-        }
-	
-    
-    searchSubmit(e){
-
-
-
-
-        console.log("Submit Button Hit");
-	}
-
-
-
-
-  render() {
-    return (
-	  <div className="searchComp">	
-	  <Button.Group>
-             <Link to={"/search"}> 
-             <Button color="green">Back to Search</Button>
-             </Link>
-      </Button.Group>
-	  <h3>Become Advanced User and Enjoy more Services ;)</h3>	
-
-      <Form>
+		}
+		
+	generateAdvancedUserView(){
+		this.setState({AdvancedUserView:(
+		<Form>
         <Form.Group widths='equal'>
           <Form.Input fluid label='Age' onChange={this.onChangeAge} placeholder='Age' />
           <Form.Input fluid label='Ethinicity' onChange={this.onChangeEthinicity} placeholder='Ethinicity' />
@@ -227,6 +206,28 @@ export default class AdvancedUserReg extends React.Component{
         <Form.Checkbox label='I agree to the Terms and Conditions' />
         <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> Submit </Form.Button>
       </Form>
+        )});
+	}
+	
+    searchSubmit(e){
+        console.log("Submit Button Hit");
+	}
+
+
+
+
+  render() {
+    return (
+	  <div className="searchComp">	
+	  <Button.Group>
+             <Link to={"/search"}> 
+             <Button color="green">Back to Search</Button>
+             </Link>
+      </Button.Group>
+	  <h3>Become Advanced User and Enjoy more Services ;)</h3>	
+	  <div className="result_display" >
+	   {this.state.AdvancedUserView}
+      </div>	
 	  </div>
     )
   }

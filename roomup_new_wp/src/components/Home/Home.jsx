@@ -31,7 +31,7 @@ var jsonResults=[
 
 
 
-export default class Home extends Component {
+  export default class Home extends Component {
 	constructor(){
 		super();
 	    this.state={
@@ -248,7 +248,6 @@ export default class Home extends Component {
 				<div>	
 				<div className= "submenu">
 				<SubMenu onClickLogout={this.toLogout} onClickShowSidebar={this.toggleSidebar}></SubMenu>
-				
 		   	    </div>
 				<Divider fitted/>   		
 			    <div>
@@ -268,7 +267,7 @@ export default class Home extends Component {
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={AdvancedUserReg}></Route>
 				 <Route exact path="/UserProfile" component={UserProfile}></Route>
-				 <Route path="/:gid" component={GroupDetail}></Route>
+				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
             </div>
@@ -276,8 +275,6 @@ export default class Home extends Component {
 			</div>
         	);
 	     }
-		
-		
 		else
 			{
 
@@ -323,7 +320,7 @@ export default class Home extends Component {
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
-				 <Route path="/:gid" component={GroupDetail}></Route>
+				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
             </div>
@@ -336,32 +333,3 @@ export default class Home extends Component {
 }
 
 
-/*
-
-		<Card className="PMList">
-                <Card.Content>
-                <Card.Header>
-                    PotentialMatch List
-                </Card.Header>
-                </Card.Content>
-            <Card.Content>  
-				{this.state.PMdisplay}
-            </Card.Content>
-         </Card>
-
-*/
-/*
-            <Menu.Item name='home'>
-              <Icon name='home'/>
-              Home1
-            </Menu.Item>
-            <Menu.Item name='gamepad'>
-              <Icon name='home' />
-              home2
-            </Menu.Item>
-            <Menu.Item name='camera'>
-              <Icon name='home' />
-              home3
-            </Menu.Item>
-
-*/
