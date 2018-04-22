@@ -44,7 +44,8 @@ var jsonResults=[
 		lname:'',
 		email:'',
 		username:'',
-		password:''};
+		password:'',
+		loginModalShow: false};
 		this.toggleSidebar=this.toggleSidebar.bind(this);
 		this.loginOnClick=this.loginOnClick.bind(this);
 		this.onReceivePM=this.onReceivePM.bind(this);
@@ -56,11 +57,36 @@ var jsonResults=[
 		this.handleRegInputChange=this.handleRegInputChange.bind(this);
 		this.onSubmitRegistration=this.onSubmitRegistration.bind(this);
 		this.doLogin=this.doLogin.bind(this);
+		this.openLoginModal=this.openLoginModal.bind(this);
+		this.closeLoginModal=this.closeLoginModal.bind(this);
+		this.handleLoginInputChange=this.handleLoginInputChange.bind(this);
+		this.loginSubmit=this.loginSubmit.bind(this);
 	}
 	
 	handleRegInputChange(e, { name, value })
 	{this.setState({ [name]: value });}
 	
+	handleLoginInputChange(e, { name, value })
+	{this.setState({ [name]: value });}
+	  
+	loginSubmit()
+	{
+		this.closeLoginModal();
+		this.doLogin();
+	}
+	  
+	
+	openLoginModal()
+	{
+		this.setState({ loginModalShow: !this.state.loginModalShow });
+	}
+	
+	closeLoginModal()
+	{
+		this.setState({ loginModalShow: !this.state.loginModalShow });
+	}
+	  
+	  
 	doLogin()
 	{
 	    var bodyFormData = new FormData();
@@ -283,7 +309,7 @@ var jsonResults=[
 					
 		  <Modal style={inlineStyle.modal} open={this.state.regModalShow} onClose={this.closeRegModal} size={"large"}>
           <Modal.Header>
-            Not Logged in.
+            Please Register
           </Modal.Header>
           <Modal.Content>
       <Form>
@@ -304,11 +330,30 @@ var jsonResults=[
           </Modal.Actions>
         </Modal>
 					
+					
+		<Modal style={inlineStyle.modal} open={this.state.loginModalShow} onClose={this.closeLoginModal} size={"large"}>
+          <Modal.Header>
+            Not Logged in.
+          </Modal.Header>
+          <Modal.Content>
+      <Form>
+		 <Form.Group widths='equal'>
+         <Form.Field control={Input} label='Username' placeholder='Username' name='username'  onChange={this.handleLoginInputChange}/>
+		 <Form.Field control={Input} label='Password' placeholder='Password' name='password'  onChange={this.handleLoginInputChange}/>
+	    </Form.Group>
+      </Form>
+          </Modal.Content>
+          <Modal.Actions>
+			 <Button content='Cancel.' onClick={this.closeLoginModal}/>
+             <Button positive content='Login' onClick={this.loginSubmit}/>
+          </Modal.Actions>
+        </Modal>
+					
 			
 			<div className= "div-right" >
 			<Button.Group>	
 				<Button  className = "ButtonGroup" basic onClick={this.openRegModal}>Register</Button>
-				<Button  className = "ButtonGroup" basic onClick={this.loginOnClick}>Login</Button>
+				<Button  className = "ButtonGroup" basic onClick={this.openLoginModal}>Login</Button>
 			</Button.Group>	
 		   	</div>	
 			<Divider fitted/>   

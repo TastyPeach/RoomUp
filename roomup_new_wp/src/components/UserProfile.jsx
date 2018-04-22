@@ -20,10 +20,17 @@ export default class UserProfile extends React.Component{
 		this.generateUserDetailsView=this.generateUserDetailsView.bind(this);
 		this.leaveGroupButtonOnClick=this.leaveGroupButtonOnClick.bind(this);
 		this.loadUserProfile=this.loadUserProfile.bind(this);
+		this.becomeAdvancedOnClick=this.becomeAdvancedOnClick.bind(this);
 		this.loadUserProfile();
 	    console.log(this.props);
 		console.log(this.props.user_token);
     }
+	
+	becomeAdvancedOnClick()
+	{
+		
+	}
+	
 	loadUserProfile()
 	{
 		var config={"Authorization":"Token "+this.state.user_token};
@@ -74,12 +81,7 @@ export default class UserProfile extends React.Component{
 	{
 		var gid_string;
 		var gid_segment;
-		if(response.data.gid==null)
-		{
-			gid_string=" You haven't add to any group.";
-			gid_segment=("GID:You haven't add to any group.");
-		}
-	    else
+		if(response.data.gid!=undefined)
 		{
 			gid_string=""+response.data.gid;
 			gid_segment=(<Grid columns={2} divided>
@@ -92,7 +94,6 @@ export default class UserProfile extends React.Component{
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
-		}
 		this.setState({UserDetailsView:(
 		<Grid columns={1} divided>
     	<Grid.Row stretched>
@@ -106,6 +107,36 @@ export default class UserProfile extends React.Component{
       	</Grid.Column>
     	</Grid.Row>
   		</Grid>)});
+		}
+		else
+		{
+			
+			gid_string="You are not an Advanced User";
+			gid_segment=(<Grid columns={2} divided>
+    			<Grid.Row stretched>
+      			<Grid.Column>
+					<Segment>GID:{gid_string}</Segment>
+				</Grid.Column>
+				<Grid.Column>
+				<Button color="blue" onClick={this.becomeAdvancedOnClick}>Go and Become an Advanced User</Button>	
+				</Grid.Column>
+					</Grid.Row>
+				</Grid>);
+		this.setState({UserDetailsView:(
+		<Grid columns={1} divided>
+    	<Grid.Row stretched>
+      	<Grid.Column>
+        	<Segment>Nickname:{" "+response.data.username}</Segment>
+        	<Segment>First Name:{" "+response.data.first_name}</Segment>
+			<Segment>Last Name:{" "+response.data.last_name}</Segment>
+        	<Segment>
+				{gid_segment}
+			</Segment>
+      	</Grid.Column>
+    	</Grid.Row>
+  		</Grid>)});
+				
+		}
 	}
 
     render(){
