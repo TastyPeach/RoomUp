@@ -75,9 +75,11 @@ export default class UserProfile extends React.Component{
 	{
 		var gid_string;
 		var gid_segment;
-		if(response.data.gid!=undefined)
+		if(response.data.gid!==undefined)
 		{
 			gid_string=""+response.data.gid;
+			if(response.data.gid!==null)
+			{
 			gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
@@ -88,6 +90,20 @@ export default class UserProfile extends React.Component{
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
+			}
+			else
+				{
+				gid_segment=(<Grid columns={2} divided>
+    			<Grid.Row stretched>
+      			<Grid.Column>
+					<Segment>GID:You don't belong to any group.</Segment>
+				</Grid.Column>
+				<Grid.Column>
+				<Segment>Go and add one!</Segment>
+				</Grid.Column>
+					</Grid.Row>
+				</Grid>);
+				}
 		this.setState({UserDetailsView:(
 		<Grid columns={1} divided>
     	<Grid.Row stretched>
