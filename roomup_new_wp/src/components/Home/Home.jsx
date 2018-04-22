@@ -29,8 +29,6 @@ var jsonResults=[
     {"addr":"Apt#103, 1010 University Avenue","gID":16003,"memberName":["blackberries"]}
   ];
 
-
-
   export default class Home extends Component {
 	constructor(){
 		super();
@@ -291,7 +289,7 @@ var jsonResults=[
                 <div className="child">
     		    <Switch>
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
-                 <Route exact path="/becomeAdvanced" component={AdvancedUserReg}></Route>
+                 <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
@@ -363,8 +361,6 @@ var jsonResults=[
                 <div className="child">
     		    <Switch>
                  <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
-				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
-                 <Route exact path="/becomeAdvanced" component={SearchComp}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>

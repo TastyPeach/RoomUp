@@ -48,8 +48,8 @@ const options = [
 export default class AdvancedUserReg extends React.Component{
     
     
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
 			user_filter:{
                 pet:0,
@@ -63,11 +63,9 @@ export default class AdvancedUserReg extends React.Component{
                 major:0,
                 note:0
             },
-			AdvancedUserView:<div></div>,
-			user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
+			user_token:this.props.user_token,
 			gid:null
 		}
-		
 		this.onChangeGender=this.onChangeGender.bind(this);
 		this.onChangePet=this.onChangePet.bind(this);
 		this.onChangeQuietness=this.onChangeQuietness.bind(this);
@@ -79,9 +77,7 @@ export default class AdvancedUserReg extends React.Component{
         this.onChangeMajor=this.onChangeMajor.bind(this);
         this.onChangeNote=this.onChangeNote.bind(this);
         this.createRequestURLForBecomeAdvancedUser=this.createRequestURLForBecomeAdvancedUser.bind(this);
-		this.generateAdvancedUserView=this.generateAdvancedUserView.bind(this);
-		console.log(this.props);
-		
+		console.log(this.props.user_token);
     }
 
 
@@ -183,10 +179,23 @@ export default class AdvancedUserReg extends React.Component{
             console.log(response);
         });
 		}
-		
-	generateAdvancedUserView(){
-		this.setState({AdvancedUserView:(
-		<Form>
+	
+    searchSubmit(e){
+        console.log("Submit Button Hit");
+	}
+
+
+  render() {
+    return (
+	  <div className="searchComp">	
+	  <Button.Group>
+             <Link to={"/"}> 
+             <Button color="green">Back to Search</Button>
+             </Link>
+      </Button.Group>
+	  <h3>Become Advanced User and Enjoy more Services ;)</h3>	
+	  <div className="result_display" >
+	   		<Form>
         <Form.Group widths='equal'>
           <Form.Input fluid label='Age' onChange={this.onChangeAge} placeholder='Age' />
           <Form.Input fluid label='Ethinicity' onChange={this.onChangeEthinicity} placeholder='Ethinicity' />
@@ -206,27 +215,6 @@ export default class AdvancedUserReg extends React.Component{
         <Form.Checkbox label='I agree to the Terms and Conditions' />
         <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> Submit </Form.Button>
       </Form>
-        )});
-	}
-	
-    searchSubmit(e){
-        console.log("Submit Button Hit");
-	}
-
-
-
-
-  render() {
-    return (
-	  <div className="searchComp">	
-	  <Button.Group>
-             <Link to={"/search"}> 
-             <Button color="green">Back to Search</Button>
-             </Link>
-      </Button.Group>
-	  <h3>Become Advanced User and Enjoy more Services ;)</h3>	
-	  <div className="result_display" >
-	   {this.state.AdvancedUserView}
       </div>	
 	  </div>
     )

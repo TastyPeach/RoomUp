@@ -20,16 +20,10 @@ export default class UserProfile extends React.Component{
 		this.generateUserDetailsView=this.generateUserDetailsView.bind(this);
 		this.leaveGroupButtonOnClick=this.leaveGroupButtonOnClick.bind(this);
 		this.loadUserProfile=this.loadUserProfile.bind(this);
-		this.becomeAdvancedOnClick=this.becomeAdvancedOnClick.bind(this);
 		this.loadUserProfile();
 	    console.log(this.props);
 		console.log(this.props.user_token);
     }
-	
-	becomeAdvancedOnClick()
-	{
-		
-	}
 	
 	loadUserProfile()
 	{
@@ -118,7 +112,9 @@ export default class UserProfile extends React.Component{
 					<Segment>GID:{gid_string}</Segment>
 				</Grid.Column>
 				<Grid.Column>
-				<Button color="blue" onClick={this.becomeAdvancedOnClick}>Go and Become an Advanced User</Button>	
+				<Link to={"/becomeAdvanced"}> 
+				<Button color="blue" >Go and Become an Advanced User</Button>	
+				</Link>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);

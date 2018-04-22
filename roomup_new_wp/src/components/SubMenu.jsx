@@ -9,6 +9,7 @@ export default class SubMenu extends Component {
 		super(props);
 		this.state = { activeItem: 'likes' }
 	}
+
   
   render() {
     const { activeItem } = this.state
@@ -21,12 +22,8 @@ export default class SubMenu extends Component {
             <Dropdown.Item>Messages</Dropdown.Item>
             <Dropdown.Divider/>
             <Dropdown.Header>Settings</Dropdown.Header>
-        <Dropdown.Item>
-          <Link to={`/UserProfile`}>UserProfile</Link>
-        </Dropdown.Item>
-            <Dropdown.Item>
-            <Link to={`/becomeAdvanced`}>GoAdvanced</Link>
-            </Dropdown.Item>
+		    <Dropdown.Item as={Link} to='/UserProfile'>UserProfile</Dropdown.Item>
+            <Dropdown.Item as={Link} to='/becomeAdvanced'>GoAdvanced</Dropdown.Item>
         <Dropdown.Item onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -38,3 +35,5 @@ export default class SubMenu extends Component {
     )
   }
 }
+
+///<Link to={`/UserProfile`}>UserProfile</Link>
