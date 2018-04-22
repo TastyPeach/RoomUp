@@ -10,6 +10,8 @@ import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
+import GoAdvancedSuccess from '../GoAdvancedSuccess.jsx'
+
 
 
 const inlineStyle={
@@ -120,17 +122,16 @@ const inlineStyle={
 				'Content-Type': 'multipart/form-data',
 				}},
 			})
-    .then((response)=>{
-        //handle success
-		console.log("Registration Success");
-		this.doLogin();
-    })
-    .catch(function (response) {
-        //handle error
-		console.log("Registration Failed")
-        console.log(response);
-    });
-		
+		.then((response)=>{
+			//handle success
+			console.log("Registration Success");
+			this.doLogin();
+		})
+		.catch(function (response) {
+			//handle error
+			console.log("Registration Failed")
+			console.log(response);
+		});
 	}
 	
 	openRegModal()

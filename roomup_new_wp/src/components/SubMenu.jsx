@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import { Button, Menu, Dropdown } from 'semantic-ui-react'
 import {BrowserRouter as Router, Route, Link, Switch, Redirect} from 'react-router-dom'
@@ -24,7 +25,7 @@ export default class SubMenu extends Component {
             <Dropdown.Header>Settings</Dropdown.Header>
 		    <Dropdown.Item as={Link} to='/UserProfile'>UserProfile</Dropdown.Item>
             <Dropdown.Item as={Link} to='/becomeAdvanced'>GoAdvanced</Dropdown.Item>
-        <Dropdown.Item onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
+        <Dropdown.Item as={Link} to='/' onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Button.Group>	
@@ -35,5 +36,3 @@ export default class SubMenu extends Component {
     )
   }
 }
-
-///<Link to={`/UserProfile`}>UserProfile</Link>
