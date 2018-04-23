@@ -1,14 +1,22 @@
 import React from "react"
-import { compose, withProps } from "recompose"
+import { compose, withProps, withStateHandlers} from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import axios from 'axios';
+const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 
 const MyMapComponent = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDUGe_pljDYYjCTUe5QbdRFv4OqY4AIipY&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDliBDekfh79V7Grt8EiSZqC19Jxal10Hk&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `700px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
+  }),
+   withStateHandlers(() => ({
+    isOpen: false,
+  }), {
+    onToggleOpen: ({ isOpen }) => () => ({
+      isOpen: !isOpen,
+    })
   }),
   withScriptjs,
   withGoogleMap
@@ -29,6 +37,9 @@ var replaced = str.split(' ').join('+');
 */
 //lat: 40.116421, lng:  -88.243385
 
+const apikey1='AIzaSyDUGe_pljDYYjCTUe5QbdRFv4OqY4AIipY';
+const apikey2='AIzaSyDliBDekfh79V7Grt8EiSZqC19Jxal10Hk';
+
 
 export default class MapComponent extends React.PureComponent {
 	
@@ -38,7 +49,8 @@ export default class MapComponent extends React.PureComponent {
 		this.state = { 
 			isMarkerShown: false,
 			markers:<div></div>,
-			locations:[]
+			locations:[],
+			group_names:[],
 		}
 		this.getUserToken=this.props.getUserToken;
 		this.generatePMMarkers=this.generatePMMarkers.bind(this);
@@ -46,7 +58,6 @@ export default class MapComponent extends React.PureComponent {
 		this.getPMList=this.getPMList.bind(this);
 		this.addMarker=this.addMarker.bind(this);
 		this.generateMarkers=this.generateMarkers.bind(this);
-		this.getPMList();
 	}
 	
 	addMarker(location)
@@ -56,18 +67,48 @@ export default class MapComponent extends React.PureComponent {
 		var lat=location.lat;
 		var lng=location.lng;
 		this.setState({locations: this.state.locations.concat([location])});
-		console.log(this.state.locations);
 		this.setState({markers: this.generateMarkers()});
 		}
 	}
 	
+	/*
+	 <Marker
+      position={{ lat: 22.6273, lng: 120.3014 }}
+      onClick={props.onToggleOpen}
+    >
+      {props.isOpen && <InfoBox
+        onCloseClick={props.onToggleOpen}
+        options={{ closeBoxURL: ``, enableEventPropagation: true }}
+      >
+        <div style={{ backgroundColor: `while`, opacity: 1.00, padding: `12px` }}>
+          <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>
+            Hello, Kaohsiung!
+          </div>
+        </div>
+      </InfoBox>}
+    </Marker>
+	*/
+	
+	/*
+	
+		 <InfoBox
+        options={{ closeBoxURL: ``, enableEventPropagation: true }}
+      >
+        <div style={{ backgroundColor: `while`, opacity: 1.00, padding: `3px`, color:'black'}}>
+          <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>
+            Kaohsiung!
+          </div>
+        </div>
+      </InfoBox>
+	*/
 	
 	generateMarkers(){
 	var gArray=this.state.locations;
 	var listItems=gArray.map((locEntry,index) =>
     // Correct! Key should be specified inside the array.
     (
-	 <Marker key={index} position={locEntry}/>
+	 <Marker key={index} position={locEntry}>
+	 </Marker>
 	)
   	);
   	return (
@@ -79,29 +120,45 @@ export default class MapComponent extends React.PureComponent {
 	
 	generatePMMarkers(response)
 	{
-		console.log(response.data.length);
 		var i;
-		for (i = 0; i < response.data.length; i++) { 
+		var temp=[];
+		for (i = 0; i < response.data.length; i++)
+		{
+			temp=temp.concat([response.data[i].gid.group_name]);
+		}
+		var the_same=true;
+		if(temp.length!=this.state.group_names.length)
+	       the_same=false;
+		for(i=0;i<temp.length;i++)
+			if(temp[i]!==this.state.group_names[i])
+				the_same=false;
+		
+		if(the_same==false)
+		{
+		console.log("update required!");
+		this.setState({group_names: temp});
+		for (i = 0; i < response.data.length; i++)
+		{
 			var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 			var addr = response.data[i].gid.aid.address;
 		    addr = addr.split(' ').join('+');
 			baseURL=baseURL+addr;
-			baseURL=baseURL+'&key=AIzaSyDUGe_pljDYYjCTUe5QbdRFv4OqY4AIipY';
+			baseURL=baseURL+'&key='+apikey2;
 			axios({
     			url: baseURL,
     			method: 'get',
  			})
  			.then(response => {
-				console.log(response.data.results[0].geometry.location);
 				this.addMarker(response.data.results[0].geometry.location);
  			}) 
  			.catch(err => {
 				//Error
     			console.log(err);
  			});
-		
+		}
 		}
 	}
+
 	
 	
 	onReceivePMList(response)
@@ -137,7 +194,8 @@ export default class MapComponent extends React.PureComponent {
 
   componentDidMount() {
     //this.delayedShowMarker()
-	 setInterval(this.getPMList, 3000);
+	//this.getPMList();
+	setInterval(this.getPMList, 3000);
   }
  
  
