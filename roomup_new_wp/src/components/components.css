@@ -10,6 +10,14 @@
         height: 60px;
     }
 
+.chatFrame{
+	top:300px;
+}
+
+.chatHeader{
+	top:250px;
+}
+
 
 .modal{
         margin:0 auto;

@@ -103,13 +103,13 @@ export default class MapComponent extends React.PureComponent {
 			temp=temp.concat([response.data[i].gid.group_name]);
 		}
 		var the_same=true;
-		if(temp.length!=this.state.group_names.length)
+		if(temp.length!==this.state.group_names.length)
 	       the_same=false;
 		for(i=0;i<temp.length;i++)
 			if(temp[i]!==this.state.group_names[i])
 				the_same=false;
 		
-		if(the_same==false)
+		if(the_same===false)
 		{
 		
 		console.log("update required!");
@@ -134,11 +134,8 @@ export default class MapComponent extends React.PureComponent {
 				//Error
     			console.log(err);
  			});
-		});
-			
+		});	
 		}
-		
-		
 		/*for (i = 0; i < response.data.length; i++)
 		{
 			var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';

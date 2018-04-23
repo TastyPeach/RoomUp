@@ -14,11 +14,10 @@ export default class GroupDetail extends React.Component{
         super(props);
         this.state={
             GroupViewDetails:<div></div>,
-            user_token:this.props.user_token,
             modalOpen: false,
-			gid: this.props.gid
-        }
-		console.log(this.props.gid);
+			gid: this.props.gid,
+			user_token: this.props.user_token
+		}
         this.generateGroupDetailsView=this.generateGroupDetailsView.bind(this);
         this.loadGroupProfile();
     }

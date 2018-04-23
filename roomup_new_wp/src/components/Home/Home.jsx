@@ -9,8 +9,8 @@ import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
-import CreateGroup from '../CreateGroup.jsx'
-import Chat from '../chat.jsx'
+import CreateGroup from '../CreateGroup.jsx';
+import Chat from '../Chat.jsx';
 
 const inlineStyle={
 	modal:{
@@ -232,7 +232,7 @@ const inlineStyle={
              </Button.Content>
 			</Button> */}
 
-	 		<Button basic as={Link} to='/chat' className={""+PMEntry.pid} animated='vertical' size='small'>
+	 		<Button basic as={Link} to={"/chat/"+PMEntry.gid.gid} className={""+PMEntry.pid} animated='vertical' size='small'>
 			 <Button.Content hidden>Chat</Button.Content>
              <Button.Content visible>
              <Icon name='talk outline' />
@@ -325,11 +325,11 @@ const inlineStyle={
 					<div className="child">
 					<Switch>
 					<Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken}  {...props}/>)}></Route>
-					<Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
-					<Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
-					<Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
-					<Route path="/chat" render={(props) => <Chat user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
-					<Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
+					<Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/CreateGroup" render={(props) => (<CreateGroup getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/UserProfile" render={(props) => (<UserProfile getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route path="/chat/:gid" render={(props) => <Chat getUserToken={this.getUserToken} user_token={this.state.user_token} gid={props.match.params.gid} {...props}/> } />
+					<Route path="/:gid" render={(props) => <GroupDetail getUserToken={this.getUserToken} user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
 					</Switch>
 					</div>
 				</div>
@@ -337,6 +337,8 @@ const inlineStyle={
 				</div>
         	);
 	     }
+		
+		//<Route path="/chat/:gid>" render={(props) => <Chat user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
 		else
 			{
 
@@ -388,7 +390,6 @@ const inlineStyle={
           </Modal.Actions>
         </Modal>
 					
-			
 			<div className= "div-right" >
 			<Button.Group>	
 				<Button  className = "ButtonGroup" basic onClick={this.openRegModal}>Register</Button>
@@ -401,9 +402,12 @@ const inlineStyle={
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken} {...props}/>)}></Route>
-				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
-                </Switch>
+					<Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken}  {...props}/>)}></Route>
+					<Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/CreateGroup" render={(props) => (<CreateGroup getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/UserProfile" render={(props) => (<UserProfile getUserToken={this.getUserToken} user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route path="/:gid" render={(props) => <GroupDetail getUserToken={this.getUserToken} user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
+					</Switch>
                 </div>
             </div>
 			</div>
