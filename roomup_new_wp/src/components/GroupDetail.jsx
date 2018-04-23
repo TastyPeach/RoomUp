@@ -116,7 +116,7 @@ export default class GroupDetail extends React.Component{
             <div className="searchComp">
             <h3>Group Details</h3>
             <Button.Group>
-             <Link to={"/"}> 
+             <Link to={""}> 
              <Button color="green">Back to Search</Button>
              </Link>
              </Button.Group>

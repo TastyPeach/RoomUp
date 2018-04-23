@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
 import { Button,Grid,Segment} from 'semantic-ui-react';
-import propTypes from 'prop-types';
 import axios from 'axios';
 
 export default class UserProfile extends React.Component{

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Button, Menu, Dropdown, Card, Segment, Divider, Sidebar, Image, Icon, Header, Modal, Input,Form} from 'semantic-ui-react'
-import propTypes from 'prop-types'
 import styles from './Home.css'
 import SubMenu from '../SubMenu.jsx'
 import axios from 'axios'
@@ -10,7 +9,7 @@ import SearchComp from '../SearchComp.jsx';
 import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
-
+import CreateGroup from '../CreateGroup.jsx'
 
 const inlineStyle={
 	modal:{
@@ -20,13 +19,14 @@ const inlineStyle={
 	}
 };
 
+//1d441aca1002c863b724c4170ec7d7f793683ad0
 
   export default class Home extends Component {
 	constructor(){
 		super();
 	    this.state={
 		login:false,
-		user_token:'1d441aca1002c863b724c4170ec7d7f793683ad0',
+		user_token:'',
 		PMdisplay:<div></div>,
 		sidebarVisible: false,
 		regModalShow: false,
@@ -51,7 +51,12 @@ const inlineStyle={
 		this.closeLoginModal=this.closeLoginModal.bind(this);
 		this.handleLoginInputChange=this.handleLoginInputChange.bind(this);
 		this.loginSubmit=this.loginSubmit.bind(this);
+		this.getUserToken=this.getUserToken.bind(this);
 	}
+	getUserToken()
+	  {
+		  return this.state.user_token;
+	  }
 	
 	handleRegInputChange(e, { name, value })
 	{this.setState({ [name]: value });}
@@ -96,6 +101,7 @@ const inlineStyle={
 		this.setState({ user_token: response.data.token });
 		console.log("Login Success");
 		console.log(this.state.user_token);
+        this.onPMListChange();
     })
     .catch(function (response) {
         //handle error
@@ -280,8 +286,9 @@ const inlineStyle={
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken} {...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
+				 <Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
                 </Switch>
@@ -352,7 +359,7 @@ const inlineStyle={
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} user_token={this.state.user_token} onPMListChange={this.onPMListChange}{...props}/>)}></Route>
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken} {...props}/>)}></Route>
 				 <Route path="/:gid" render={(props) => <GroupDetail gid={props.match.params.gid} {...props} /> } />
                 </Switch>
                 </div>
@@ -364,5 +371,3 @@ const inlineStyle={
 	}
 	
 }
-
-

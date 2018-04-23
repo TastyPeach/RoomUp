@@ -4,13 +4,12 @@ import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
 import { Button,Grid,Segment, Form} from 'semantic-ui-react';
-import propTypes from 'prop-types';
 import axios from 'axios';
 
 
 const options = [
-	{ key: 'm', text: 'Male', value: 'male' },
-	{ key: 'f', text: 'Female', value: 'female' },
+	{ key: 'm', text: 'Male', value: '0' },
+	{ key: 'f', text: 'Female', value: '1' },
   ]
   
   const options1 = [
@@ -213,7 +212,9 @@ export default class AdvancedUserReg extends React.Component{
         </Form.Group>
         <Form.TextArea label='UserNote' onChange={this.onChangeNote} placeholder='Tell us more about you, eg.your hobbies ;)' />
         <Form.Checkbox label='I agree to the Terms and Conditions' />
+		<Link to={"/UserProfile"}>
         <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> Submit </Form.Button>
+		</Link>
       </Form>
       </div>	
 	  </div>

@@ -5,11 +5,11 @@
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
+    width: 70%;
 }
 
 .placeHolder{
-	height:  6000px;
+	height:  2000px;
 }
 
 .div-right { 
