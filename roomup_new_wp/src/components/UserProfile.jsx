@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './components.css'
 import {render} from 'react-dom';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Link,} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import { Button,Grid,Segment} from 'semantic-ui-react';
+import { Button,Grid,Segment, Icon} from 'semantic-ui-react';
 import axios from 'axios';
 
 export default class UserProfile extends React.Component{
@@ -82,10 +82,23 @@ export default class UserProfile extends React.Component{
 			gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-					<Segment>GID:{gid_string}</Segment>
+					<Segment>
+						<Button basic as={Link} to='/'>GID:{gid_string}</Button>
+					</Segment>	
 				</Grid.Column>
 				<Grid.Column>
-				<Button color="blue" onClick={this.leaveGroupButtonOnClick}>Leave Group</Button>	
+					<Segment>
+				{/* <Button basic onClick={this.leaveGroupButtonOnClick}>Leave Group</Button>	 */}
+
+                <Button animated basic onClick={this.leaveGroupButtonOnClick}>
+                <Button.Content visible>Leave Group</Button.Content>
+		        <Button.Content hidden>
+			    <Icon name='yellow frown' />
+		        </Button.Content>
+		        </Button>
+
+
+				</Segment>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
@@ -95,10 +108,22 @@ export default class UserProfile extends React.Component{
 				gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-					<Segment>GID:You don't belong to any group.</Segment>
+					<Segment><Button basic as={Link} to='/'>GID:You don't belong to any group</Button></Segment>
 				</Grid.Column>
 				<Grid.Column>
-				<Button color="blue" as={Link} to='/'>Go and add one!</Button>
+					<Segment>
+
+
+				<Button animated basic as={Link} to='/'>
+                <Button.Content visible>Go and add one!</Button.Content>
+		        <Button.Content hidden>
+			    <Icon name='yellow hand peace' />
+		        </Button.Content>
+		        </Button>
+
+
+
+				</Segment>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
@@ -107,7 +132,7 @@ export default class UserProfile extends React.Component{
 		<Grid columns={1} divided>
     	<Grid.Row stretched>
       	<Grid.Column>
-        	<Segment>Nickname:{" "+response.data.uid.username}</Segment>
+        	<Segment><Icon name='blue id card outline ' />Nickname:{" "+response.data.uid.username}</Segment>
         	<Segment>First Name:{" "+response.data.uid.first_name}</Segment>
 			<Segment>Last Name:{" "+response.data.uid.last_name}</Segment>
         	<Segment>
@@ -128,7 +153,7 @@ export default class UserProfile extends React.Component{
 				</Grid.Column>
 				<Grid.Column>
 				<Link to={"/becomeAdvanced"}> 
-				<Button color="blue" >Go and Become an Advanced User</Button>	
+				<Button basic>Go and Become an Advanced User</Button>	
 				</Link>
 				</Grid.Column>
 					</Grid.Row>

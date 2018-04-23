@@ -35,3 +35,8 @@ class PotentialMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = PotentialMatch
         fields = ('pid', 'uid', 'gid')
+
+class ChatSerializer(serializers.ModelSerializer):
+    # TODO: make chat RESTful
+    pass
+

@@ -3,7 +3,7 @@ import styles from './components.css'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import { Button,Grid,Segment, Form} from 'semantic-ui-react';
+import { Button,Grid,Segment, Form, Icon} from 'semantic-ui-react';
 import axios from 'axios';
 
 
@@ -213,7 +213,9 @@ export default class AdvancedUserReg extends React.Component{
         <Form.TextArea label='UserNote' onChange={this.onChangeNote} placeholder='Tell us more about you, eg.your hobbies ;)' />
         <Form.Checkbox label='I agree to the Terms and Conditions' />
 		<Link to={"/UserProfile"}>
-        <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> Submit </Form.Button>
+        <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> 
+		<Icon name='yellow hand pointer' />
+		Submit </Form.Button>
 		</Link>
       </Form>
       </div>	

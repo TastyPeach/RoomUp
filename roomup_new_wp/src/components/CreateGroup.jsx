@@ -3,7 +3,7 @@ import styles from './components.css'
 import {render} from 'react-dom';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css';
-import { Container,Button, Select, Input,Dropdown, Checkbox ,Card ,Image, Message, Grid,Segment, Header, Table, Form} from 'semantic-ui-react';
+import { Icon, Container,Button, Select, Input,Dropdown, Checkbox ,Card ,Image, Message, Grid,Segment, Header, Table, Form} from 'semantic-ui-react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 
@@ -157,7 +157,8 @@ export default class CreateGroup extends React.Component{
 			</Form.Group>
 			<Form.Checkbox label='I agree to the Terms and Conditions' />
 			<Link to={"/UserProfile"}>
-			<Form.Button type='submit' onClick={this.createRequestURLForCreateGroup}> Submit </Form.Button>
+			<Form.Button type='submit' onClick={this.createRequestURLForCreateGroup}> 
+			<Icon name='yellow hand pointer' />Submit </Form.Button>
 			</Link>
 		</Form>
 		</div>

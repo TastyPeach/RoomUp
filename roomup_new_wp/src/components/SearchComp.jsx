@@ -299,7 +299,7 @@ export default class SearchComp extends React.Component{
 		<Button animated='vertical' basic className={""+gEntry.gid} onClick={this.addButtonOnClick}>
 		<Button.Content hidden>Join</Button.Content>
 		<Button.Content visible>
-			<Icon name='smile' />
+			<Icon name='yellow smile' />
 		</Button.Content>
 		</Button>
 	 		{/* <Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>

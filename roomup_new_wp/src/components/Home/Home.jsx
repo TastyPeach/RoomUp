@@ -222,14 +222,19 @@ const inlineStyle={
 			<Link to={"/"+PMEntry.gid.gid}>{PMEntry.gid.group_name}</Link>
 	 	</div>
 		<div className="PMList_column2">
-	 		<Button onClick={this.onClickDeletePMEntry} content='x' className={""+PMEntry.pid} primary/>
+	 		<Button basic onClick={this.onClickDeletePMEntry} className={""+PMEntry.pid} animated='vertical' size='small'>
+			 <Button.Content hidden>Delete</Button.Content>
+             <Button.Content visible>
+             <Icon name='thumbs outline down' />
+             </Button.Content>
+            </Button>
 	 	</div>
 	 </div>	
 			
 	 </Segment>)
   	);
   	return (
-    	<Segment.Group horizontal>
+    	<Segment.Group vertical>
       	{listItems}
     	</Segment.Group>
   	);
@@ -281,14 +286,35 @@ const inlineStyle={
 		   	    </div>
 				<Divider fitted/>   		
 			    <div>
-        <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='overlay' direction='top' visible={visible}>
-				{this.state.PMdisplay}
+				{/* <Sidebar.Pushable as={Segment}>
+				<Sidebar as={Menu} animation='push' direction='right' width ='width='thin visible={visible}>
+						{this.state.PMdisplay}
+				</Sidebar>
+				<Sidebar.Pusher>
+					<div className="placeHolder"/>
+				</Sidebar.Pusher>
+				</Sidebar.Pushable>	 */}
+
+
+		  <Sidebar.Pushable as={Segment}>
+          <Sidebar as={Menu} animation='push' direction='right' width='thin' visible={visible} vertical>
+    		{this.state.PMdisplay}
           </Sidebar>
           <Sidebar.Pusher>
-			  <div className="placeHolder"/>
+            <Segment basic>
+			<div className="placeHolder">
+              <Header as='h3'></Header>
+			  </div>
+            </Segment>
           </Sidebar.Pusher>
-        </Sidebar.Pushable>					
+        </Sidebar.Pushable>
+
+
+		
+						
+		
+
+
 					
             <div className="MainComp">
                 <h1>RoomUp</h1>

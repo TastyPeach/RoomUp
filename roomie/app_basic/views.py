@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.utils import IntegrityError
 from django.contrib.auth import logout, login, authenticate
+from django.shortcuts import render_to_response
 
 from .models import *
 from .serializers import *
@@ -14,13 +15,42 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 
-def index(request):
-    my_dick = {'insert_me' : "Hello I am from views.py"}
-    return render(request, 'app_basic/index.html', context=my_dick)
+from django.forms.models import model_to_dict
+from datetime import date, datetime
 
+## chat room
+def chat_room(request, label):
+    # If the room with the given label doesn't exist, automatically create it
+    # upon first visit (a la etherpad).
+    # print (type(label))
+    # print (label)
+    room, created = Room.objects.get_or_create(label=label)
+
+    # We want to show the last 50 messages, ordered most-recent-last
+    messages = reversed(room.messages.order_by('-timestamp')[:50])
+    ms = []
+    for message in messages:
+        m = model_to_dict(message)
+        print(m)
+        if isinstance(m['timestamp'], (datetime, date)):
+            m['timestamp'] = m['timestamp'].strftime('%Y-%m-%d %H:%M') #.isoformat()
+            ms.append(m)
+            # print(m)
+    # print(room.messages.order_by('-timestamp')[:50])
+    print(ms)
+    #    print(request.__dir__())
+    #    print(request.content_params, request.get_raw_uri(), request.path, )
+    return render(request, "app_basic/room.html", {
+        'username': request.get_raw_uri().split("?")[1].split("=")[1], 
+        'room': room,
+        'messages': ms,
+    })
+
+def index(request):
+    return render_to_response('index.html')
 ## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
-@parser_classes((JSONParser,))
+#@parser_classes((JSONParser,))
 def app_login(request):
     uname = request.data.get('username')
     passwd = request.data.get('password')
@@ -38,7 +68,7 @@ def app_login(request):
     return r
 
 @api_view(['POST'])
-@parser_classes((JSONParser,))
+#@parser_classes((JSONParser,))
 def app_register(request):
     uname = request.data.get('username')
     passwd = request.data.get('password')
@@ -75,7 +105,7 @@ def get_apt_by_name(request):
 
 
 @api_view(['GET'])
-@parser_classes((JSONParser,)) 
+#@parser_classes((JSONParser,)) 
 @permission_classes((IsAuthenticated,))
 def get_apt_by_id(request):
     aid = request.query_params.get('aid')
@@ -116,14 +146,17 @@ def become_advance(request):
 @permission_classes((IsAuthenticated,))
 def get_personal_info(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.get(uid=u)
-    adv_ser = AdvancedUserSerializer(adv_u)
-    return JsonResponse(adv_ser.data)
+    adv_u = AdvancedUser.objects.filter(uid=u)
+    if len(adv_u) == 0:
+        u_ser = UserSerializer(u)
+    else:
+        u_ser = AdvancedUserSerializer(adv_u[0])
+    return JsonResponse(u_ser.data)
 
 @api_view(['GET'])
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def get_user_info(request):
-    uname = request.data.get('username')
+    uname = request.query_params.get('username')
     users = User.objects.filter(username=uname)
     if len(users) > 0:
         user = users[0]
@@ -145,11 +178,13 @@ def add_potential_match(request):
     gs = Group.objects.filter(gid=gid)
     adv_us = AdvancedUser.objects.filter(uid=u)
 
-    if len(gs) > 0 and len(adv_u) > 0:
+    if len(gs) > 0 and len(adv_us) > 0:
         pm = PotentialMatch(uid=adv_us[0], gid=gs[0])
         try:
             pm.save()
             return Response(status=status.HTTP_201_CREATED)
+
+        # duplicate potential match
         except IntegrityError:
             return Response(status=status.HTTP_409_CONFLICT)
 
@@ -166,9 +201,13 @@ def add_potential_match(request):
 @permission_classes((IsAuthenticated,))
 def get_potential_match(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.get(uid=u)
-    pms = PotentialMatch.objects.filter(uid=adv_u)
+    adv_u = AdvancedUser.objects.filter(uid=u)
+
+    if len(adv_u) == 0:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    pms = PotentialMatch.objects.filter(uid=adv_u[0])
     ret = []
+
     for pm in pms:
         ret.append(PotentialMatchSerializer(pm).data)
     return JsonResponse(ret, safe=False)
@@ -184,14 +223,14 @@ def delete_potential_match(request):
 ## -------------------------------- Group Related Operation ---------------------------
 #gender=1&quietness=5&sanitary=5&timetobed=5&pet=1
 @api_view(['GET'])
-#@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def filter_group(request):
     gender = int(request.query_params.get('gender'))
     timetobed = int(request.query_params.get('timetobed'))
     quietness = int(request.query_params.get('quietness'))
     sanitary = int(request.query_params.get('sanitary'))
     pet = int(request.query_params.get('pet'))
-
+    
     ret = []
     valid_groups = Group.objects.filter(active=True)
     for group in valid_groups:
@@ -199,10 +238,12 @@ def filter_group(request):
         is_valid = True
         have_pet = False
         for user in potential_users:
-            if user.gender == None or user.timetobed == None or user.quietness == None or user.sanitary == None:
+            if user.gender == None or user.timetobed == None or \
+               user.quietness == None or user.sanitary == None:
                 is_valid = False
                 break;
-            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
+            valid = user.gender == gender and abs(user.timetobed-timetobed)<3 \
+                    and abs(user.quietness-quietness)<2 and abs(user.sanitary-sanitary)<2
             have_pet = have_pet or user.pet
             if not valid:
                 is_valid = False
@@ -210,32 +251,49 @@ def filter_group(request):
         if is_valid and have_pet==pet:
            ret.append(GroupSerializer(group).data)
 
-    return JsonResponse({"group" : ret}, safe=False)
+    return JsonResponse({"group" : ret[:10]}, safe=False)
 
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def create_group(request):
     user = request._request.user
+    # no longer advanced user - 410
     if len(AdvancedUser.objects.filter(uid=user)) == 0:
         return Response(status=status.HTTP_410_GONE)
-    advance = AdvancedUser.objects.get(uid=user)
 
+    advance = AdvancedUser.objects.get(uid=user)
+    # already in a group - 403
     if advance.gid != None:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+    # Get apartment related parameter
     name = request.data.get("name")
     price = request.data.get("price")
     address = request.data.get("address")
     floorplan = request.data.get("floorplan")
-    occupied = request.data.get("occupied")
+    occupied = request.data.get("occupied") # True 1 False 0
+    if occupied == "0":
+        occupied = False
+    else:
+        occupied = True
 
+    # Get group related parameter
+    capacity = request.data.get("capacity")
+    group_name = request.data.get("group_name")
+    
+    # group name too long
+    if len(group_name) > 20:
+        return JsonResponse({'error': 'group name too long'}, status=status.HTTP_400_BAD_REQUEST)
+    if len(name) > 50:
+        return JsonResponse({'error': 'apartment name too long'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Save apartment
     apt = Apartment(name=name, price=price, address=address, floorplan=floorplan, occupied=occupied)
     apt.save()
 
-    capacity = request.data.get("capacity")
-    group_name = request.data.get("group_name")
-    group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
+    # Save group
+    group = Group(group_name=group_name, aid=apt, peopleleft=str(int(capacity)-1), capacity=capacity, admin_uid=advance)
     group.save()
 
     advance.gid = group
@@ -248,15 +306,19 @@ def create_group(request):
 @permission_classes((IsAuthenticated,))
 def add_to_group(request):
     user = request._request.user
+    # no longer advanced user - 410
     if len(AdvancedUser.objects.filter(uid=user)) == 0:
         return Response(status=status.HTTP_410_GONE)
-    advance = AdvancedUser.objects.get(uid=user)
 
+    advance = AdvancedUser.objects.get(uid=user)
+    # already in a group - 403
     if advance.gid != None:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     gid = request.data.get('gid')
     group = Group.objects.get(gid=gid)
+
+    # attempt to join a full group - Consider 403? 406 refers to content type...
     if group.peopleleft <= 0:
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     else:
