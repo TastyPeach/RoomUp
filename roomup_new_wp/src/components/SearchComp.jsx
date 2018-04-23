@@ -418,9 +418,9 @@ export default class SearchComp extends React.Component{
         else{
         return (
             <div className="searchComp">
-		  <Modal style={inlineStyle.modal} open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
+		  <Modal className = "modal" style={inlineStyle.modal} open={this.state.modalShow} onClose={this.closeModal} size={"mini"}>
           <Modal.Header>
-            Not Logged in.
+            Not Logged in!
           </Modal.Header>
           <Modal.Content>
             <p>Search by User group is an advanced function. You have to log in to proceed.</p>

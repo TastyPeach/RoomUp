@@ -10,6 +10,7 @@ import GroupDetail from '../GroupDetail.jsx';
 import UserProfile from '../UserProfile.jsx';
 import AdvancedUserReg from '../AdvancedUserReg.jsx';
 import CreateGroup from '../CreateGroup.jsx'
+import Chat from '../chat.jsx'
 
 const inlineStyle={
 	modal:{
@@ -222,12 +223,31 @@ const inlineStyle={
 			<Link to={"/"+PMEntry.gid.gid}>{PMEntry.gid.group_name}</Link>
 	 	</div>
 		<div className="PMList_column2">
-	 		<Button basic onClick={this.onClickDeletePMEntry} className={""+PMEntry.pid} animated='vertical' size='small'>
-			 <Button.Content hidden>Delete</Button.Content>
+		<Button.Group>
+		    {/* <Link to={"/chat"}>  */}
+			{/* <Button basic className={""+PMEntry.pid} animated size='small'>
+			 <Button.Content hidden>Chat</Button.Content>
              <Button.Content visible>
+             <Icon name='talk outline'/>
+             </Button.Content>
+			</Button> */}
+
+	 		<Button basic as={Link} to='/chat' className={""+PMEntry.pid} animated='vertical' size='small'>
+			 <Button.Content hidden>Chat</Button.Content>
+             <Button.Content visible>
+             <Icon name='talk outline' />
+             </Button.Content>
+            </Button>
+			
+
+			{/* </Link> */}
+	 		<Button basic onClick={this.onClickDeletePMEntry} className={""+PMEntry.pid} animated='vertical' size='small'>
+			 <Button.Content visible>Delete</Button.Content>
+             <Button.Content hidden>
              <Icon name='thumbs outline down' />
              </Button.Content>
             </Button>
+		</Button.Group>
 	 	</div>
 	 </div>	
 			
@@ -286,50 +306,35 @@ const inlineStyle={
 		   	    </div>
 				<Divider fitted/>   		
 			    <div>
-				{/* <Sidebar.Pushable as={Segment}>
-				<Sidebar as={Menu} animation='push' direction='right' width ='width='thin visible={visible}>
-						{this.state.PMdisplay}
+
+				<Sidebar.Pushable as={Segment}>
+				<Sidebar as={Menu} animation='push' direction='right' width='thin' visible={visible} vertical>
+					{this.state.PMdisplay}
 				</Sidebar>
 				<Sidebar.Pusher>
-					<div className="placeHolder"/>
+					<Segment basic>
+					<div className="placeHolder">
+					<Header as='h3'></Header>
+					</div>
+					</Segment>
 				</Sidebar.Pusher>
-				</Sidebar.Pushable>	 */}
-
-
-		  <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation='push' direction='right' width='thin' visible={visible} vertical>
-    		{this.state.PMdisplay}
-          </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic>
-			<div className="placeHolder">
-              <Header as='h3'></Header>
-			  </div>
-            </Segment>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-
-
+				</Sidebar.Pushable>
 		
-						
-		
-
-
-					
-            <div className="MainComp">
-                <h1>RoomUp</h1>
-                <div className="child">
-    		    <Switch>
-                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken}  {...props}/>)}></Route>
-                 <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
-				 <Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
-				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
-				 <Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
-                </Switch>
-                </div>
-            </div>
-			</div>
-			</div>
+				<div className="MainComp">
+					<h1>RoomUp</h1>
+					<div className="child">
+					<Switch>
+					<Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken}  {...props}/>)}></Route>
+					<Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>
+					<Route path="/chat" render={(props) => <Chat user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
+					<Route path="/:gid" render={(props) => <GroupDetail user_token={this.state.user_token} gid={props.match.params.gid} {...props} /> } />
+					</Switch>
+					</div>
+				</div>
+				</div>
+				</div>
         	);
 	     }
 		else
@@ -338,44 +343,47 @@ const inlineStyle={
 		    return(			
 			<div>
 					
-		  <Modal style={inlineStyle.modal} open={this.state.regModalShow} onClose={this.closeRegModal} size={"large"}>
+		  <Modal className = "modal" style={inlineStyle.modal} open={this.state.regModalShow} onClose={this.closeRegModal} size={"large"}>
           <Modal.Header>
             Please Register
           </Modal.Header>
           <Modal.Content>
       <Form>
+	  <Form.Group widths='equal'>
+         <Form.Field control={Input} label='Username' placeholder='Username' name='username'  onChange={this.handleRegInputChange}/>
+		 <Form.Field control={Input} label='Email' placeholder='Email' name='email' onChange={this.handleRegInputChange}/>
+	    </Form.Group>
         <Form.Group widths='equal'>
           <Form.Field control={Input} label='First name' placeholder='First name' name='fname'  onChange={this.handleRegInputChange}/>
           <Form.Field control={Input} label='Last name' placeholder='Last name' name='lname'  onChange={this.handleRegInputChange}/>
         </Form.Group>
-		 <Form.Group widths='equal'>
-         <Form.Field control={Input} label='Username' placeholder='Username' name='username'  onChange={this.handleRegInputChange}/>
-		 <Form.Field control={Input} label='Password' placeholder='Password' name='password'  onChange={this.handleRegInputChange}/>
+		<Form.Group widths='equal'>
+		 <Form.Field control={Input} label='Password' placeholder='Password' name='password' type='password' onChange={this.handleRegInputChange}/>
+		 <Form.Field control={Input} label='Retype Password' placeholder='Password' name='password' type='password' onChange={this.handleRegInputChange}/>
 	    </Form.Group>
-		<Form.Field control={Input} label='Email' placeholder='Email' name='email' onChange={this.handleRegInputChange}/>
       </Form>
           </Modal.Content>
           <Modal.Actions>
-			 <Button content='Cancel.' onClick={this.closeRegModal}/>
+			 <Button content='Cancel' onClick={this.closeRegModal}/>
              <Button positive content='Submit' onClick={this.onSubmitRegistration}/>
           </Modal.Actions>
         </Modal>
 					
 					
-		<Modal style={inlineStyle.modal} open={this.state.loginModalShow} onClose={this.closeLoginModal} size={"large"}>
+		<Modal className = "modal" style={inlineStyle.modal} open={this.state.loginModalShow} onClose={this.closeLoginModal} size={"large"}>
           <Modal.Header>
-            Not Logged in.
+            Welcome!
           </Modal.Header>
           <Modal.Content>
       <Form>
 		 <Form.Group widths='equal'>
          <Form.Field control={Input} label='Username' placeholder='Username' name='username'  onChange={this.handleLoginInputChange}/>
-		 <Form.Field control={Input} label='Password' placeholder='Password' name='password'  onChange={this.handleLoginInputChange}/>
+		 <Form.Field control={Input} label='Password' placeholder='Password' name='password' type='password' onChange={this.handleLoginInputChange}/>
 	    </Form.Group>
       </Form>
           </Modal.Content>
           <Modal.Actions>
-			 <Button content='Cancel.' onClick={this.closeLoginModal}/>
+			 <Button content='Cancel' onClick={this.closeLoginModal}/>
              <Button positive content='Login' onClick={this.loginSubmit}/>
           </Modal.Actions>
         </Modal>

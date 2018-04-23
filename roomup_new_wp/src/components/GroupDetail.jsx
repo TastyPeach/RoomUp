@@ -44,6 +44,15 @@ export default class GroupDetail extends React.Component{
 
     generateGroupDetailsView(response)
 	{
+
+        var ad_gender = response.data.group[0].admin_uid.gender;
+        var ad_quietness = response.data.group[0].admin_uid.quietness;
+        var ad_sanitary = response.data.group[0].admin_uid.sanitary;
+        var gender = ['Male', 'Female'];
+        var quietness = ['Extremely Quiet', 'Very Quiet', 'Medium Quiet', 'Noisy', 'Very Noisy']
+        var sanitary = ['Extremely Clean', 'Very Clean', 'Medium Clean', 'Sloppy', 'Very Sloppy']
+
+
 		this.setState({GroupViewDetails:(
         <Table celled padded>
         <Table.Header>
@@ -99,15 +108,40 @@ export default class GroupDetail extends React.Component{
             {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
         </Table.Row>
         </Table.Body>
-
         <Table.Body> 
         <Table.Row textAlign='center'>
-            <Table.Cell >{" "+response.data.group[0].admin_uid.gender}</Table.Cell>   
-            {response.data.users.map((user,i) => <Table.Cell>{user.uid.username}</Table.Cell>)}
+            <Table.Cell>Gender: {" "+gender[ad_gender]}</Table.Cell>   
+            {response.data.users.map((user,i) => <Table.Cell>Gender:{gender[user.gender]}</Table.Cell>)}
             {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
         </Table.Row>
         </Table.Body>
-        </Table>    
+
+        <Table.Body> 
+        <Table.Row textAlign='center'>
+            <Table.Cell>Quietness: {" "+quietness[ad_quietness]}</Table.Cell>   
+            {response.data.users.map((user,i) => <Table.Cell>Quietness:{quietness[user.quietness]}</Table.Cell>)}
+            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
+        </Table.Row>
+        </Table.Body>
+
+        <Table.Body> 
+        <Table.Row textAlign='center'>
+            <Table.Cell>Sanitation: {" "+sanitary[ad_sanitary]}</Table.Cell>   
+            {response.data.users.map((user,i) => <Table.Cell>Sanitation: {sanitary[user.sanitary]}</Table.Cell>)}
+            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
+        </Table.Row>
+        </Table.Body>
+
+        <Table.Body> 
+        <Table.Row textAlign='center'>
+            <Table.Cell>Major: {" "+response.data.group[0].admin_uid.major}</Table.Cell>   
+            {response.data.users.map((user,i) => <Table.Cell>Major: {user.major}</Table.Cell>)}
+            {/* <Table.Cell>{" "+response.data.users[1].uid.username}</Table.Cell>  */}
+        </Table.Row>
+        </Table.Body>
+
+        </Table>  
+ 
 		)});
 	}
 

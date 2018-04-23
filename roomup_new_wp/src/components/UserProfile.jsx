@@ -82,48 +82,40 @@ export default class UserProfile extends React.Component{
 			gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-					<Segment>
-						<Button basic as={Link} to='/'>GID:{gid_string}</Button>
-					</Segment>	
+						<Button className = "borderlessbutton" basic as={Link} to='/'>GID:{gid_string}</Button>
 				</Grid.Column>
 				<Grid.Column>
-					<Segment>
 				{/* <Button basic onClick={this.leaveGroupButtonOnClick}>Leave Group</Button>	 */}
 
-                <Button animated basic onClick={this.leaveGroupButtonOnClick}>
+                <Button className = "borderlessbutton" animated basic onClick={this.leaveGroupButtonOnClick}>
                 <Button.Content visible>Leave Group</Button.Content>
 		        <Button.Content hidden>
 			    <Icon name='yellow frown' />
 		        </Button.Content>
 		        </Button>
 
-
-				</Segment>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
+
+
+
+
 			}
 			else
 				{
 				gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-					<Segment><Button basic as={Link} to='/'>GID:You don't belong to any group</Button></Segment>
+				<Button className = "borderlessbutton" basic as={Link} to='/'>GID:You don't belong to any group</Button>
 				</Grid.Column>
 				<Grid.Column>
-					<Segment>
-
-
-				<Button animated basic as={Link} to='/'>
+				<Button className = "borderlessbutton" animated basic as={Link} to='/'>
                 <Button.Content visible>Go and add one!</Button.Content>
 		        <Button.Content hidden>
 			    <Icon name='yellow hand peace' />
 		        </Button.Content>
 		        </Button>
-
-
-
-				</Segment>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
