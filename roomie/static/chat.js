@@ -6,7 +6,7 @@ $(function() {
     chatsock.onmessage = function(message) {
         var data = JSON.parse(message.data);
         var chat = $("#chatcontent")
-        var ele = $('<div style="margin-bottom: 15px; text-align:right;"></div>')
+        var ele = $('<div style="margin-bottom: 100px; text-align:right;"></div>')
         
         ele.append(
             $("<div></div>").text(data.timestamp).css({"float":"right", "margin-left":"1rem", "font-size":"12px", "font-weight":"200"})
@@ -17,7 +17,7 @@ $(function() {
         )
         
         ele.append(
-            $("<div></div>").text(data.message).css({"font-size": "1.11em"}) //.css({"font-size: 1.11em;"})
+            $("<div class='chat'>").append($("<div class='chat-content clearfix'>").append($("<span class='you last'></span>").append($("<div></div>").text(data.message).css({"font-size": "1.11em"}))))
         )
         
         chat.append(ele)
