@@ -12,25 +12,36 @@
 
 
   <form id="chatform">
-    <table id="chat">
-      <tbody>
+    <div id="chat">
+      <div id = "chatcontent">
         {% for message in messages %}
-          <tr>
-            <td>{{ message.timestamp }}</td>
-            <td>{{ message.handle }}</td>
-            <td>{{ message.message }}</td>
-          </tr> 
+          {% if message.handle != username %}
+              <div style="margin-bottom: 15px;">
+                <div style="float:left;margin-right:2rem;margin-left: 0.15rem;font-weight:  bolder;">{{ message.handle }}</div>
+                <div style="font-size: 12px;position: relative;margin-bottom: 1rem;top: 3.5px; font-weight: 200">{{ message.timestamp }}</div>
+                <div style="font-size: 1.11em;">{{ message.message }}</div>
+              </div> 
+          {% else %}
+             <div>
+             <div style="margin-bottom: 15px; text-align:right;">
+                <div style="float:right; margin-left: 1rem; font-size: 12px; font-weight: 200">{{ message.timestamp }}</div>
+                <div style="font-weight:bolder;position: relative;margin-bottom: 1rem;top: -3.5px; ">{{ message.handle }}</div>
+                <div style="font-size: 1.11em;">{{ message.message }}</div>
+              </div> 
+              </div>
+          {% endif %}
         {% endfor %}
-      </tbody>
+      </div>
       <tfoot>
-      <tr>
+      <div style="position:relative; top: 20px; text-align: center;">
         <td>Say something:</td>
         <td colspan=2>
-          <input id="message" type="text" placeholder="message">
-          <button type="submit" id="go">Say it</button>
+          <input id="message" type="text" placeholder="message" style="width: 60%">
+          <button type="submit" id="go">Send</button>
         </td>
+      </div>
       </tfoot>
-    </table>
+    </div>
   </form>
 {% endblock content %}
 
