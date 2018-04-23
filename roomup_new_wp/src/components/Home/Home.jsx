@@ -52,7 +52,14 @@ const inlineStyle={
 		this.handleLoginInputChange=this.handleLoginInputChange.bind(this);
 		this.loginSubmit=this.loginSubmit.bind(this);
 		this.getUserToken=this.getUserToken.bind(this);
+		this.updateMarkers=this.updateMarkers.bind(this);
 	}
+	
+	updateMarkers()
+	 {
+
+	 }
+	  
 	getUserToken()
 	  {
 		  return this.state.user_token;
@@ -180,6 +187,7 @@ const inlineStyle={
         //handle success
 		console.log("DELETE potential match success");
 		this.onPMListChange();
+		this.updateMarkers();
     })
     .catch(function (response) {
         //handle error

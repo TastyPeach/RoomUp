@@ -463,7 +463,7 @@ export default class SearchComp extends React.Component{
 				<div className="workspace_row">
             	<div className="workspace_mapColumn">
                     <div style={{width: '100%', height: '700px'}}>
-                    <MapComponent/>
+                    <MapComponent getUserToken={this.getUserToken}/>
                     </div>
                 </div>
                 <div className="workspace_resultColumn">
