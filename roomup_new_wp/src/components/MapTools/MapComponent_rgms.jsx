@@ -6,7 +6,7 @@ const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 
 const MyMapComponent = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDliBDekfh79V7Grt8EiSZqC19Jxal10Hk&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyAHs3vgmc8aGyqReVIjcgPkkNBi-QuQ4pE&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `700px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
@@ -39,6 +39,7 @@ var replaced = str.split(' ').join('+');
 
 const apikey1='AIzaSyDUGe_pljDYYjCTUe5QbdRFv4OqY4AIipY';
 const apikey2='AIzaSyDliBDekfh79V7Grt8EiSZqC19Jxal10Hk';
+const apikey3='AIzaSyAHs3vgmc8aGyqReVIjcgPkkNBi-QuQ4pE';
 
 
 export default class MapComponent extends React.PureComponent {
@@ -121,7 +122,7 @@ export default class MapComponent extends React.PureComponent {
 			var addr = listItem.gid.aid.address;
 		    addr = addr.split(' ').join('+');
 			baseURL=baseURL+addr;
-			baseURL=baseURL+'&key='+apikey2;
+			baseURL=baseURL+'&key='+apikey3;
 			axios({
     			url: baseURL,
     			method: 'get',
@@ -142,7 +143,7 @@ export default class MapComponent extends React.PureComponent {
 			var addr = response.data[i].gid.aid.address;
 		    addr = addr.split(' ').join('+');
 			baseURL=baseURL+addr;
-			baseURL=baseURL+'&key='+apikey2;
+			baseURL=baseURL+'&key='+apikey3;
 			axios({
     			url: baseURL,
     			method: 'get',
