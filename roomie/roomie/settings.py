@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+TEMPLATE_DIR = 'app_basic/template'
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 # Quick-start development settings - unsuitable for production
@@ -26,9 +26,9 @@ SECRET_KEY = 'klp$854)x^t2d-csux6ly(b#ptcm2utf^!_kzzwot_i0_6h8&z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1']
-
-
+ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1', 'ec2-18-219-12-38.us-east-2.compute.amazonaws.com', '172.31.42.204']
+CORS_ORIGIN_ALLOW_ALL = True
+WEBSOCKET_URL = "unix:/home/ubuntu/temp/WeRoomie/roomie/chat.sock"
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,9 +41,14 @@ INSTALLED_APPS = [
     'app_basic',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
+    'channels',
+    'ws4redis',
+    'websockets',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,12 +85,22 @@ WSGI_APPLICATION = 'roomie.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'WeRoomie',
+        'NAME': 'WeRoomie2',
         'USER': 'root',
         'PASSWORD': ''
     }
 }
 
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "app_basic.routing.channel_routing",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
