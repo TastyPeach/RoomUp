@@ -60,54 +60,30 @@ export default class MapComponent extends React.PureComponent {
 		this.generateMarkers=this.generateMarkers.bind(this);
 	}
 	
-	addMarker(location)
+	addMarker(loc_info)
 	{
-		if(location!==undefined)
+		if(loc_info.loc!==undefined)
 		{
-		var lat=location.lat;
-		var lng=location.lng;
-		this.setState({locations: this.state.locations.concat([location])});
+		this.setState({locations: this.state.locations.concat([loc_info])});
 		this.setState({markers: this.generateMarkers()});
 		}
 	}
-	
-	/*
-	 <Marker
-      position={{ lat: 22.6273, lng: 120.3014 }}
-      onClick={props.onToggleOpen}
-    >
-      {props.isOpen && <InfoBox
-        onCloseClick={props.onToggleOpen}
-        options={{ closeBoxURL: ``, enableEventPropagation: true }}
-      >
-        <div style={{ backgroundColor: `while`, opacity: 1.00, padding: `12px` }}>
-          <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>
-            Hello, Kaohsiung!
-          </div>
-        </div>
-      </InfoBox>}
-    </Marker>
-	*/
-	
-	/*
-	
-		 <InfoBox
-        options={{ closeBoxURL: ``, enableEventPropagation: true }}
-      >
-        <div style={{ backgroundColor: `while`, opacity: 1.00, padding: `3px`, color:'black'}}>
-          <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>
-            Kaohsiung!
-          </div>
-        </div>
-      </InfoBox>
-	*/
 	
 	generateMarkers(){
 	var gArray=this.state.locations;
 	var listItems=gArray.map((locEntry,index) =>
     // Correct! Key should be specified inside the array.
     (
-	 <Marker key={index} position={locEntry}>
+	 <Marker key={index} position={locEntry.loc}>
+	  <InfoBox
+        options={{ closeBoxURL: ``, enableEventPropagation: true }}
+      >
+        <div style={{ backgroundColor: `while`, opacity: 1.00, padding: `3px`, color:'black'}}>
+          <div style={{ fontSize: `12px`, fontColor: `#08233B` }}>
+             {locEntry.gname}
+          </div>
+        </div>
+      </InfoBox>	
 	 </Marker>
 	)
   	);
@@ -135,9 +111,35 @@ export default class MapComponent extends React.PureComponent {
 		
 		if(the_same==false)
 		{
+		
 		console.log("update required!");
-		this.setState({group_names: temp});
-		for (i = 0; i < response.data.length; i++)
+		this.setState({group_names: temp});	
+		this.setState({locations:[]})
+		response.data.forEach(
+			(listItem, index)=>{
+		    var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
+			var addr = listItem.gid.aid.address;
+		    addr = addr.split(' ').join('+');
+			baseURL=baseURL+addr;
+			baseURL=baseURL+'&key='+apikey2;
+			axios({
+    			url: baseURL,
+    			method: 'get',
+ 			})
+ 			.then(response => {
+				var gname= this.state.group_names[index];
+				this.addMarker({loc:response.data.results[0].geometry.location,gname: gname});
+ 			}) 
+ 			.catch(err => {
+				//Error
+    			console.log(err);
+ 			});
+		});
+			
+		}
+		
+		
+		/*for (i = 0; i < response.data.length; i++)
 		{
 			var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 			var addr = response.data[i].gid.aid.address;
@@ -149,6 +151,7 @@ export default class MapComponent extends React.PureComponent {
     			method: 'get',
  			})
  			.then(response => {
+				console.log(i);
 				this.addMarker(response.data.results[0].geometry.location);
  			}) 
  			.catch(err => {
@@ -156,7 +159,7 @@ export default class MapComponent extends React.PureComponent {
     			console.log(err);
  			});
 		}
-		}
+		}*/
 	}
 
 	

@@ -460,10 +460,12 @@ export default class SearchComp extends React.Component{
                      <Dropdown placeholder='Time go to bed' onChange={this.onChangeTimetobed} compact selection options={timetobedOptions} defaultValue={"2"}/>
                      <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions} defaultValue={"0"}/>
                 </div>
+				
+				{this.state.login&&
 				<div className="workspace_row">
             	<div className="workspace_mapColumn">
                     <div style={{width: '100%', height: '700px'}}>
-                    <MapComponent  getUserToken={this.getUserToken}/>
+						<MapComponent  getUserToken={this.getUserToken}/>
                     </div>
                 </div>
                 <div className="workspace_resultColumn">
@@ -471,7 +473,9 @@ export default class SearchComp extends React.Component{
                     {this.state.result_display}
             	   </div>
                 </div>
-                </div>
+                </div>}
+				
+				
 			</div>);
         }
     }
