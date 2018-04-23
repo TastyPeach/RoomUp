@@ -6,7 +6,6 @@ import 'semantic-ui-css/semantic.min.css';
 import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List, Segment, Grid, Divider,Sidebar,Card, Modal, Icon} from 'semantic-ui-react';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-
 import MapComponent from './MapTools/MapComponent_rgms.jsx';
 
 
@@ -462,7 +461,7 @@ export default class SearchComp extends React.Component{
                      <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions} defaultValue={"0"}/>
                 </div>
 				<div class="workspace_row">
-            	    <div class="workspace_mapColumn">
+            	<div class="workspace_mapColumn">
                     <div style={{width: '100%', height: '700px'}}>
                     <MapComponent/>
                     </div>

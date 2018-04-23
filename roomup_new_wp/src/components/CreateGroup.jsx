@@ -103,7 +103,6 @@ export default class CreateGroup extends React.Component{
 		bodyFormData.set('group_name', group_name);
 		bodyFormData.set('occupied', occupied);
 		bodyFormData.set('capacity', capacity);
-
         axios({
     		method: 'post',
     		url: baseUrl,
