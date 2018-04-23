@@ -26,9 +26,9 @@ SECRET_KEY = 'klp$854)x^t2d-csux6ly(b#ptcm2utf^!_kzzwot_i0_6h8&z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1', 'ec2-18-219-12-38.us-east-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1', 'ec2-18-219-12-38.us-east-2.compute.amazonaws.com', '172.31.42.204']
 CORS_ORIGIN_ALLOW_ALL = True
-
+WEBSOCKET_URL = "unix:/home/ubuntu/temp/WeRoomie/roomie/chat.sock"
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'channels',
+    'ws4redis',
+    'websockets',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +91,16 @@ DATABASES = {
     }
 }
 
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "app_basic.routing.channel_routing",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

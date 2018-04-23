@@ -15,11 +15,42 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 
+from django.forms.models import model_to_dict
+from datetime import date, datetime
+
+## chat room
+def chat_room(request, label):
+    # If the room with the given label doesn't exist, automatically create it
+    # upon first visit (a la etherpad).
+    # print (type(label))
+    # print (label)
+    room, created = Room.objects.get_or_create(label=label)
+
+    # We want to show the last 50 messages, ordered most-recent-last
+    messages = reversed(room.messages.order_by('-timestamp')[:50])
+    ms = []
+    for message in messages:
+        m = model_to_dict(message)
+        print(m)
+        if isinstance(m['timestamp'], (datetime, date)):
+            m['timestamp'] = m['timestamp'].strftime('%Y-%m-%d %H:%M') #.isoformat()
+            ms.append(m)
+            # print(m)
+    # print(room.messages.order_by('-timestamp')[:50])
+    print(ms)
+    #    print(request.__dir__())
+    #    print(request.content_params, request.get_raw_uri(), request.path, )
+    return render(request, "app_basic/room.html", {
+        'username': request.get_raw_uri().split("?")[1].split("=")[1], 
+        'room': room,
+        'messages': ms,
+    })
+
 def index(request):
     return render_to_response('index.html')
 ## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
-@parser_classes((JSONParser,))
+#@parser_classes((JSONParser,))
 def app_login(request):
     uname = request.data.get('username')
     passwd = request.data.get('password')
@@ -37,7 +68,7 @@ def app_login(request):
     return r
 
 @api_view(['POST'])
-@parser_classes((JSONParser,))
+#@parser_classes((JSONParser,))
 def app_register(request):
     uname = request.data.get('username')
     passwd = request.data.get('password')
@@ -74,7 +105,7 @@ def get_apt_by_name(request):
 
 
 @api_view(['GET'])
-@parser_classes((JSONParser,)) 
+#@parser_classes((JSONParser,)) 
 @permission_classes((IsAuthenticated,))
 def get_apt_by_id(request):
     aid = request.query_params.get('aid')
@@ -115,9 +146,12 @@ def become_advance(request):
 @permission_classes((IsAuthenticated,))
 def get_personal_info(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.get(uid=u)
-    adv_ser = AdvancedUserSerializer(adv_u)
-    return JsonResponse(adv_ser.data)
+    adv_u = AdvancedUser.objects.filter(uid=u)
+    if len(adv_u) == 0:
+        u_ser = UserSerializer(u)
+    else:
+        u_ser = AdvancedUserSerializer(adv_u[0])
+    return JsonResponse(u_ser.data)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
@@ -167,9 +201,13 @@ def add_potential_match(request):
 @permission_classes((IsAuthenticated,))
 def get_potential_match(request):
     u = request._request.user
-    adv_u = AdvancedUser.objects.get(uid=u)
-    pms = PotentialMatch.objects.filter(uid=adv_u)
+    adv_u = AdvancedUser.objects.filter(uid=u)
+
+    if len(adv_u) == 0:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    pms = PotentialMatch.objects.filter(uid=adv_u[0])
     ret = []
+
     for pm in pms:
         ret.append(PotentialMatchSerializer(pm).data)
     return JsonResponse(ret, safe=False)
@@ -192,7 +230,7 @@ def filter_group(request):
     quietness = int(request.query_params.get('quietness'))
     sanitary = int(request.query_params.get('sanitary'))
     pet = int(request.query_params.get('pet'))
-
+    
     ret = []
     valid_groups = Group.objects.filter(active=True)
     for group in valid_groups:
@@ -213,7 +251,7 @@ def filter_group(request):
         if is_valid and have_pet==pet:
            ret.append(GroupSerializer(group).data)
 
-    return JsonResponse({"group" : ret}, safe=False)
+    return JsonResponse({"group" : ret[:10]}, safe=False)
 
 
 @api_view(['POST'])
@@ -234,14 +272,18 @@ def create_group(request):
     price = request.data.get("price")
     address = request.data.get("address")
     floorplan = request.data.get("floorplan")
-    occupied = request.data.get("occupied")
+    occupied = request.data.get("occupied") # True 1 False 0
+    if occupied == "0":
+        occupied = False
+    else:
+        occupied = True
 
     # Get group related parameter
     capacity = request.data.get("capacity")
     group_name = request.data.get("group_name")
-
+    
     # group name too long
-    if len(group_name) > 10:
+    if len(group_name) > 20:
         return JsonResponse({'error': 'group name too long'}, status=status.HTTP_400_BAD_REQUEST)
     if len(name) > 50:
         return JsonResponse({'error': 'apartment name too long'}, status=status.HTTP_400_BAD_REQUEST)
@@ -251,7 +293,7 @@ def create_group(request):
     apt.save()
 
     # Save group
-    group = Group(group_name=group_name, aid=apt, peopleleft=capacity-1, capacity=capacity, admin_uid=advance)
+    group = Group(group_name=group_name, aid=apt, peopleleft=str(int(capacity)-1), capacity=capacity, admin_uid=advance)
     group.save()
 
     advance.gid = group
