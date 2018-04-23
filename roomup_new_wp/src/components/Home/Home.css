@@ -5,17 +5,28 @@
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
+    width: 70%;
+}
+
+.placeHolder{
+	height:  2000px;
 }
 
 .div-right { 
     text-align:right;
     margin:0px auto 0px auto;
-    height:54px;
+    height:60px;
 } 
 
-.buttonStyle{
-    height: 100%;
+.submenu{
+    text-align:right;
+    margin:0px auto 0px auto;
+    padding: 1.5% 5px 0px 20px;
+    height:60px;
+}
+
+.ButtonGroup{
+    height: 60px;
 }
 
 
@@ -27,11 +38,11 @@
 
 .PMList_column1{
     float: left;
-    width: 50%;
+    width: 100px;
 }
 .PMList_column2{
     float: left;
-    width: 50%;
+    width: 100px;
     color: black;
 }
 
