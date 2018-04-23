@@ -121,6 +121,7 @@ export default class MapComponent extends React.PureComponent {
 		    var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
 			var addr = listItem.gid.aid.address;
 		    addr = addr.split(' ').join('+');
+		    addr = addr+ "+champaign+urbana"
 			baseURL=baseURL+addr;
 			baseURL=baseURL+'&key='+apikey3;
 			axios({
@@ -129,6 +130,8 @@ export default class MapComponent extends React.PureComponent {
  			})
  			.then(response => {
 				var gname= this.state.group_names[index];
+				if(response.data.results[0].geometry==undefined)
+					console.log(gname);
 				this.addMarker({loc:response.data.results[0].geometry.location,gname: gname});
  			}) 
  			.catch(err => {
@@ -137,27 +140,6 @@ export default class MapComponent extends React.PureComponent {
  			});
 		});	
 		}
-		/*for (i = 0; i < response.data.length; i++)
-		{
-			var baseURL='https://maps.googleapis.com/maps/api/place/textsearch/json?query=';
-			var addr = response.data[i].gid.aid.address;
-		    addr = addr.split(' ').join('+');
-			baseURL=baseURL+addr;
-			baseURL=baseURL+'&key='+apikey3;
-			axios({
-    			url: baseURL,
-    			method: 'get',
- 			})
- 			.then(response => {
-				console.log(i);
-				this.addMarker(response.data.results[0].geometry.location);
- 			}) 
- 			.catch(err => {
-				//Error
-    			console.log(err);
- 			});
-		}
-		}*/
 	}
 
 	
