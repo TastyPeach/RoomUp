@@ -112,7 +112,7 @@ export default class SearchComp extends React.Component{
 		
 		this.onPMListChange=this.props.onPMListChange;
 		this.getUserToken=this.props.getUserToken;
-		console.log(this.props);
+		
 		
 	}
 	
@@ -299,7 +299,7 @@ export default class SearchComp extends React.Component{
 		<Button animated='vertical' basic className={""+gEntry.gid} onClick={this.addButtonOnClick}>
 		<Button.Content hidden>Join</Button.Content>
 		<Button.Content visible>
-			<Icon name='yellow smile' />
+			<Icon name='smile' />
 		</Button.Content>
 		</Button>
 	 		{/* <Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>
@@ -463,7 +463,7 @@ export default class SearchComp extends React.Component{
 				<div className="workspace_row">
             	<div className="workspace_mapColumn">
                     <div style={{width: '100%', height: '700px'}}>
-                    <MapComponent getUserToken={this.getUserToken}/>
+                    <MapComponent  getUserToken={this.getUserToken}/>
                     </div>
                 </div>
                 <div className="workspace_resultColumn">

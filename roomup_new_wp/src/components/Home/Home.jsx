@@ -57,7 +57,7 @@ const inlineStyle={
 	
 	updateMarkers()
 	 {
-
+		 //something
 	 }
 	  
 	getUserToken()
@@ -234,7 +234,7 @@ const inlineStyle={
 	 </Segment>)
   	);
   	return (
-    	<Segment.Group vertical>
+    	<Segment.Group vertical="true">
       	{listItems}
     	</Segment.Group>
   	);
@@ -320,7 +320,7 @@ const inlineStyle={
                 <h1>RoomUp</h1>
                 <div className="child">
     		    <Switch>
-                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken} {...props}/>)}></Route>
+                 <Route exact path="/" render={(props) => (<SearchComp login={this.state.login} onPMListChange={this.onPMListChange} getUserToken={this.getUserToken}  {...props}/>)}></Route>
                  <Route exact path="/becomeAdvanced" render={(props) => (<AdvancedUserReg user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/CreateGroup" render={(props) => (<CreateGroup user_token={this.state.user_token} {...props}/>)}></Route>
 				 <Route exact path="/UserProfile" render={(props) => (<UserProfile user_token={this.state.user_token} {...props}/>)}></Route>

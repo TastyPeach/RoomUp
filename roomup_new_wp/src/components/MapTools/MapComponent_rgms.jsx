@@ -41,9 +41,7 @@ export default class MapComponent extends React.PureComponent {
 			locations:[]
 		}
 		this.getUserToken=this.props.getUserToken;
-		
 		this.generatePMMarkers=this.generatePMMarkers.bind(this);
-		//this.generatePMList=this.generatePMList.bind(this);
 		this.onReceivePMList=this.onReceivePMList.bind(this);
 		this.getPMList=this.getPMList.bind(this);
 		this.addMarker=this.addMarker.bind(this);
@@ -120,6 +118,7 @@ export default class MapComponent extends React.PureComponent {
 	
     getPMList()
 	{
+		console.log("getPMList")
 	    var config={"Authorization":"Token "+this.getUserToken()};
 		axios({
     		url: 'http://18.219.12.38:8001/get_potential_match',
@@ -137,23 +136,17 @@ export default class MapComponent extends React.PureComponent {
 
 
   componentDidMount() {
-    this.delayedShowMarker()
+    //this.delayedShowMarker()
+	 setInterval(this.getPMList, 3000);
   }
-
-  delayedShowMarker = () => {
-    setTimeout(() => {
-      this.setState({ isMarkerShown: true })
-    }, 300)
-  }
+ 
+ 
 
   handleMarkerClick = () => {
     this.setState({ isMarkerShown: false })
     this.delayedShowMarker()
   }
   
-  
-  
-
   render() {
     return (
       <MyMapComponent
