@@ -23,7 +23,7 @@ $(function() {
         chat.append(ele)
         
         $(document).ready(function(){
-            $(this).scrollTop($(window).height());
+            $(this).scrollTop($(document).height());
         });
     };
 
@@ -36,8 +36,9 @@ $(function() {
         $("#message").val('').focus();
         
         $(document).ready(function(){
-            $(this).scrollTop($(window).height());
+            $(this).scrollTop($(document).height());
         });
+        
         return false;
     });
 });
