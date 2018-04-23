@@ -2,7 +2,7 @@
     color: skyblue;
     text-align: center;
     position: absolute;
-    width:100%;
+    width: 100%;
     height: 1000px;
 }
 
@@ -48,7 +48,6 @@
     color: black;
 }
 
-
 /* Clear floats after the columns */
 .entry_row:after {
     content: "";
@@ -60,3 +59,24 @@
     position: relative;
     padding-top:5%;
 }
+
+
+.workspace_resultColumn {
+    float: left;
+    width: 50%;
+}
+
+.workspace_mapColumn {
+    float: left;
+    width: 50%;
+    padding-top: 5%;
+    padding-right: 2%
+}
+
+/* Clear floats after the columns */
+.workspace_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+

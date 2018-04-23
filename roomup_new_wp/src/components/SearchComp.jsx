@@ -7,6 +7,8 @@ import {Header, Container,Button, Select, Input,Dropdown, Checkbox, List, Segmen
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 
+import MapComponent from './MapTools/MapComponent.jsx';
+
 
 /*
 To do: 
@@ -444,9 +446,21 @@ export default class SearchComp extends React.Component{
                      <Dropdown placeholder='Time go to bed' onChange={this.onChangeTimetobed} compact selection options={timetobedOptions} defaultValue={"2"}/>
                      <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions} defaultValue={"0"}/>
                 </div>
-            	<div className="result_display">
-                 {this.state.result_display}
-            	</div>
+                
+                <div class="workspace_row">
+                <div class="workspace_mapColumn">
+                    <div style={{width: '100%', height: '700px'}}>
+                    <MapComponent/>
+                    </div>
+                </div>
+                <div class="workspace_resultColumn">
+            	   <div className="result_display">
+                    {this.state.result_display}
+            	   </div>
+                </div>
+                </div>
+                
+                
 			</div>);
         }
     }
