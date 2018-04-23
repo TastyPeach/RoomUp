@@ -29,7 +29,7 @@ export default class SubMenu extends Component {
             </Dropdown>
             <Button.Group>	
             <Button basic >Messages</Button>
-            <Button basic onClick={this.props.onClickShowSidebar} animated='vertical'>
+            <Button basic onClick={this.props.onClickShowSidebar} animated='vertical' size='mini'>
             <Button.Content hidden>Likes</Button.Content>
             <Button.Content visible>
               <Icon name='red heart' />
