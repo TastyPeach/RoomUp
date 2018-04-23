@@ -460,13 +460,13 @@ export default class SearchComp extends React.Component{
                      <Dropdown placeholder='Time go to bed' onChange={this.onChangeTimetobed} compact selection options={timetobedOptions} defaultValue={"2"}/>
                      <Dropdown placeholder='Pet?' onChange={this.onChangePet} compact selection options={petOptions} defaultValue={"0"}/>
                 </div>
-				<div class="workspace_row">
-            	<div class="workspace_mapColumn">
+				<div className="workspace_row">
+            	<div className="workspace_mapColumn">
                     <div style={{width: '100%', height: '700px'}}>
                     <MapComponent/>
                     </div>
                 </div>
-                <div class="workspace_resultColumn">
+                <div className="workspace_resultColumn">
             	   <div className="result_display">
                     {this.state.result_display}
             	   </div>

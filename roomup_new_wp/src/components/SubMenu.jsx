@@ -32,7 +32,7 @@ export default class SubMenu extends Component {
             <Button basic onClick={this.props.onClickShowSidebar} animated='vertical'>
             <Button.Content hidden>Likes</Button.Content>
             <Button.Content visible>
-              <Icon name='red heart' />
+              <Icon name='heart' />
             </Button.Content>
           </Button>
         </Button.Group>	
