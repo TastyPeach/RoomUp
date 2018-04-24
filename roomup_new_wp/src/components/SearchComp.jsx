@@ -24,7 +24,7 @@ var jsonResults=[
   ];
 
 const searchOptions = [
-  { key: 'Apt', text: 'Apt', value: 'Apt' },
+  { key: 'Apt', text: 'Apt+', value: 'Apt' },
   { key: 'Group', text: 'Group', value: 'Group' },
 ]
 
@@ -225,6 +225,7 @@ export default class SearchComp extends React.Component{
 					
 				var resultView=this.generateEntriesForSearchApt(response);
             	this.setState({result_display:resultView});
+				
  				
 				}) 
  				.catch(err => {
@@ -256,10 +257,12 @@ export default class SearchComp extends React.Component{
         //handle success
 		console.log("add potential match success");
 		this.props.onPMListChange();
+		alert("Add Potential Match Success");
     })
     .catch(function (response) {
         //handle error
         console.log(response);
+		alert("Add Potential Match Failed. Please check you profile.")
     });
     }
 	
@@ -283,10 +286,12 @@ export default class SearchComp extends React.Component{
         //handle success
 		this.showAddToGroupModal();
 		console.log("add to group success");
+		alert("Add to group success");
     })
     .catch(function (response) {
         //handle error
         console.log(response);
+		alert("Add to group failed. Please check you profile.")
     });
     }
 	
@@ -414,7 +419,7 @@ export default class SearchComp extends React.Component{
 	var totLength=listItems_user.length+listItems_apt;
   	return (
     	<Segment.Group>
-			{totLength==0 && <Segment> <h3>It is Emptry. </h3></Segment>}
+			{totLength==0 && <Segment> <h3>It is Empty. </h3></Segment>}
 		{listItems_user}
       	{listItems_apt}
     	</Segment.Group>

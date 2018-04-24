@@ -116,12 +116,14 @@ export default class CreateGroup extends React.Component{
 			//handle success
             console.log("success");
             console.log(response);
+			alert("CreateGroup Success");
 			
         })
         .catch(function (response) {
             //handle error
-            console.log("failing")
+            console.log("failing");
 			console.log(response);
+			alert("CreateGroup Failed");
         });
 		}
 		
