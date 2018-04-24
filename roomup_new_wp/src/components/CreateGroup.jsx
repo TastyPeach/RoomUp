@@ -96,7 +96,7 @@ export default class CreateGroup extends React.Component{
 		var capacity = this.state.user_filter.capacity;
 
         var bodyFormData = new FormData();
-		bodyFormData.set('name', 'susie');
+		bodyFormData.set('name', name);
 		bodyFormData.set('price', price);
 		bodyFormData.set('address', address);
 		bodyFormData.set('floorplan', floorplan);
@@ -156,7 +156,7 @@ export default class CreateGroup extends React.Component{
 			<Form.Group widths='equal'>
 			</Form.Group>
 			<Form.Checkbox label='I agree to the Terms and Conditions' />
-			<Link to={"/UserProfile"}>
+			<Link to={"/"}>
 			<Form.Button type='submit' onClick={this.createRequestURLForCreateGroup}> 
 			<Icon name='yellow hand pointer' />Submit </Form.Button>
 			</Link>

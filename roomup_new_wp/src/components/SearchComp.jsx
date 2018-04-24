@@ -8,13 +8,6 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import MapComponent from './MapTools/MapComponent_rgms.jsx';
 
-
-/*
-To do: 
-Delete/Like button
-Pass Down of User information
-*/
-
 const inlineStyle={
 	modal:{
 		marginTop: '0px !important',
@@ -36,38 +29,38 @@ const searchOptions = [
 ]
 
 const petOptions = [
-  { key: 'a', text: 'They can have pets.', value: '1' },
-  { key: 'na', text: 'I don\'t like pets', value: '0' }
+  { key: 'a', text: 'They can have pets.', value: '0' },
+  { key: 'na', text: 'I don\'t like pets', value: '1' }
 ]
 
 const genderOptions = [
-  { key: 'm', text: 'All Male', value: '1' },
-  { key: 'fm', text: 'All Female', value: '0' },
+  { key: 'm', text: 'All Male', value: '0' },
+  { key: 'fm', text: 'All Female', value: '1' },
   { key: 'mfm', text: 'Mixed Gender Group', value: '2' }
 ]
 
 
 const quietnessOptions = [
-  { key: '4', text: 'Extremely Quiet', value:'4' },
-  { key: '3', text: 'Very Quiet', value: '3' },
+  { key: '0', text: 'Extremely Quiet', value:'0' },
+  { key: '1', text: 'Very Quiet', value: '1' },
   { key: '2', text: 'I\'m OK with some noise.', value: '2' },
-  { key: '1', text: 'I also make noise.', value: '1' },
-  { key: '0', text: 'Noise? I don\'t care now.', value: '0' }
+  { key: '3', text: 'I also make noise.', value: '3' },
+  { key: '4', text: 'Noise? I don\'t care now.', value: '4' }
 ]
 
 const sanitaryOptions = [
-  { key: '4', text: 'Fan of housekeeping', value:'4' },
-  { key: '3', text: 'Extremely Clean', value: '3' },
+  { key: '0', text: 'Fan of housekeeping', value:'0' },
+  { key: '1', text: 'Extremely Clean', value: '1' },
   { key: '2', text: 'Clean', value: '2' },
-  { key: '1', text: 'Somewhat Clean', value: '1' },
-  { key: '0', text: 'Sanitary? I don\'t care now.', value: '0' }
+  { key: '3', text: 'Somewhat Clean', value: '3' },
+  { key: '4', text: 'Sanitary? I don\'t care now.', value: '4' }
 ]
 
 const timetobedOptions = [
   { key: '0', text: 'Go to bed before 9pm.', value:'0' },
   { key: '1', text: 'Go to bed before 11pm.', value: '1' },
   { key: '2', text: 'Go to bed before 1am', value: '2' },
-  { key: '3', text: 'Go to bed before 3pm', value: '3' },
+  { key: '3', text: 'Go to bed before 3am', value: '3' },
   { key: '4', text: 'No need to sleep.', value: '4' }
 ]
 
@@ -109,10 +102,23 @@ export default class SearchComp extends React.Component{
 		this.closeAddToGroupModal=this.closeAddToGroupModal.bind(this);
 		this.showAddToGroupModal=this.showAddToGroupModal.bind(this);
 		
+		this.generateEntriesForSearchApt=this.generateEntriesForSearchApt.bind(this);
+		
 		
 		this.onPMListChange=this.props.onPMListChange;
 		this.getUserToken=this.props.getUserToken;
 		
+		if (document.cookie.indexOf('token') == -1 ) 
+		{
+				console.log("cookie not exists");
+		}
+		else
+		{
+			    console.log("cookie exists");
+			    console.log(document.cookie.split("=")[1]);
+				this.setState({user_token: document.cookie.split("=")[1]});
+				this.setState({login: true});	
+		}
 		
 	}
 	
@@ -193,7 +199,7 @@ export default class SearchComp extends React.Component{
  		}) 
  		.catch(err => {
 			//Error
-    		console.log(err.response.status);
+    		console.log(err);
  		});
 		}
 		else
@@ -203,14 +209,29 @@ export default class SearchComp extends React.Component{
         }
         else{
 			//Mode is Apt
+			console.log("Submit Button Hit on Apt+");
+			
 			if(this.state.search_input=="")
 			  this.setState({result_display:<div></div>});
 			else
 			{
-			  var resultView=this.generateEntriesForTest();
-              this.setState({result_display:resultView});
-			}
-			console.log("Submit Button Hit");
+			  var tempURL="http://18.219.12.38:8001/keyword_search?keyword="+this.state.search_input;
+			  console.log(tempURL);
+	    		axios({
+    				url: tempURL,
+    				method: 'get',
+ 					})
+ 				.then(response => {
+					
+				var resultView=this.generateEntriesForSearchApt(response);
+            	this.setState({result_display:resultView});
+ 				
+				}) 
+ 				.catch(err => {
+					//Error
+    				console.log(err);
+ 				});
+			}	
         }
 	}
 	
@@ -287,9 +308,6 @@ export default class SearchComp extends React.Component{
 			<div>Apt: {gEntry.aid.name}</div>
 	 	</div>
 		<div className="user_column3">
-
-
-
 		<Button animated basic className={""+gEntry.gid} onClick={this.saveButtonOnClick}>
         <Button.Content visible>Like</Button.Content>
 		<Button.Content hidden>
@@ -315,7 +333,97 @@ export default class SearchComp extends React.Component{
     	</Segment.Group>
   	);
     }
-    
+	
+	
+	generateEntriesForSearchApt(response){
+	console.log(response);
+	var gArray=response.data.address[0].group;
+	var listItems_apt=gArray.map((gEntry,index) =>
+    // Correct! Key should be specified inside the array.
+    (
+	 <Segment vertical key={index}>
+	 <div className="entry_row">
+	 	<div className="user_column1">
+	 		  <Button content='Details' basic onClick={()=>{this.props.history.push(""+gEntry.gid);
+															 console.log("Details Button Hit");}}/>
+     	</div>
+	 	<div className="user_column2">
+		    <div>Group Name: {gEntry.group_name}</div>
+			<div>Apt: {gEntry.aid.name}</div>
+	 	</div>
+		<div className="user_column3">
+		{this.state.login&& 
+		<Button animated basic className={""+gEntry.gid} onClick={this.saveButtonOnClick}>
+        <Button.Content visible>Like</Button.Content>
+		<Button.Content hidden>
+			<Icon name='empty heart' />
+		</Button.Content>
+		</Button>}
+				
+		{this.state.login&&
+		<Button animated='vertical' basic className={""+gEntry.gid} onClick={this.addButtonOnClick}>
+		<Button.Content hidden>Join</Button.Content>
+		<Button.Content visible>
+			<Icon name='smile' />
+		</Button.Content>
+		</Button>}
+	 		{/* <Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>
+            <Button className={""+gEntry.gid} onClick={this.addButtonOnClick} content='Add to Group' primary/> */}
+	 	</div>
+	 </div>
+	</Segment>
+	)
+  	);
+	gArray=response.data.user[0].group;
+	var listItems_user=gArray.map((gEntry,index) =>
+    // Correct! Key should be specified inside the array.
+    (
+	 <Segment vertical key={index}>
+	 <div className="entry_row">
+	 	<div className="user_column1">
+	 		  <Button content='Details' basic onClick={()=>{this.props.history.push(""+gEntry.gid);
+															 console.log("Details Button Hit");}}/>
+     	</div>
+	 	<div className="user_column2">
+		    <div>Group Name: {gEntry.group_name}</div>
+			<div>Apt: {gEntry.aid.name}</div>
+	 	</div>
+		<div className="user_column3">
+		{this.state.login&& 
+		<Button animated basic className={""+gEntry.gid} onClick={this.saveButtonOnClick}>
+        <Button.Content visible>Like</Button.Content>
+		<Button.Content hidden>
+			<Icon name='empty heart' />
+		</Button.Content>
+		</Button>}
+				
+		{this.state.login&&
+		<Button animated='vertical' basic className={""+gEntry.gid} onClick={this.addButtonOnClick}>
+		<Button.Content hidden>Join</Button.Content>
+		<Button.Content visible>
+			<Icon name='smile' />
+		</Button.Content>
+		</Button>}
+	 		{/* <Button className={""+gEntry.gid} onClick={this.saveButtonOnClick} content='Save' primary/>
+            <Button className={""+gEntry.gid} onClick={this.addButtonOnClick} content='Add to Group' primary/> */}
+	 	</div>
+	 </div>
+	</Segment>
+	)
+  	);
+	var totLength=listItems_user.length+listItems_apt;
+  	return (
+    	<Segment.Group>
+			{totLength==0 && <Segment> <h3>It is Emptry. </h3></Segment>}
+		{listItems_user}
+      	{listItems_apt}
+    	</Segment.Group>
+  	);
+    }
+	
+   
+	
+	
     generateEntriesForTest(){ 
     
 	var listItems;
@@ -371,6 +479,8 @@ export default class SearchComp extends React.Component{
     }
 		
     }
+	
+	
    
     searchInputChange(e){
         if(e.target.value!="")
@@ -481,6 +591,7 @@ export default class SearchComp extends React.Component{
     }
     
     componentWillMount(){
+		
         console.log("Search Component Mount");
     }
 }
