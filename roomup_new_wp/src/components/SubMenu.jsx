@@ -9,7 +9,7 @@ export default class SubMenu extends Component {
 		super(props);
 		this.state = { 
 			activeItem: 'likes',
-			notAdvanced: true
+			notAdvanced: this.props.notAdvanced
 		}
 	}
   

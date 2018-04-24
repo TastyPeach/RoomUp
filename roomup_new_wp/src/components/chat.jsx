@@ -64,12 +64,12 @@ export default class Chat extends React.Component{
 			  
 			
 		    <Iframe url= {baseURL}
-        	width="400px"
+        	width="1000px"
         	height="600px"
         	id="myId"
 			className="chatFrame"
         	position="relative"
-			styles={{left: "30%"}}
+			styles={{left: "10%"}}
         	allowFullScreen/>
 					
 		   </div>}

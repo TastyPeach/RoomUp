@@ -20,14 +20,31 @@ const inlineStyle={
 	}
 };
 
-//1d441aca1002c863b724c4170ec7d7f793683ad0
+//Test Token: 1d441aca1002c863b724c4170ec7d7f793683ad0
 
-  export default class Home extends Component {
+export default class Home extends Component {
 	constructor(){
+		
+		var user_token_cookie;
+		var login;
+		
+		if (document.cookie.indexOf('token') == -1 ) 
+		{
+				console.log("cookie not exists");
+				user_token_cookie='';
+				login=false;
+		}
+		else
+		{
+			    console.log("cookie exists");
+			    console.log(document.cookie.split("=")[1]);
+				user_token_cookie=document.cookie.split("=")[1];
+				login=true;
+		}
 		super();
 	    this.state={
-		login:false,
-		user_token:'',
+		login:login,
+		user_token:user_token_cookie,
 		PMdisplay:<div></div>,
 		sidebarVisible: false,
 		regModalShow: false,
@@ -36,7 +53,8 @@ const inlineStyle={
 		email:'',
 		username:'',
 		password:'',
-		loginModalShow: false};
+		loginModalShow: false,
+		notAdvanced: true};
 		this.toggleSidebar=this.toggleSidebar.bind(this);
 		this.loginOnClick=this.loginOnClick.bind(this);
 		this.onReceivePM=this.onReceivePM.bind(this);
@@ -54,6 +72,13 @@ const inlineStyle={
 		this.loginSubmit=this.loginSubmit.bind(this);
 		this.getUserToken=this.getUserToken.bind(this);
 		this.updateMarkers=this.updateMarkers.bind(this);
+		
+	}
+	
+	componentWillMount()
+	{
+		if(this.state.login==true)
+		 this.onPMListChange();
 	}
 	
 	updateMarkers()
@@ -108,7 +133,8 @@ const inlineStyle={
 		this.setState({ login: !this.state.login });
 		this.setState({ user_token: response.data.token });
 		console.log("Login Success");
-		console.log(this.state.user_token);
+		console.log("Cookie Token:"+document.cookie.split("=")[1])
+		console.log("True Token:  "+this.state.user_token);
         this.onPMListChange();
     })
     .catch(function (response) {
@@ -165,7 +191,25 @@ const inlineStyle={
 	
 	toLogout()
 	{
+		axios({
+    		method: 'POST',
+    		url: 'http://18.219.12.38:8001/logout',
+    		config: { headers: {
+				'Content-Type': 'multipart/form-data',
+				}},
+			headers:{'Authorization':"Token "+this.state.user_token}
+			})
+    	.then((response)=>{
+        //handle success
+		console.log("Logout Success");
 		this.setState({login:false});
+	    this.setState({user_token:''});
+    })
+    .catch(function (response) {
+        //handle error
+        console.log(response);
+    });
+		
 	}
 	
 	onClickDeletePMEntry(e,d)
@@ -295,6 +339,7 @@ const inlineStyle={
 	}
 	
     render() {
+		console.log("login state: "+this.state.login)
 		if(this.state.login==true)
 		{
 					
@@ -302,7 +347,7 @@ const inlineStyle={
 			return(			
 				<div>	
 				<div className= "submenu">
-				<SubMenu onClickLogout={this.toLogout} onClickShowSidebar={this.toggleSidebar}></SubMenu>
+				<SubMenu onClickLogout={this.toLogout} notAdvanced={this.state.notAdvanced}onClickShowSidebar={this.toggleSidebar}></SubMenu>
 		   	    </div>
 				<Divider fitted/>   		
 			    <div>

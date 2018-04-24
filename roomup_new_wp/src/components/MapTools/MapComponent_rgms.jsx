@@ -54,12 +54,27 @@ export default class MapComponent extends React.PureComponent {
 			group_names:[],
 		}
 		this.getUserToken=this.props.getUserToken;
+		//this.getUserToken=this.getUserToken.bind(this);
 		this.generatePMMarkers=this.generatePMMarkers.bind(this);
 		this.onReceivePMList=this.onReceivePMList.bind(this);
 		this.getPMList=this.getPMList.bind(this);
 		this.addMarker=this.addMarker.bind(this);
 		this.generateMarkers=this.generateMarkers.bind(this);
 	}
+	
+	
+	/*getUserToken()
+	{
+		if (document.cookie.indexOf('token') == -1 ) 
+		{
+				return ('');
+		}
+		else
+		{
+				return (document.cookie.split("=")[1]);
+				
+		}
+	}*/
 	
 	addMarker(loc_info)
 	{
@@ -112,8 +127,7 @@ export default class MapComponent extends React.PureComponent {
 		
 		if(the_same===false)
 		{
-		
-		console.log("update required!");
+			
 		this.setState({group_names: temp});	
 		this.setState({locations:[]})
 		response.data.forEach(
@@ -127,6 +141,7 @@ export default class MapComponent extends React.PureComponent {
 			axios({
     			url: baseURL,
     			method: 'get',
+				dataType: 'jsonp'
  			})
  			.then(response => {
 				var gname= this.state.group_names[index];
@@ -159,6 +174,8 @@ export default class MapComponent extends React.PureComponent {
     getPMList()
 	{
 		console.log("getPMList")
+		if(this.getUserToken()!=='')
+		{
 	    var config={"Authorization":"Token "+this.getUserToken()};
 		axios({
     		url: 'http://18.219.12.38:8001/get_potential_match',
@@ -172,6 +189,7 @@ export default class MapComponent extends React.PureComponent {
 			//Error
     		console.log(err);
  		});
+		}
 	}
 
 

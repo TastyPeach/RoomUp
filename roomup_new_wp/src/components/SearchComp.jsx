@@ -113,6 +113,17 @@ export default class SearchComp extends React.Component{
 		this.onPMListChange=this.props.onPMListChange;
 		this.getUserToken=this.props.getUserToken;
 		
+		if (document.cookie.indexOf('token') == -1 ) 
+		{
+				console.log("cookie not exists");
+		}
+		else
+		{
+			    console.log("cookie exists");
+			    console.log(document.cookie.split("=")[1]);
+				this.setState({user_token: document.cookie.split("=")[1]});
+				this.setState({login: true});	
+		}
 		
 	}
 	
@@ -481,6 +492,7 @@ export default class SearchComp extends React.Component{
     }
     
     componentWillMount(){
+		
         console.log("Search Component Mount");
     }
 }
