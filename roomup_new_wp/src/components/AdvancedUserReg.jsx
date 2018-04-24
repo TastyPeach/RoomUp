@@ -57,11 +57,11 @@ export default class AdvancedUserReg extends React.Component{
                 sanitary:1,
                 timetobed:2,
                 age:0,
-                ethinicity:0,
+                ethinicity:'Ethinicity TBD',
                 graduationyear:0,
-                major:0,
-                note:0
-            },
+				major:'Major TBD',
+				// note:'TBD',
+	            },
 			user_token:this.props.user_token,
 			gid:null
 		}
@@ -74,7 +74,7 @@ export default class AdvancedUserReg extends React.Component{
 		this.onChangeGraduationYear=this.onChangeGraduationYear.bind(this);
 		this.onChangeEthinicity=this.onChangeEthinicity.bind(this);
         this.onChangeMajor=this.onChangeMajor.bind(this);
-        this.onChangeNote=this.onChangeNote.bind(this);
+        // this.onChangeNote=this.onChangeNote.bind(this);
         this.createRequestURLForBecomeAdvancedUser=this.createRequestURLForBecomeAdvancedUser.bind(this);
 		console.log(this.props.user_token);
     }
@@ -114,33 +114,33 @@ export default class AdvancedUserReg extends React.Component{
     onChangeAge(e,d)
 	{
 	    var new_user_filter=this.state.user_filter;
-		new_user_filter.timetobed=d.value;
+		new_user_filter.age=d.value;
 		this.setState({user_filter:new_user_filter});
     }
     onChangeGraduationYear(e,d)
 	{
 	    var new_user_filter=this.state.user_filter;
-		new_user_filter.timetobed=d.value;
+		new_user_filter.graduationyear=d.value;
 		this.setState({user_filter:new_user_filter});
     }   
     onChangeMajor(e,d)
 	{
 	    var new_user_filter=this.state.user_filter;
-		new_user_filter.timetobed=d.value;
+		new_user_filter.major=d.value;
 		this.setState({user_filter:new_user_filter});
     }
     onChangeEthinicity(e,d)
 	{
 	    var new_user_filter=this.state.user_filter;
-		new_user_filter.timetobed=d.value;
+		new_user_filter.ethinicity=d.value;
 		this.setState({user_filter:new_user_filter});
     }
-    onChangeNote(e,d)
-	{
-	    var new_user_filter=this.state.user_filter;
-		new_user_filter.timetobed=d.value;
-		this.setState({user_filter:new_user_filter});
-	}
+    // onChangeNote(e,d)
+	// {
+	//     var new_user_filter=this.state.user_filter;
+	// 	new_user_filter.note=d.value;
+	// 	this.setState({user_filter:new_user_filter});
+	// }
     
 
     createRequestURLForBecomeAdvancedUser(){
@@ -149,17 +149,39 @@ export default class AdvancedUserReg extends React.Component{
         console.log(this.state.user_filter);
 		
 		var gender = this.state.user_filter.gender;
-		// var quietness = this.state.user_filter.quietness;
-		// var sanitary = this.state.user_filter.sanitary;
-		// var timetobed = this.state.user_filter.timetobed;
-        // var pet = this.state.user_filter.pet;
-        // var age = this.state.user_filter.age;
-		// var graduationyear = this.state.user_filter.graduationyear;
-		// var language = this.state.user_filter.language;
-        // var major = this.state.user_filter.major;
+		var quietness = this.state.user_filter.quietness;
+		var sanitary = this.state.user_filter.sanitary;
+		var timetobed = this.state.user_filter.timetobed;
+        var pet = this.state.user_filter.pet;
+        var age = this.state.user_filter.age;
+		var graduationyear = this.state.user_filter.graduationyear;
+		var major = this.state.user_filter.major;
+		var ethinicity = this.state.user_filter.ethinicity;
         
         var bodyFormData = new FormData();
-        bodyFormData.set('gender', gender);
+		bodyFormData.set('gender', gender);
+		bodyFormData.set('quietness', quietness);
+		bodyFormData.set('sanitary', sanitary);
+		bodyFormData.set('timetobed', timetobed);
+		bodyFormData.set('pet', pet);
+		bodyFormData.set('age', age);
+		bodyFormData.set('graduationyear', graduationyear);
+		bodyFormData.set('major', major);
+		bodyFormData.set('ethinicity', ethinicity);
+
+		console.log(bodyFormData.get('gender'))
+		console.log(bodyFormData.get('quietness'))
+		console.log(bodyFormData.get('timetobed'))
+		console.log(bodyFormData.get('sanitary'))
+		console.log(bodyFormData.get('pet'))
+		console.log(bodyFormData.get('age'))
+		console.log(bodyFormData.get('graduationyear'))
+		console.log(bodyFormData.get('timetobed'))
+		console.log(bodyFormData.get('major'))
+		console.log(bodyFormData.get('ethinicity'))
+
+
+
         axios({
     		method: 'post',
     		url: baseUrl,
@@ -170,8 +192,10 @@ export default class AdvancedUserReg extends React.Component{
 			headers:{'Authorization':"Token "+this.state.user_token}
 			})
         .then((response)=>{
-            //handle success
-            console.log("success");
+			//handle success
+
+			console.log("success");
+			console.log(response.data.quietness)
         })
         .catch(function (response) {
             //handle error
@@ -197,7 +221,7 @@ export default class AdvancedUserReg extends React.Component{
 	   		<Form>
         <Form.Group widths='equal'>
           <Form.Input fluid label='Age' onChange={this.onChangeAge} placeholder='Age' />
-          <Form.Input fluid label='Ethinicity' onChange={this.onChangeEthinicity} placeholder='Ethinicity' />
+          <Form.Input fluid label='Ethnicity' onChange={this.onChangeEthinicity} placeholder='Ethnicity' />
           <Form.Select fluid label='Gender' onChange={this.onChangeGender} options={options} placeholder='Gender' />
         </Form.Group>
         <Form.Group widths='equal'>

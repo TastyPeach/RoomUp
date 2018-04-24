@@ -82,7 +82,7 @@ export default class UserProfile extends React.Component{
 			gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-						<Button className = "borderlessbutton" basic as={Link} to='/'>GID:{gid_string}</Button>
+				<Button className = "borderlessbutton" basic as={Link} to={'/'+response.data.gid}>GID:{gid_string}</Button>
 				</Grid.Column>
 				<Grid.Column>
 				{/* <Button basic onClick={this.leaveGroupButtonOnClick}>Leave Group</Button>	 */}
@@ -137,33 +137,49 @@ export default class UserProfile extends React.Component{
 		else
 		{
 			
-			gid_string="You are not an Advanced User";
+			// gid_string="You are not an Advanced User";
+			// gid_segment=(<Grid columns={2} divided>
+    		// 	<Grid.Row stretched>
+      		// 	<Grid.Column>
+			// 		<Segment>GID:{gid_string}</Segment>
+			// 	</Grid.Column>
+			// 	<Grid.Column>
+			// 	<Link to={"/becomeAdvanced"}> 
+			// 	<Button basic>Go and Become an Advanced User</Button>	
+			// 	</Link>
+			// 	</Grid.Column>
+			// 		</Grid.Row>
+			// 	</Grid>);
 			gid_segment=(<Grid columns={2} divided>
     			<Grid.Row stretched>
       			<Grid.Column>
-					<Segment>GID:{gid_string}</Segment>
+				<Button className = "borderlessbutton" basic as={Link} to='/becomeAdvanced'>You are not an Advanced User</Button>
 				</Grid.Column>
 				<Grid.Column>
-				<Link to={"/becomeAdvanced"}> 
-				<Button basic>Go and Become an Advanced User</Button>	
-				</Link>
+				<Button className = "borderlessbutton" animated basic as={Link} to='/becomeAdvanced'>
+                <Button.Content visible>Become an Advanced User</Button.Content>
+		        <Button.Content hidden>
+			    <Icon name='yellow hand peace' />
+		        </Button.Content>
+		        </Button>
 				</Grid.Column>
 					</Grid.Row>
 				</Grid>);
-		this.setState({UserDetailsView:(
-		<Grid columns={1} divided>
-    	<Grid.Row stretched>
-      	<Grid.Column>
-        	<Segment>Nickname:{" "+response.data.username}</Segment>
-        	<Segment>First Name:{" "+response.data.first_name}</Segment>
-			<Segment>Last Name:{" "+response.data.last_name}</Segment>
-        	<Segment>
-				{gid_segment}
-			</Segment>
-      	</Grid.Column>
-    	</Grid.Row>
-  		</Grid>)});
-				
+
+
+				this.setState({UserDetailsView:(
+				<Grid columns={1} divided>
+				<Grid.Row stretched>
+				<Grid.Column>
+					<Segment>Nickname:{" "+response.data.username}</Segment>
+					<Segment>First Name:{" "+response.data.first_name}</Segment>
+					<Segment>Last Name:{" "+response.data.last_name}</Segment>
+					<Segment>
+						{gid_segment}
+					</Segment>
+				</Grid.Column>
+				</Grid.Row>
+				</Grid>)});
 		}
 	}
 
