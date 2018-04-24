@@ -25,7 +25,6 @@ export default class SubMenu extends Component {
             <Dropdown.Divider/>
             <Dropdown.Header>Settings</Dropdown.Header>
             <Dropdown.Item as={Link} to='/UserProfile'>UserProfile</Dropdown.Item>
-			{this.state.notAdvanced && <Dropdown.Item as={Link} to='/becomeAdvanced'>GoAdvanced</Dropdown.Item>}
             <Dropdown.Item as={Link} to='/CreateGroup'>CreateGroup</Dropdown.Item>
             <Dropdown.Item as={Link} to='/' onClick={this.props.onClickLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
@@ -44,4 +43,5 @@ export default class SubMenu extends Component {
   }
 }
 
+//{this.state.notAdvanced && <Dropdown.Item as={Link} to='/becomeAdvanced'>GoAdvanced</Dropdown.Item>}
 ///<Link to={`/UserProfile`}>UserProfile</Link>
