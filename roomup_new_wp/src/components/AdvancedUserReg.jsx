@@ -236,7 +236,7 @@ export default class AdvancedUserReg extends React.Component{
         </Form.Group>
         <Form.TextArea label='UserNote' onChange={this.onChangeNote} placeholder='Tell us more about you, eg.your hobbies ;)' />
         <Form.Checkbox label='I agree to the Terms and Conditions' />
-		<Link to={"/UserProfile"}>
+		<Link to={"/"}>
         <Form.Button type='submit' onClick={this.createRequestURLForBecomeAdvancedUser}> 
 		<Icon name='yellow hand pointer' />
 		Submit </Form.Button>

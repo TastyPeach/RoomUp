@@ -114,7 +114,6 @@ export default class Home extends Component {
 		this.setState({ loginModalShow: !this.state.loginModalShow });
 	}
 	  
-	  
 	doLogin()
 	{
 	    var bodyFormData = new FormData();

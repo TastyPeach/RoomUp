@@ -24,6 +24,8 @@ export default class GroupDetail extends React.Component{
 
     loadGroupProfile()
     {
+		if(this.state.user_token!=='')
+		{
         var urlAddr='http://18.219.12.38:8001/get_group_info?gid='+this.state.gid;
         var config={"Authorization":"Token "+this.state.user_token};
         axios({
@@ -39,6 +41,7 @@ export default class GroupDetail extends React.Component{
             //Error
             console.log(err);
         }); 
+		}
     }
 
 
@@ -178,9 +181,11 @@ export default class GroupDetail extends React.Component{
              <Button color="green">Back to Search</Button>
              </Link>
              </Button.Group>
+			{this.props.user_token==''&& <h3>You don't have access, please log in.</h3>}
              <div className="result_display" >
                  {this.state.GroupViewDetails}
              </div>
+				
             </div>);
     }
 
