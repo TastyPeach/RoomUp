@@ -193,13 +193,14 @@ export default class AdvancedUserReg extends React.Component{
 			})
         .then((response)=>{
 			//handle success
-
-			console.log("success");
 			console.log(response.data.quietness)
+			alert("BecomeAdvanced Success");
+			
         })
         .catch(function (response) {
             //handle error
             console.log(response);
+			alert("BecomeAdvanced Failed");
         });
 		}
 	

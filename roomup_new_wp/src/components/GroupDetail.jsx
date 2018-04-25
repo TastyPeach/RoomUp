@@ -55,9 +55,9 @@ export default class GroupDetail extends React.Component{
 
 
         var gender = ['Male', 'Female'];
-        var quietness = ['Very Noisy', 'Noisy', 'Medium Quiet', 'Very Quiet', 'Extremely Quiet']
+        var quietness = ['Extremely Quiet', 'Very Quiet', 'Medium Quiet', 'Noisy','Very Noisy']
         var sanitary = ['Extremely Clean', 'Very Clean', 'Medium Clean', 'Sloppy', 'Very Sloppy']
-        var pet = ['Naw, No Pet', 'Love Pet']
+        var pet = [ 'Love Pet','Naw, No Pet']
         //console.log(gender[gender_id]);
 
         console.log()

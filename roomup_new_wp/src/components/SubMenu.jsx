@@ -19,10 +19,6 @@ export default class SubMenu extends Component {
       <div>
         <Dropdown text='You' pointing className='link item'>
           <Dropdown.Menu>
-            <Dropdown.Header>Matching</Dropdown.Header>
-            <Dropdown.Item>Likes</Dropdown.Item>
-            <Dropdown.Item>Messages</Dropdown.Item>
-            <Dropdown.Divider/>
             <Dropdown.Header>Settings</Dropdown.Header>
             <Dropdown.Item as={Link} to='/UserProfile'>UserProfile</Dropdown.Item>
             <Dropdown.Item as={Link} to='/CreateGroup'>CreateGroup</Dropdown.Item>
@@ -30,7 +26,6 @@ export default class SubMenu extends Component {
             </Dropdown.Menu>
             </Dropdown>
             <Button.Group>	
-            <Button basic >Messages</Button>
             <Button basic onClick={this.props.onClickShowSidebar} animated='vertical' size='mini'>
             <Button.Content hidden>Likes</Button.Content>
             <Button.Content visible>

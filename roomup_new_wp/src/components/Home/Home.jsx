@@ -135,10 +135,12 @@ export default class Home extends Component {
 		console.log("Cookie Token:"+document.cookie.split("=")[1])
 		console.log("True Token:  "+this.state.user_token);
         this.onPMListChange();
+		alert("Login Success");
     })
     .catch(function (response) {
         //handle error
 		console.log("Login Failed")
+		alert("Login Failed");
     });
 		
 	}
@@ -162,12 +164,15 @@ export default class Home extends Component {
     .then((response)=>{
         //handle success
 		console.log("Registration Success");
+		alert("Registration Success");
+		this.closeRegModal();
 		this.doLogin();
     })
     .catch(function (response) {
         //handle error
 		console.log("Registration Failed")
         console.log(response);
+		alert("Registration Failed");
     });
 		
 	}
@@ -203,10 +208,12 @@ export default class Home extends Component {
 		console.log("Logout Success");
 		this.setState({login:false});
 	    this.setState({user_token:''});
+		alert("Logout Success");
     })
     .catch(function (response) {
         //handle error
         console.log(response);
+		alert("Logout Failed");
     });
 		
 	}
