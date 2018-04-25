@@ -24,17 +24,17 @@ class AdvancedUser(models.Model):
     uid = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, db_column='uid') 
     gender = models.IntegerField(null=True)
     age = models.IntegerField(null=True)
-    ethinicity = models.CharField(max_length=10, null=True)
+    ethinicity = models.CharField(max_length=15, null=True)
     quietness = models.IntegerField(null=True) #0-5 
     sanitary = models.IntegerField(null=True) #0-5
     timetobed = models.IntegerField(null=True) #0-5 late
     # otherthings to consider: study often, date, loud music, invite friends to home.
     pet = models.IntegerField(null=True) #0-1 yes or no
-    major = models.CharField(max_length=10, null=True)
+    major = models.CharField(max_length=50, null=True)
     hobbies = models.CharField(max_length=256, null=True)
     language = models.CharField(max_length=10, null=True)
     graduationyear = models.IntegerField(null=True)
-    note = models.CharField(max_length=256, null=True)
+    note = models.TextField(null=True)
 
     gid = models.ForeignKey('Group', on_delete=models.CASCADE, null=True, db_column='gid')
 
@@ -76,7 +76,7 @@ class Group(models.Model):
     # TODO: gid duplicate with aid?
 
     gid = models.AutoField(primary_key=True)
-    group_name = models.CharField(max_length=10, null=False) # for display in potential match
+    group_name = models.CharField(max_length=30, null=False) # for display in potential match
     aid = models.OneToOneField(Apartment, on_delete=models.DO_NOTHING, null=False, unique=True, db_column='aid')
     capacity = models.IntegerField()
     peopleleft = models.IntegerField(null=False)

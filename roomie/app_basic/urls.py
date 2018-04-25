@@ -1,4 +1,5 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.conf.urls import url
 from app_basic import views
 
 urlpatterns = [
@@ -19,9 +20,15 @@ urlpatterns = [
     path('add_to_group', views.add_to_group),
     path('leave_from_group', views.leave_from_group),
     path('get_group_info', views.get_group_info),
+    path('keyword_search', views.keyword_search),
+    path('<int:gid>', views.index),
+    path('chat/<int:gid>', views.index),
 
     # re_path(r'^new/$', views.new_room, name='new_room'),
     # re_path(r'^(?P<label>[\w-]{,50})/$', views.chat_room, name='chat_room'),
-    path('<int:label>/chat_room/', views.chat_room, name='chat_room')
+    path('<int:label>/chat_room/', views.chat_room, name='chat_room'),
 
+    path('UserProfile', views.index),
+    path('CreateGroup', views.index),
+    path('becomeAdvanced', views.index)
 ]

@@ -65,6 +65,10 @@ def test_delete_potential_match(auth, pid):
     r = requests.delete(base + 'delete_potential_match', data=json.dumps(payload), headers=header)
     return r
 
+def test_keyword_search(keyword):
+
+    r = requests.get(base + 'keyword_search?keyword=' + keyword, headers=header)
+    return r
 # ----------------------- group -------------------------
 def test_create_group(auth, group_name):
     payload = {'name': 'Campus Circle', 'price': 635, 'address': '1010W University Ave', 'floorplan': '2B2B', 'occupied': True, 'capacity': 4, 'group_name': group_name}

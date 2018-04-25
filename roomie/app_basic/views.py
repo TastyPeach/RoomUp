@@ -38,15 +38,13 @@ def chat_room(request, label):
             # print(m)
     # print(room.messages.order_by('-timestamp')[:50])
     print(ms)
-    #    print(request.__dir__())
-    #    print(request.content_params, request.get_raw_uri(), request.path, )
     return render(request, "app_basic/room.html", {
         'username': request.get_raw_uri().split("?")[1].split("=")[1], 
         'room': room,
         'messages': ms,
     })
 
-def index(request):
+def index(request, gid=None):
     return render_to_response('index.html')
 ## ------------------------------- Authentication Related --------------------------
 @api_view(['POST'])
@@ -63,8 +61,16 @@ def app_login(request):
     
     # generate token for client
     token, _ = Token.objects.get_or_create(user=user)
-    r = JsonResponse({"token": token.key}, status=status.HTTP_202_ACCEPTED)
-    # r.set_cookie(key="token", value=token.key)
+    u = User.objects.get(username=uname)
+    adv_u = AdvancedUser.objects.filter(uid=u)
+    #    r = JsonResponse({"token": token.key}, status=status.HTTP_202_ACCEPTED)
+    if len(adv_u):
+        adv = 1
+    else:
+        adv = 0
+        
+    r = JsonResponse({"advance": adv, "token": token.key}, status=status.HTTP_202_ACCEPTED)
+    r.set_cookie(key="token", value=token.key)
     return r
 
 @api_view(['POST'])
@@ -75,7 +81,7 @@ def app_register(request):
     fname = request.data.get('first_name')
     lname = request.data.get('last_name')
     email = request.data.get('email')
-
+    
     try:
         u = User(username=uname, password=passwd, first_name=fname, last_name=lname, email=email)
         u.set_password(passwd)
@@ -92,17 +98,34 @@ def app_logout(request):
     logout(request._request)
     request.user.auth_token.delete()
     r = Response() 
-    # r.delete_cookie('token')
+    r.delete_cookie('token')
     r.status_code = status.HTTP_200_OK
     return r
 
 
 ## ---------------------------------- Apartment Related -------------------------------
-@api_view(['GET'])
-def get_apt_by_name(request):
-    # TODO: support get_apt_by_address
-    pass
 
+# partial match based on username or apartment address and return corresponding group
+@api_view(['GET'])
+def keyword_search(request):
+    kw = request.query_params.get('keyword')
+    ret1 = []
+    ret2 = []
+    apt_sql = "SELECT * FROM app_basic_apartment WHERE address LIKE '%%{}%%' OR name LIKE '%%{}%%';".format(kw, kw)
+    user_sql = "SELECT * FROM auth_user WHERE username LIKE '%%{}%%';".format(kw)
+    apts = Apartment.objects.raw(apt_sql)
+    users = User.objects.raw(user_sql)
+    for apt in apts:
+        groups = Group.objects.filter(aid=apt)
+        if len(groups):
+            ret1.append(GroupSerializer(groups[0]).data)
+    for user in users:
+        adv_u = AdvancedUser.objects.filter(uid=user)
+        if len(adv_u) and adv_u[0].gid:    
+            group = Group.objects.get(gid=adv_u[0].gid)
+            ret2.append(GroupSerializer(group).data)
+    return JsonResponse({"user":[{"group" : ret2[:10]}], "address":[{"group": ret1[:10]}]}, safe=False)
+    
 
 @api_view(['GET'])
 #@parser_classes((JSONParser,)) 
