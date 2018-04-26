@@ -25,7 +25,7 @@ SECRET_KEY = 'klp$854)x^t2d-csux6ly(b#ptcm2utf^!_kzzwot_i0_6h8&z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+X_FRAME_OPTIONS = 'ALLOW-FROM http://18.219.12.38:8080'
 ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1', 'ec2-18-219-12-38.us-east-2.compute.amazonaws.com', '172.31.42.204']
 CORS_ORIGIN_ALLOW_ALL = True
 WEBSOCKET_URL = "unix:/home/ubuntu/temp/WeRoomie/roomie/chat.sock"
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'roomie.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'WeRoomie2',
+        'NAME': 'WeRoomie3',
         'USER': 'root',
         'PASSWORD': ''
     }
