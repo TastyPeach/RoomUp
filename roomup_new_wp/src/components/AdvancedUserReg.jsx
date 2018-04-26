@@ -13,7 +13,7 @@ const options = [
   ]
   
   const options1 = [
-	  { key: 'q0', text: '0-Very Quiet', value: '0' },
+	  { key: 'q0', text: '0-Extremely Quiet', value: '0' },
 	  { key: 'q1', text: '1', value: '1' },
 	  { key: 'q2', text: '2', value: '2' },
 	  { key: 'q3', text: '3', value: '3' },
@@ -22,7 +22,7 @@ const options = [
 	  ]
   
   const options2 = [
-	  { key: 's0', text: '0-Very Clean', value: '0' },
+	  { key: 's0', text: '0-Entremely Clean', value: '0' },
 	  { key: 's1', text: '1', value: '1' },
 	  { key: 's2', text: '2', value: '2' },
 	  { key: 's3', text: '3', value: '3' },
@@ -31,7 +31,7 @@ const options = [
 	  ]    
   
   const options3 = [
-	  { key: 't0', text: '0-Very Early', value: '0' },
+	  { key: 't0', text: '0-Extremely Early', value: '0' },
 	  { key: 't1', text: '1', value: '1' },
 	  { key: 't2', text: '2', value: '2' },
 	  { key: 't3', text: '3', value: '3' },
