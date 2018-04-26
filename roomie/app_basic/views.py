@@ -153,7 +153,7 @@ def get_personal_info(request):
     return JsonResponse(adv_ser.data)
 
 @api_view(['GET'])
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 def get_user_info(request):
     uname = request.data.get('username')
     users = User.objects.filter(username=uname)

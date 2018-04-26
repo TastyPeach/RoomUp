@@ -27,7 +27,13 @@ SECRET_KEY = 'klp$854)x^t2d-csux6ly(b#ptcm2utf^!_kzzwot_i0_6h8&z'
 DEBUG = True
 
 ALLOWED_HOSTS = ['18.219.12.38', 'localhost', '127.0.0.1']
+# WEBSOCKET_URL = "/home/ubuntu/temp/WeRoomie/roomie/chat.sock"
+WEBSOCKET_URL = "/ws/"
 
+WS4REDIS_CONNECTION = {
+    'unix_socket_path': '/home/ubuntu/temp/WeRoomie/roomie/chat.sock',
+    'db': 5
+}
 
 # Application definition
 
