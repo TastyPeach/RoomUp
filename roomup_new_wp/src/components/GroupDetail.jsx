@@ -103,9 +103,7 @@ export default class GroupDetail extends React.Component{
         <Table.Header>
         <Table.Row textAlign='center'>
             <Table.HeaderCell>Administor Name</Table.HeaderCell>
-            <Table.HeaderCell>Group Member</Table.HeaderCell>
-            <Table.HeaderCell>Group Member</Table.HeaderCell>
-            <Table.HeaderCell>Group Member</Table.HeaderCell>
+            {response.data.users.map((user,i) => <Table.HeaderCell>Group Member</Table.HeaderCell>)}
         </Table.Row>
         </Table.Header>
 
