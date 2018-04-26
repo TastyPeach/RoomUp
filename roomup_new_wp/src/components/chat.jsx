@@ -47,6 +47,7 @@ export default class Chat extends React.Component{
     render(){
 		
 		var baseURL="http://18.219.12.38:8080/"+this.state.gid+"/chat_room/?fname="+this.state.fname;
+		console.log(baseURL)
 		
         return (
             <div className="chat">
@@ -63,7 +64,7 @@ export default class Chat extends React.Component{
 			 </Segment>
 			  
 			
-		    <Iframe url= {baseURL}
+		    <Iframe url= {"http://18.219.12.38:8080/"+this.state.gid+"/chat_room/?fname="+this.state.fname}
         	width="1000px"
         	height="600px"
         	id="myId"

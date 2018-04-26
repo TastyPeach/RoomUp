@@ -256,11 +256,13 @@ export default class Home extends Component {
     		headers: config
  			})
  		.then(response => {
+		console.log("PMList Change");
 		this.onReceivePM(response);
  		}) 
  		.catch(err => {
 			//Error
     		console.log(err);
+			this.onReceivePM(undefined);
  		});
 	}
 	
@@ -312,6 +314,15 @@ export default class Home extends Component {
 	
 	onReceivePM(response)
 	{
+		if(response==undefined)
+		{
+		this.setState({PMdisplay:
+		 <Segment.Group>
+         <Segment>It's empty.</Segment>
+         </Segment.Group>})
+		}
+		else
+		{
 		if(response.data.length!=0)
 		{
 		  this.setState({PMdisplay:this.generatePMList(response)});
@@ -321,6 +332,7 @@ export default class Home extends Component {
 		 <Segment.Group>
          <Segment>It's empty.</Segment>
          </Segment.Group>})
+		}
 		}
 	}
 	
