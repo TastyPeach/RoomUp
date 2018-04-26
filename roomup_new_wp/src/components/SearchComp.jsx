@@ -259,10 +259,14 @@ export default class SearchComp extends React.Component{
 		this.props.onPMListChange();
 		alert("Add Potential Match Success");
     })
-    .catch(function (response) {
+    .catch(function (error) {
         //handle error
-        console.log(response);
-		alert("Add Potential Match Failed. Please check you profile.")
+        console.log(error.response.status);
+		console.log(typeof(error.response.status))
+		if(error.response.status==409)
+			alert("Conflict. You have saved the group already.")
+		else
+		   alert("Add Potential Match Failed. Please check you profile.");
     });
     }
 	
